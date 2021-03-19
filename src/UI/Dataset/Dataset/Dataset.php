@@ -6,7 +6,6 @@ namespace Stepapo\Data\UI\Dataset\Dataset;
 
 use Nette\Localization\ITranslator;
 use Stepapo\Data\Column;
-use Stepapo\Data\DatasetView;
 use Stepapo\Data\Factory;
 use Stepapo\Data\Filter;
 use Stepapo\Data\LatteFilter;
@@ -18,6 +17,7 @@ use Stepapo\Data\Search;
 use Stepapo\Data\UI\Dataset\Attribute\SimpleAttribute;
 use Stepapo\Data\UI\Dataset\DatasetControl;
 use Stepapo\Data\UI\Dataset\DatasetFactory;
+use Stepapo\Data\UI\Dataset\DatasetView;
 use Stepapo\Data\UI\Dataset\Display\SimpleDisplay;
 use Stepapo\Data\UI\Dataset\Display\Display;
 use Stepapo\Data\UI\Dataset\Filter\SimpleFilter;
