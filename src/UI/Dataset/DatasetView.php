@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Stepapo\Data\UI\Dataset;
 
 use Nette\InvalidArgumentException;
+use Stepapo\Data\View;
 
 
 class DatasetView implements View
