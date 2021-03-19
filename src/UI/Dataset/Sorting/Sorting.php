@@ -9,5 +9,5 @@ use Nextras\Orm\Collection\ICollection;
 
 interface Sorting
 {
-    public function handleSort(?string $sort = null, ?string $direction = ICollection::ASC): void;
+	public function handleSort(?string $sort = null, ?string $direction = ICollection::ASC): void;
 }

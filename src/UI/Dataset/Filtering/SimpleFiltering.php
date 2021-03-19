@@ -15,30 +15,30 @@ use Nette\Application\UI\Multiplier;
  */
 class SimpleFiltering extends DatasetControl implements Filtering
 {
-    /** @persistent */
-    public ?string $value = null;
+	/** @persistent */
+	public ?string $value = null;
 
-    public array $onFilter = [];
-
-
-    public function render()
-    {
-        parent::render();
-        $this->template->render($this->getSelectedView()->filteringTemplate);
-    }
+	public array $onFilter = [];
 
 
-    public function createComponentFilter()
-    {
-        return new Multiplier(function ($name): Filter {
-            $control = $this->getFactory()->createFilter(
-                $this->getColumns()[$name],
-            );
-            $control->onFilter[] = function (Filter $filter) {
-                $this->onFilter($this);
-                $this->redrawControl();
-            };
-            return $control;
-        });
-    }
+	public function render()
+	{
+		parent::render();
+		$this->template->render($this->getSelectedView()->filteringTemplate);
+	}
+
+
+	public function createComponentFilter()
+	{
+		return new Multiplier(function ($name): Filter {
+			$control = $this->getFactory()->createFilter(
+				$this->getColumns()[$name],
+			);
+			$control->onFilter[] = function (Filter $filter) {
+				$this->onFilter($this);
+				$this->redrawControl();
+			};
+			return $control;
+		});
+	}
 }

@@ -13,29 +13,29 @@ use Stepapo\Data\UI\Dataset\DatasetControl;
  */
 class SimpleDisplay extends DatasetControl implements Display
 {
-    /** @persistent */
-    public ?string $viewName = null;
+	/** @persistent */
+	public ?string $viewName = null;
 
-    public array $onDisplay = [];
-
-
-    public function render()
-    {
-        if (count($this->getViews()) < 2) {
-            return;
-        }
-        parent::render();
-        $this->template->viewName = $this->viewName;
-        $this->template->render($this->getSelectedView()->displayTemplate);
-    }
+	public array $onDisplay = [];
 
 
-    public function handleDisplay(?string $viewName = null): void
-    {
-        $this->viewName = $viewName;
-        if ($this->presenter->isAjax()) {
-            $this->onDisplay($this);
-            $this->redrawControl();
-        }
-    }
+	public function render()
+	{
+		if (count($this->getViews()) < 2) {
+			return;
+		}
+		parent::render();
+		$this->template->viewName = $this->viewName;
+		$this->template->render($this->getSelectedView()->displayTemplate);
+	}
+
+
+	public function handleDisplay(?string $viewName = null): void
+	{
+		$this->viewName = $viewName;
+		if ($this->presenter->isAjax()) {
+			$this->onDisplay($this);
+			$this->redrawControl();
+		}
+	}
 }

@@ -13,16 +13,16 @@ use Nextras\Orm\Collection\ICollection;
 
 interface MainComponent
 {
-    function getCollection(): ICollection;
+	function getCollection(): ICollection;
 
 	function getTranslator(): ?ITranslator;
 
-    /** @return Column[]|null */
-    function getColumns(): ?array;
+	/** @return Column[]|null */
+	function getColumns(): ?array;
 
-    function getSelectedView(): View;
+	function getSelectedView(): View;
 
-    function getFactory(): Factory;
+	function getFactory(): Factory;
 
-    function getFilter(): array;
+	function getFilter(): array;
 }

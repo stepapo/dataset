@@ -15,11 +15,11 @@ use Nextras\Orm\Collection\ICollection;
 
 abstract class DataControl extends Control
 {
-    public function render()
-    {
-        $this->template->columns = $this->getColumns();
-        $this->template->selectedView = $this->getSelectedView();
-    }
+	public function render()
+	{
+		$this->template->columns = $this->getColumns();
+		$this->template->selectedView = $this->getSelectedView();
+	}
 
 
 	protected function createTemplate(): ITemplate
@@ -31,13 +31,13 @@ abstract class DataControl extends Control
 	}
 
 
-    abstract public function getMainComponent(): ?MainComponent;
+	abstract public function getMainComponent(): ?MainComponent;
 
 
-    public function getCollection(): ICollection
-    {
-        return $this->getMainComponent()->getCollection();
-    }
+	public function getCollection(): ICollection
+	{
+		return $this->getMainComponent()->getCollection();
+	}
 
 
 	public function getTranslator(): ?ITranslator
@@ -46,27 +46,27 @@ abstract class DataControl extends Control
 	}
 
 
-    /** @var Column[]|null */
-    public function getColumns(): ?array
-    {
-        return $this->getMainComponent()->getColumns();
-    }
+	/** @var Column[]|null */
+	public function getColumns(): ?array
+	{
+		return $this->getMainComponent()->getColumns();
+	}
 
 
-    public function getSelectedView(): View
-    {
-        return $this->getMainComponent()->getSelectedView();
-    }
+	public function getSelectedView(): View
+	{
+		return $this->getMainComponent()->getSelectedView();
+	}
 
 
-    public function getFactory(): Factory
-    {
-        return $this->getMainComponent()->getFactory();
-    }
+	public function getFactory(): Factory
+	{
+		return $this->getMainComponent()->getFactory();
+	}
 
 
-    public function getFilter(): array
-    {
-        return $this->getMainComponent()->getFilter();
-    }
+	public function getFilter(): array
+	{
+		return $this->getMainComponent()->getFilter();
+	}
 }

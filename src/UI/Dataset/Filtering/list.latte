@@ -1,9 +1,9 @@
 {templateType Stepapo\Data\UI\Dataset\Filtering\FilteringTemplate}
 
 {snippet}
-    {foreach $columns as $column}
-        {if $column->filter}
-            {control filter-$column->name}
-        {/}
-    {/}
+	{foreach $columns as $column}
+		{if $column->filter}
+			{control filter-$column->name}
+		{/}
+	{/}
 {/}

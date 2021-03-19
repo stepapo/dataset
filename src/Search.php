@@ -9,11 +9,11 @@ use Nette\InvalidArgumentException;
 
 class Search
 {
-    public OrmFunction $searchFunction;
+	public OrmFunction $searchFunction;
 
-    public ?string $placeholder;
+	public ?string $placeholder;
 
-    /** @var callable|null */
+	/** @var callable|null */
 	public $prepareCallback;
 
 	/** @var callable|null */
@@ -23,12 +23,12 @@ class Search
 
 
 	public function __construct(
-        OrmFunction $searchFunction,
-        ?string $placeholder = null,
+		OrmFunction $searchFunction,
+		?string $placeholder = null,
 		?callable $prepareCallback = null,
 		?callable $suggestCallback = null,
 		?OrmFunction $sortFunction = null
-    ) {
+	) {
 		$this->searchFunction = $searchFunction;
 		$this->placeholder = $placeholder;
 		$this->prepareCallback = $prepareCallback;
@@ -37,13 +37,13 @@ class Search
 	}
 
 
-    public static function createFromArray(array $config): Search
-    {
-        if (!isset($config['searchFunction'])) {
-            throw new InvalidArgumentException('Search function has to be defined.');
-        }
-        $searchFunction = OrmFunction::createFromArray((array) $config['searchFunction']);
-        $search = new self($searchFunction);
+	public static function createFromArray(array $config): Search
+	{
+		if (!isset($config['searchFunction'])) {
+			throw new InvalidArgumentException('Search function has to be defined.');
+		}
+		$searchFunction = OrmFunction::createFromArray((array) $config['searchFunction']);
+		$search = new self($searchFunction);
 		if (array_key_exists('placeholder', $config)) {
 			$search->setPlaceholder($config['placeholder']);
 		}
@@ -56,8 +56,8 @@ class Search
 		if (array_key_exists('sortFunction', $config)) {
 			$search->setSortFunction(OrmFunction::createFromArray((array) $config['sortFunction']));
 		}
-        return $search;
-    }
+		return $search;
+	}
 
 
 	/** @var string|array|null $args */

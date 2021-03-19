@@ -18,58 +18,58 @@ use Nextras\Orm\Relationships\HasMany;
  */
 class SimpleItemList extends DatasetControl implements ItemList
 {
-    private ICollection $items;
+	private ICollection $items;
 
 
-    public function __construct(
-        ICollection $items
-    ) {
-        $this->items = $items;
-    }
+	public function __construct(
+		ICollection $items
+	) {
+		$this->items = $items;
+	}
 
 
-    public function render()
-    {
-        parent::render();
-        $this->template->items = $this->items;
-        $this->template->render($this->getSelectedView()->itemListTemplate);
-    }
+	public function render()
+	{
+		parent::render();
+		$this->template->items = $this->items;
+		$this->template->render($this->getSelectedView()->itemListTemplate);
+	}
 
 
-    public function createComponentItem()
-    {
-        return new Multiplier(function ($id): Item {
-            $entity = $this->getCollection()->getById($id);
-            return $this->getFactory()->createItem(
-                $entity,
-            );
-        });
-    }
+	public function createComponentItem()
+	{
+		return new Multiplier(function ($id): Item {
+			$entity = $this->getCollection()->getById($id);
+			return $this->getFactory()->createItem(
+				$entity,
+			);
+		});
+	}
 
 
-    public function getValue(IEntity $entity, $columnName)
-    {
-        $columnNames = explode('.', $columnName);
-        $values = [$entity];
-        foreach ($columnNames as $columnName) {
-            $newValues = [];
-            foreach ($values as $value) {
-                if ($value instanceof HasMany) {
-                    foreach ($value as $v) {
-                        if (!isset($v->{$columnName})) {
-                            return null;
-                        }
-                        $newValues[] = $v->{$columnName};
-                    }
-                } else {
-                    if (!isset($value->{$columnName})) {
-                        return null;
-                    }
-                    $newValues[] = $value->{$columnName};
-                }
-            }
-            $values = $newValues;
-        }
-        return $values;
-    }
+	public function getValue(IEntity $entity, $columnName)
+	{
+		$columnNames = explode('.', $columnName);
+		$values = [$entity];
+		foreach ($columnNames as $columnName) {
+			$newValues = [];
+			foreach ($values as $value) {
+				if ($value instanceof HasMany) {
+					foreach ($value as $v) {
+						if (!isset($v->{$columnName})) {
+							return null;
+						}
+						$newValues[] = $v->{$columnName};
+					}
+				} else {
+					if (!isset($value->{$columnName})) {
+						return null;
+					}
+					$newValues[] = $value->{$columnName};
+				}
+			}
+			$values = $newValues;
+		}
+		return $values;
+	}
 }

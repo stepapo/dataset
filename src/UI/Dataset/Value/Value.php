@@ -7,5 +7,5 @@ namespace Stepapo\Data\UI\Dataset\Value;
 
 interface Value
 {
-    public function getEntityValue(?string $columnName = null);
+	public function getEntityValue(?string $columnName = null);
 }

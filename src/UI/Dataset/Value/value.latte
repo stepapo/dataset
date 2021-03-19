@@ -1,10 +1,10 @@
 {templateType Stepapo\Data\UI\Dataset\Value\ValueTemplate}
 
 {foreach (array) $value as $k => $v}
-    {continueIf $v === null}
-    {var $args = []}
-    {foreach (array) $linkArgs as $arg}
-        {php $args[$k][] = $arg[$k]}
-    {/}
-    <a n:tag-if="$column->link" href="{plink $column->link->destination ...$args[$k]}"><span class="nobreak">{if $v !== null}{$column->prepend}{$column->latteFilter ? ($this->filters->{$column->latteFilter->name})($v, ...$column->latteFilter->args) : $v}{$column->append}{/}</span></a>{sep}{if $view->name == 'table'}<br>{else}, {/}{/}
+	{continueIf $v === null}
+	{var $args = []}
+	{foreach (array) $linkArgs as $arg}
+		{php $args[$k][] = $arg[$k]}
+	{/}
+	<a n:tag-if="$column->link" href="{plink $column->link->destination ...$args[$k]}"><span class="nobreak">{if $v !== null}{$column->prepend}{$column->latteFilter ? ($this->filters->{$column->latteFilter->name})($v, ...$column->latteFilter->args) : $v}{$column->append}{/}</span></a>{sep}{if $view->name == 'table'}<br>{else}, {/}{/}
 {/}

@@ -14,36 +14,36 @@ use Stepapo\Data\UI\Dataset\DatasetControl;
  */
 class SimpleFilter extends DatasetControl implements Filter
 {
-    /** @persistent */
-    public ?string $value = null;
+	/** @persistent */
+	public ?string $value = null;
 
-    public array $onFilter = [];
+	public array $onFilter = [];
 
-    private Column $column;
-
-
-    public function __construct(
-        Column $column
-    ) {
-        $this->column = $column;
-    }
+	private Column $column;
 
 
-    public function render()
-    {
-        parent::render();
-        $this->template->column = $this->column;
-        $this->template->value = $this->value;
-        $this->template->render($this->getSelectedView()->filterTemplate);
-    }
+	public function __construct(
+		Column $column
+	) {
+		$this->column = $column;
+	}
 
 
-    public function handleFilter($value = null): void
-    {
-        $this->value = $value;
-        if ($this->presenter->isAjax()) {
-            $this->onFilter($this);
-            $this->redrawControl();
-        }
-    }
+	public function render()
+	{
+		parent::render();
+		$this->template->column = $this->column;
+		$this->template->value = $this->value;
+		$this->template->render($this->getSelectedView()->filterTemplate);
+	}
+
+
+	public function handleFilter($value = null): void
+	{
+		$this->value = $value;
+		if ($this->presenter->isAjax()) {
+			$this->onFilter($this);
+			$this->redrawControl();
+		}
+	}
 }

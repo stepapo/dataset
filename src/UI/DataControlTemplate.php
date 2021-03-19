@@ -11,8 +11,8 @@ use Nette\Bridges\ApplicationLatte\Template;
 
 abstract class DataControlTemplate extends Template
 {
-    /** @var Column[] */
-    public array $columns;
+	/** @var Column[] */
+	public array $columns;
 
-    public View $selectedView;
+	public View $selectedView;
 }

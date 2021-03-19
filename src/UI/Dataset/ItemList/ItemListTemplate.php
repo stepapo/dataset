@@ -10,7 +10,7 @@ use Nextras\Orm\Collection\ICollection;
 
 class ItemListTemplate extends DatasetControlTemplate
 {
-    public ICollection $items;
+	public ICollection $items;
 
-    public array $crossItems;
+	public array $crossItems;
 }

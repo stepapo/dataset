@@ -9,5 +9,5 @@ use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 
 class SearchFormTemplate extends DatasetControlTemplate
 {
-    public ?string $term;
+	public ?string $term;
 }

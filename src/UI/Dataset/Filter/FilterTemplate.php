@@ -10,7 +10,7 @@ use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 
 class FilterTemplate extends DatasetControlTemplate
 {
-    public Column $column;
+	public Column $column;
 
-    public ?string $value;
+	public ?string $value;
 }

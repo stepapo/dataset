@@ -10,5 +10,5 @@ namespace Stepapo\Data\UI\Dataset\Filter;
  */
 interface Filter
 {
-    public function handleFilter($value = null): void;
+	public function handleFilter($value = null): void;
 }

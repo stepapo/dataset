@@ -1,18 +1,18 @@
 {templateType Stepapo\Data\UI\Dataset\SearchForm\SearchFormTemplate}
 
 {snippet}
-    {form form class => 'ajax form-inline'}
-        <div class="mb-2">
-            <div class="d-inline-block" style="width: 65px;">{_}Hledej{/}:</div>
-            <div class="form-group d-inline-flex">
-                <div class="input-group input-group-sm space">
-                    <input n:name="term" type="text" class="form-control">
-                    <div class="input-group-append">
-                        <button n:class="btn, $term ? btn-primary : btn-secondary, ajax" n:name="send"><i class="fas fa-fw fa-search"></i></button>
-                        <a n:if="$term" href="{link search! term => null}" class="btn btn-secondary ajax"><i class="fas fa-fw fa-times"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {/}
+	{form form class => 'ajax form-inline'}
+		<div class="mb-2">
+			<div class="d-inline-block" style="width: 65px;">{_}Hledej{/}:</div>
+			<div class="form-group d-inline-flex">
+				<div class="input-group input-group-sm space">
+					<input n:name="term" type="text" class="form-control">
+					<div class="input-group-append">
+						<button n:class="btn, $term ? btn-primary : btn-secondary, ajax" n:name="send"><i class="fas fa-fw fa-search"></i></button>
+						<a n:if="$term" href="{link search! term => null}" class="btn btn-secondary ajax"><i class="fas fa-fw fa-times"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/}
 {/}

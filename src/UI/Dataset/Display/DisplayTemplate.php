@@ -9,5 +9,5 @@ use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 
 class DisplayTemplate extends DatasetControlTemplate
 {
-    public ?string $viewName;
+	public ?string $viewName;
 }

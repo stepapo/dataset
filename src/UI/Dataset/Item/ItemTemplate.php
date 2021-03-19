@@ -9,8 +9,8 @@ use Nextras\Orm\Entity\IEntity;
 
 class ItemTemplate extends DatasetControlTemplate
 {
-    public IEntity $item;
+	public IEntity $item;
 
-    /** @var Column[] */
-    public array $columns;
+	/** @var Column[] */
+	public array $columns;
 }

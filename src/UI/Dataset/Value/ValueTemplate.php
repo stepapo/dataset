@@ -11,14 +11,14 @@ use Nextras\Orm\Entity\IEntity;
 
 class ValueTemplate extends DatasetControlTemplate
 {
-    public IEntity $entity;
+	public IEntity $entity;
 
-    /** @var mixed */
-    public $value;
+	/** @var mixed */
+	public $value;
 
-    public ?array $linkArgs;
+	public ?array $linkArgs;
 
-    public Column $column;
+	public Column $column;
 
-    public array $filter;
+	public array $filter;
 }

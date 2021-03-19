@@ -10,6 +10,6 @@ use Stepapo\Data\View;
 
 abstract class DatasetControlTemplate extends DataControlTemplate
 {
-    /** @var View[]|null */
-    public ?array $views;
+	/** @var View[]|null */
+	public ?array $views;
 }

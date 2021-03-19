@@ -10,5 +10,5 @@ use Nette\Utils\Paginator;
 
 class PaginationTemplate extends DatasetControlTemplate
 {
-    public Paginator $paginator;
+	public Paginator $paginator;
 }

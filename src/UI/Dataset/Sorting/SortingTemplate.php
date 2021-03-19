@@ -9,9 +9,9 @@ use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 
 class SortingTemplate extends DatasetControlTemplate
 {
-    public bool $show;
-    
-    public ?string $sort;
+	public bool $show;
 
-    public ?string $direction;
+	public ?string $sort;
+
+	public ?string $direction;
 }

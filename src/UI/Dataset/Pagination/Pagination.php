@@ -12,7 +12,7 @@ use Nette\Utils\Paginator;
  */
 interface Pagination
 {
-    public function getPaginator(): Paginator;
+	public function getPaginator(): Paginator;
 
-    public function handlePaginate(int $page = 1): void;
+	public function handlePaginate(int $page = 1): void;
 }

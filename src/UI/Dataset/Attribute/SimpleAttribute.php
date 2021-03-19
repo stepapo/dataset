@@ -15,33 +15,33 @@ use Nextras\Orm\Entity\IEntity;
  */
 class SimpleAttribute extends DatasetControl implements Attribute
 {
-    private IEntity $entity;
+	private IEntity $entity;
 
-    private Column $column;
-
-
-    public function __construct(
-        IEntity $entity,
-        Column $column
-    ) {
-        $this->entity = $entity;
-        $this->column = $column;
-    }
+	private Column $column;
 
 
-    public function render()
-    {
-        parent::render();
-        $this->template->column = $this->column;
-        $this->template->render($this->getSelectedView()->attributeTemplate);
-    }
+	public function __construct(
+		IEntity $entity,
+		Column $column
+	) {
+		$this->entity = $entity;
+		$this->column = $column;
+	}
 
 
-    public function createComponentValue(): Value
-    {
-        return $this->getFactory()->createValue(
-            $this->entity,
-            $this->column
-        );
-    }
+	public function render()
+	{
+		parent::render();
+		$this->template->column = $this->column;
+		$this->template->render($this->getSelectedView()->attributeTemplate);
+	}
+
+
+	public function createComponentValue(): Value
+	{
+		return $this->getFactory()->createValue(
+			$this->entity,
+			$this->column
+		);
+	}
 }

@@ -10,7 +10,7 @@ use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 
 class DatasetTemplate extends DatasetControlTemplate
 {
-    public ?Search $search;
+	public ?Search $search;
 
 	public int $count;
 }
