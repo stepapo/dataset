@@ -1,0 +1,15 @@
+{templateType Stepapo\Data\UI\Dataset\Item\ItemTemplate}
+
+<ul n:inner-foreach="$columns as $column" n:if="!$column->hide" n:snippet>
+    {if $control->getComponentLevel() > Stepapo\Data\UI\Dataset\Dataset\Dataset::COMPONENT_LEVEL_ITEM}
+        {control attribute-$column->name}
+    {else}
+        {var $value = $control->getValue($item, $column->columnName)}
+        <li n:if="$value">
+            {var $linkArgs = $column->link?->args ? array_map(fn($a) => $control->getValue($item, $a), $column->link->args)}
+            {if $column->label}{_$column->label}:{/}
+            {var $file = $column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate}
+            {include $file, 'entity' => $item, 'value' => $value, 'filter' => $control->getFilter(), 'linkArgs' => $linkArgs, 'column' => $column}
+        </li>
+    {/}
+</ul>

@@ -1,0 +1,18 @@
+{templateType Stepapo\Data\UI\Dataset\ItemList\ItemListTemplate}
+
+<tbody n:snippet>
+    {php $type = isset($columns['type']) && ($control->getMainComponent()->getComponent('filtering-filter-type')->value || !$columns['type']->hide)}
+    {foreach $items as $item}
+        {if $control->getComponentLevel() > Stepapo\Data\UI\Dataset\Dataset\Dataset::COMPONENT_LEVEL_LIST}
+            {control item-$item->id}
+        {else}
+            <tr>
+                <td n:foreach="$columns as $column" n:if="!$column->hide" n:class="'text-' . $column->align, $column->class"{if $column->width} style="min-width: {$column->width}px"{/}>
+                    {var $linkArgs = $column->link?->args ? array_map(fn($a) => $control->getValue($item, $a), $column->link->args)}
+                    {var $file = $column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate}
+                    {include $file, 'entity' => $item, 'value' => $control->getValue($item, $column->columnName), 'filter' => $control->getFilter(), 'linkArgs' => $linkArgs, 'column' => $column}
+                </td>
+            </tr>
+        {/}
+    {/}
+</tbody>
