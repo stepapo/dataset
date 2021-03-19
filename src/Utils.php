@@ -25,13 +25,13 @@ class Utils
                 $v = self::replace($v, $params);
             });
             return $value;
-        } else {
+        } else if (is_string($value)) {
             preg_match('/^%(.*)%$/', $value, $m);
             if (isset($m[1])) {
                 return array_key_exists($m[1], $params) ? $params[$m[1]] : $value;
             }
             return $value;
         }
-
+        return $value;
     }
 }
