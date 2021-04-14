@@ -18,6 +18,7 @@ class Utils
 		return $parsedArray;
 	}
 
+
 	public static function replace($value, array $params)
 	{
 		if (is_array($value)) {

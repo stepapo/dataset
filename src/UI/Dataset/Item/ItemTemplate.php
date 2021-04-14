@@ -13,4 +13,6 @@ class ItemTemplate extends DatasetControlTemplate
 
 	/** @var Column[] */
 	public array $columns;
+
+	public bool $showDataset;
 }

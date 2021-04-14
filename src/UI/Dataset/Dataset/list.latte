@@ -1,12 +1,19 @@
 {templateType Stepapo\Data\UI\Dataset\Dataset\DatasetTemplate}
 
 {snippet}
-	{if $search}
+	{if $showSearch}
 		{control searchForm}
 	{/}
-	{control filtering}
+	{control filterList}
 	{control display}
 	{control sorting}
-	{control list}
-	{control pagination}
+	{if $showForm}
+		{snippet form}
+			{control form}
+		{/}
+	{/}
+	{control itemList}
+	{if $showPagination}
+		{control pagination}
+	{/}
 {/}

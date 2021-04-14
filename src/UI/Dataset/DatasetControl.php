@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset;
 
+use Nextras\Orm\Collection\ICollection;
+use Stepapo\Data\Button;
 use Stepapo\Data\UI\DataControl;
 use Stepapo\Data\UI\Dataset\Dataset\Dataset;
-use Stepapo\Data\View;
 
 
 abstract class DatasetControl extends DataControl
@@ -14,7 +15,7 @@ abstract class DatasetControl extends DataControl
 	public function render()
 	{
 		parent::render();
-		$this->template->views = $this->getViews();
+		$this->template->buttons = $this->getButtons();
 	}
 
 
@@ -24,15 +25,33 @@ abstract class DatasetControl extends DataControl
 	}
 
 
-	public function getComponentLevel(): int
+	public function getCollectionItems(): ICollection
 	{
-		return $this->getMainComponent()->getComponentLevel();
+		return $this->getMainComponent()->getCollectionItems();
 	}
 
 
-	/** @var View[]|null */
-	public function getViews(): ?array
+	public function getCollectionCount(): int
 	{
-		return $this->getMainComponent()->getViews();
+		return $this->getMainComponent()->getCollectionCount();
+	}
+
+
+	public function getDatasetCallback(): ?callable
+	{
+		return $this->getMainComponent()->getDatasetCallback();
+	}
+
+
+	public function getFormCallback(): ?callable
+	{
+		return $this->getMainComponent()->getFormCallback();
+	}
+
+
+	/** @var Button[]|null */
+	public function getButtons(): ?array
+	{
+		return $this->getMainComponent()->getButtons();
 	}
 }

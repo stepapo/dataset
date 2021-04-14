@@ -9,9 +9,9 @@ use Stepapo\Data\UI\Dataset\DatasetControl;
 
 /**
  * @property-read DisplayTemplate $template
- * @method onDisplay(SimpleDisplay $control)
+ * @method onDisplay(DisplayControl $control)
  */
-class SimpleDisplay extends DatasetControl implements Display
+class DisplayControl extends DatasetControl
 {
 	/** @persistent */
 	public ?string $viewName = null;

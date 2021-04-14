@@ -2,17 +2,6 @@
 
 {snippet}
 	<div class="row" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
-		{if $control->getComponentLevel() > Stepapo\Data\UI\Dataset\Dataset\Dataset::COMPONENT_LEVEL_LIST}
-			{control item-$item->id}
-		{else}
-			<ul class="col-3" n:inner-foreach="$columns as $column" n:if="!$column->hide">
-				{var $value = $control->getValue($item, $column->columnName)}
-				<li n:if="$value">
-					{var $linkArgs = $column->link?->args ? array_map(fn($a) => $control->getValue($item, $a), $column->link->args)}
-					{if $column->label}{_$column->label}:{/}
-					{include $column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate, 'entity' => $item, 'value' => $value, 'filter' => $control->getFilter(), 'linkArgs' => $linkArgs, 'column' => $column}
-				</li>
-			</ul>
-		{/}
+		{control item-$item->id}
 	</div>
 {/}

@@ -10,9 +10,9 @@ use Stepapo\Data\UI\Dataset\DatasetControl;
 
 /**
  * @property-read FilterTemplate $template
- * @method onFilter(SimpleFilter $control)
+ * @method onFilter(FilterControl $control)
  */
-class SimpleFilter extends DatasetControl implements Filter
+class FilterControl extends DatasetControl
 {
 	/** @persistent */
 	public ?string $value = null;

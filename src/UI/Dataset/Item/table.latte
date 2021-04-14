@@ -1,13 +1,12 @@
 {templateType Stepapo\Data\UI\Dataset\Item\ItemTemplate}
-{dump $columns}
-<tr n:inner-foreach="$columns as $column" n:if="!$column->hide" n:snippet>
-	{if $control->getComponentLevel() > Stepapo\Data\UI\Dataset\Dataset\Dataset::COMPONENT_LEVEL_ITEM}
-		{control attribute-$column->name}
-	{else}
-		<td class="text-{$column->align}"{if $column->width} style="width: {$column->width}px"{/}>
-			{var $linkArgs = $column->link?->args ? array_map(fn($a) => $control->getValue($a), $column->link->args)}
-			{var $file = $column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate}
-			{include $file, 'entity' => $item, 'value' => $control->getValue($column->columnName), 'filter' => $control->getFilter(), 'linkArgs' => $linkArgs, 'column' => $column}
-		</td>
+
+<tr n:snippet>
+	{foreach $columns as $column}
+		{if !$column->hide}
+			{control attribute-$column->name}
+		{/}
 	{/}
+	<td n:if="$buttons" n:inner-foreach="$buttons as $button" n:snippet="buttons">
+		{control button-$button->name}
+	</td>
 </tr>

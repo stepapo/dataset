@@ -1,24 +1,36 @@
 {templateType Stepapo\Data\UI\Dataset\Dataset\DatasetTemplate}
 
 {snippet}
-	{if $search}
+	{if $showSearch}
 		{control searchForm}
 	{/}
-	{control filtering}
+	{control filterList}
 	{control display}
 	<p n:if="$term">{_}Výsledky vyhledávání podle výrazu{/} "{$term}"</p>
-	{if $count > 0}
-		<table>
-			{control sorting}
-			{control list}
-		</table>
-	{else}
-		<p>
-			{_}Nic nenalezeno{/}.
-			{if $suggestedTerm}
-				{_}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
-			{/}
-		</p>
+	{if $showForm}
+		{snippet form}
+		    {control form}
+		{/}
 	{/}
-	{control pagination}
+	{if $showPagination}
+        {if $count > 0}
+            <table>
+                {control sorting}
+                {control itemList}
+            </table>
+        {else}
+            <p>
+                {_}Nic nenalezeno{/}.
+                {if $suggestedTerm}
+                    {_}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+                {/}
+            </p>
+        {/}
+		{control pagination}
+	{else}
+        <table>
+            {control sorting}
+            {control itemList}
+        </table>
+	{/}
 {/}

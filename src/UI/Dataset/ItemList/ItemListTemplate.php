@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset\ItemList;
 
+use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
-use Nextras\Orm\Collection\ICollection;
 
 
 class ItemListTemplate extends DatasetControlTemplate
 {
-	public ICollection $items;
-
-	public array $crossItems;
+	/** @var IEntity[] */
+	public array $items;
 }

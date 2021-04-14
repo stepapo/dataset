@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Stepapo\Data\UI\Dataset\ItemList;
 
 use Stepapo\Data\UI\Dataset\DatasetControl;
-use Stepapo\Data\UI\Dataset\Item\Item;
-use Stepapo\Data\UI\ModePicker\ModePicker;
+use Stepapo\Data\UI\Dataset\Item\ItemControl;
 use Nette\Application\UI\Multiplier;
-use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
 
@@ -16,33 +14,35 @@ use Nextras\Orm\Relationships\HasMany;
 /**
  * @property-read ItemListTemplate $template
  */
-class SimpleItemList extends DatasetControl implements ItemList
+class ItemListControl extends DatasetControl
 {
-	private ICollection $items;
-
-
-	public function __construct(
-		ICollection $items
-	) {
-		$this->items = $items;
-	}
-
-
 	public function render()
 	{
 		parent::render();
-		$this->template->items = $this->items;
+		if ($this->getMainComponent()->shouldRetrieveItems) {
+			$this->template->items = $this->getItems();
+		}
 		$this->template->render($this->getSelectedView()->itemListTemplate);
 	}
 
 
 	public function createComponentItem()
 	{
-		return new Multiplier(function ($id): Item {
-			$entity = $this->getCollection()->getById($id);
-			return $this->getFactory()->createItem(
-				$entity,
-			);
+		return new Multiplier(function ($id): ItemControl {
+			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
+			$control = new ItemControl($entity);
+			$control->onChange[] = function (ItemControl $control, IEntity $entity) {
+				$this->getMainComponent()->shouldRetrieveItems = false;
+				$this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
+			};
+			$control->onRemove[] = function (ItemControl $control) {
+				$this->redrawControl();
+				if ($this->getMainComponent()->getItemsPerPage()) {
+					$this->getMainComponent()->getComponent('pagination')->redrawControl();
+				}
+				$this->getMainComponent()->onItemChange($this->getMainComponent());
+			};
+			return $control;
 		});
 	}
 
@@ -71,5 +71,11 @@ class SimpleItemList extends DatasetControl implements ItemList
 			$values = $newValues;
 		}
 		return $values;
+	}
+
+
+	private function getItems()
+	{
+		return $this->getCollectionItems()->fetchPairs('id');
 	}
 }

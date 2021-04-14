@@ -2,52 +2,47 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data\UI\Dataset\Item;
+namespace Stepapo\Data\UI\Dataset\Value;
 
-use Stepapo\Data\UI\Dataset\Attribute\Attribute;
+use Stepapo\Data\Column;
 use Stepapo\Data\UI\Dataset\DatasetControl;
-use Nette\Application\UI\Multiplier;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
 
 
 /**
- * @property-read ItemTemplate $template
+ * @property-read ValueTemplate $template
  */
-class SimpleItem extends DatasetControl implements Item
+class ValueControl extends DatasetControl
 {
 	private IEntity $entity;
 
+	private Column $column;
+
 
 	public function __construct(
-		IEntity $entity
+		IEntity $entity,
+		Column $column
 	) {
 		$this->entity = $entity;
+		$this->column = $column;
 	}
 
 
 	public function render()
 	{
 		parent::render();
-		$this->template->item = $this->entity;
-		$this->template->render($this->getSelectedView()->itemTemplate);
+		$this->template->entity = $this->entity;
+		$this->template->value = $this->getEntityValue();
+		$this->template->column = $this->column;
+		$this->template->linkArgs = $this->column->link && $this->column->link->args ? array_map(fn($a) => $this->getEntityValue($a), $this->column->link->args) : null;
+		$this->template->render($this->column->valueTemplateFile ?: __DIR__ . '/value.latte');
 	}
 
 
-	public function createComponentAttribute()
+	public function getEntityValue(?string $columnName = null): ?array
 	{
-		return new Multiplier(function(string $columnName): Attribute {
-			return $this->getFactory()->createAttribute(
-				$this->entity,
-				$this->getColumns()[$columnName],
-			);
-		});
-	}
-
-
-	public function getValue($columnName)
-	{
-		$columnNames = explode('.', $columnName);
+		$columnNames = explode('.', $columnName ?: $this->column->columnName);
 		$values = [$this->entity];
 		foreach ($columnNames as $columnName) {
 			$newValues = [];

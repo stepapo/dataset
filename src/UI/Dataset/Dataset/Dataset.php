@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset\Dataset;
 
-use Nette\Localization\ITranslator;
+use Nette\Application\UI\Form;
+use Nette\Localization\Translator;
+use Nextras\Orm\Entity\IEntity;
+use Nextras\Orm\Repository\IRepository;
+use Stepapo\Data\Button;
 use Stepapo\Data\Column;
-use Stepapo\Data\Factory;
 use Stepapo\Data\Filter;
 use Stepapo\Data\LatteFilter;
 use Stepapo\Data\Link;
@@ -14,25 +17,15 @@ use Stepapo\Data\Option;
 use Stepapo\Data\OrmFunction;
 use Stepapo\Data\Sort;
 use Stepapo\Data\Search;
-use Stepapo\Data\UI\Dataset\Attribute\SimpleAttribute;
 use Stepapo\Data\UI\Dataset\DatasetControl;
-use Stepapo\Data\UI\Dataset\DatasetFactory;
 use Stepapo\Data\UI\Dataset\DatasetView;
-use Stepapo\Data\UI\Dataset\Display\SimpleDisplay;
-use Stepapo\Data\UI\Dataset\Display\Display;
-use Stepapo\Data\UI\Dataset\Filter\SimpleFilter;
-use Stepapo\Data\UI\Dataset\Filtering\SimpleFiltering;
-use Stepapo\Data\UI\Dataset\Filtering\Filtering;
-use Stepapo\Data\UI\Dataset\Item\SimpleItem;
-use Stepapo\Data\UI\Dataset\ItemList\SimpleItemList;
-use Stepapo\Data\UI\Dataset\ItemList\ItemList;
+use Stepapo\Data\UI\Dataset\Display\DisplayControl;
+use Stepapo\Data\UI\Dataset\FilterList\FilterListControl;
+use Stepapo\Data\UI\Dataset\ItemList\ItemListControl;
 use Stepapo\Data\UI\MainComponent;
-use Stepapo\Data\UI\Dataset\Pagination\SimplePagination;
-use Stepapo\Data\UI\Dataset\Pagination\Pagination;
-use Stepapo\Data\UI\Dataset\SearchForm\SearchForm;
-use Stepapo\Data\UI\Dataset\Sorting\SimpleSorting;
-use Stepapo\Data\UI\Dataset\Sorting\Sorting;
-use Stepapo\Data\UI\Dataset\Value\SimpleValue;
+use Stepapo\Data\UI\Dataset\Pagination\PaginationControl;
+use Stepapo\Data\UI\Dataset\SearchForm\SearchFormControl;
+use Stepapo\Data\UI\Dataset\Sorting\SortingControl;
 use Stepapo\Data\Utils;
 use Nette\InvalidArgumentException;
 use Nette\Neon\Neon;
@@ -43,28 +36,22 @@ use Nextras\Orm\Collection\ICollection;
 
 /**
  * @property-read DatasetTemplate $template
+ * @method onItemChange(Dataset $control, ?IEntity $entity)
  */
 class Dataset extends DatasetControl implements MainComponent
 {
-	public const COMPONENT_LEVEL_LIST = 1;
-
-	public const COMPONENT_LEVEL_ITEM = 2;
-
-	public const COMPONENT_LEVEL_ATTRIBUTE = 3;
+	/** @var callable[] */
+	public array $onItemChange;
 
 	private DatasetView $selectedView;
 
 	private ICollection $collection;
 
-	private ?ITranslator $translator;
+	private IRepository $repository;
 
-	private ICollection $filteredCollection;
+	private ?IEntity $parentEntity;
 
-	private ICollection $searchedCollection;
-
-	private ICollection $sortedCollection;
-
-	private ICollection $paginatedCollection;
+	private ?Translator $translator;
 
 	/** @var Column[]|null */
 	private ?array $columns;
@@ -72,17 +59,22 @@ class Dataset extends DatasetControl implements MainComponent
 	/** @var DatasetView[]|null */
 	private ?array $views;
 
-	private ?int $itemsPerPage;
+	/** @var Button[]|null */
+	private ?array $buttons;
 
-	private ?int $componentLevel;
+	private ?int $itemsPerPage;
 
 	private ?Search $search;
 
-	private ?DatasetFactory $factory;
+	/** @var callable|null */
+	private $datasetCallback;
 
-	private array $filter = [];
+	/** @var callable|null */
+	private $formCallback;
 
 	private int $count = 0;
+
+	public bool $shouldRetrieveItems = true;
 
 
 	/**
@@ -91,22 +83,28 @@ class Dataset extends DatasetControl implements MainComponent
 	 */
 	public function __construct(
 		ICollection $collection,
-		?ITranslator $translator = null,
-		?array $columns = null,
-		?array $views = null,
+		IRepository $repository,
+		?IEntity $parentEntity = null,
+		?Translator $translator = null,
+		array $columns = [],
+		array $views = [],
+		array $buttons = [],
 		?int $itemsPerPage = null,
-		int $componentLevel = self::COMPONENT_LEVEL_LIST,
 		?Search $search = null,
-		?DatasetFactory $factory = null
+		?callable $datasetCallback = null,
+		?callable $formCallback = null,
 	) {
 		$this->collection = $collection;
+		$this->repository = $repository;
+		$this->parentEntity = $parentEntity;
 		$this->columns = $columns;
 		$this->views = $views;
+		$this->buttons = $buttons;
 		$this->itemsPerPage = $itemsPerPage;
-		$this->componentLevel = $componentLevel;
 		$this->search = $search;
-		$this->factory = $factory ?: DatasetFactory::createDefault();
 		$this->translator = $translator;
+		$this->datasetCallback = $datasetCallback;
+		$this->formCallback = $formCallback;
 	}
 
 
@@ -114,30 +112,33 @@ class Dataset extends DatasetControl implements MainComponent
 	{
 		$config = (array) Neon::decode(FileSystem::read($file));
 		$parsedConfig = Utils::replaceParams($config, $params);
-		return self::createFromArray((array) $parsedConfig);
+		return self::createFromArray($parsedConfig);
 	}
 
 
 	public static function createFromArray(array $config): Dataset
 	{
-		if (!isset($config['collection'])) {
-			throw new InvalidArgumentException('Dataset collection has to be defined.');
+		if (!isset($config['collection'], $config['repository'])) {
+			throw new InvalidArgumentException('Dataset collection and repository has to be defined.');
 		}
-		$dataset = new self($config['collection']);
+		$dataset = new self($config['collection'], $config['repository']);
+		if (array_key_exists('parentEntity', $config)) {
+			$dataset->setParentEntity($config['parentEntity']);
+		}
 		if (array_key_exists('itemsPerPage', $config)) {
 			$dataset->setItemsPerPage($config['itemsPerPage']);
 		}
 		if (array_key_exists('translator', $config)) {
 			$dataset->setTranslator($config['translator']);
 		}
-		if (array_key_exists('componentLevel', $config)) {
-			$dataset->setComponentLevel($config['componentLevel']);
-		}
-		if (array_key_exists('factory', $config)) {
-			$dataset->setFactory(DatasetFactory::createFromArray((array) $config['factory']));
-		}
 		if (array_key_exists('search', $config)) {
 			$dataset->setSearch(Search::createFromArray((array) $config['search']));
+		}
+		if (array_key_exists('datasetCallback', $config)) {
+			$dataset->setDatasetCallback($config['datasetCallback']);
+		}
+		if (array_key_exists('formCallback', $config)) {
+			$dataset->setFormCallback($config['formCallback']);
 		}
 		if (array_key_exists('columns', $config)) {
 			foreach ((array) $config['columns'] as $columnName => $columnConfig) {
@@ -147,6 +148,11 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('views', $config)) {
 			foreach ((array) $config['views'] as $name => $viewConfig) {
 				$dataset->addView(DatasetView::createFromArray((array) $viewConfig, $name));
+			}
+		}
+		if (array_key_exists('buttons', $config)) {
+			foreach ((array) $config['buttons'] as $name => $viewConfig) {
+				$dataset->addButton(Button::createFromArray((array) $viewConfig, $name));
 			}
 		}
 		return $dataset;
@@ -160,25 +166,46 @@ class Dataset extends DatasetControl implements MainComponent
 			$this->createAndAddDefaultView();
 		}
 		$this->selectedView = $this->selectView();
-		$this->filter()->search()->sort();
-		$this->count = $this->searchedCollection->countStored();
-		$this->paginate();
+	}
+
+
+	public function getCollectionItems(): ICollection
+	{
+		$c = $this->getCollection();
+		$c = $this->filter($c);
+		$c = $this->search($c);
+		$c = $this->sort($c);
+		$c = $this->paginate($c);
+		return $c;
+	}
+
+
+	public function getCollectionCount(): int
+	{
+		$c = $this->getCollection();
+		$c = $this->filter($c);
+		$c = $this->search($c);
+		return $c->countStored();
 	}
 
 
 	public function render()
 	{
 		parent::render();
-		$this->template->search = $this->search;
-		$this->template->count = $this->count;
-		$term = $this->getComponent('searchForm')->term;
-		$this->template->term = $term;
-		if ($this->count == 0 && $term && $this->search->suggestCallback) {
-			$this->template->suggestedTerm = ($this->search->suggestCallback)($term);
+		$this->template->showForm = (bool) $this->formCallback;
+		$this->template->showPagination = (bool) $this->itemsPerPage;
+		$this->template->showSearch = (bool) $this->search;
+		if ($this->itemsPerPage && $this->shouldRetrieveItems) {
+			$count = $this->getCollectionCount();
+			$term = $this->search ? $this->getComponent('searchForm')->term : null;
+			$this->template->count = $count;
+			$this->template->term = $term;
+			if ($count == 0 && $term && $this->search->suggestCallback) {
+				$this->template->suggestedTerm = ($this->search->suggestCallback)($term);
+			}
 		}
 		$this->template->render($this->selectedView->datasetTemplate);
 	}
-
 
 
 	public function getCollection(): ICollection
@@ -187,15 +214,33 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function getTranslator(): ?ITranslator
+	public function getRepository(): IRepository
+	{
+		return $this->repository;
+	}
+
+
+	public function getParentEntity(): ?IEntity
+	{
+		return $this->parentEntity;
+	}
+
+
+	public function getTranslator(): ?Translator
 	{
 		return $this->translator;
 	}
 
 
-	public function getComponentLevel(): int
+	public function getDatasetCallback(): ?callable
 	{
-		return $this->componentLevel;
+		return $this->datasetCallback;
+	}
+
+
+	public function getFormCallback(): ?callable
+	{
+		return $this->formCallback;
 	}
 
 
@@ -213,27 +258,42 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
+	/** @return Button[]|null */
+	public function getButtons(): ?array
+	{
+		return $this->buttons;
+	}
+
+
 	public function getSelectedView(): DatasetView
 	{
 		return $this->selectedView;
 	}
 
 
-	public function getFactory(): Factory
+	public function getItemsPerPage(): ?int
 	{
-		return $this->factory;
-	}
-
-
-	public function getFilter(): array
-	{
-		return $this->filter;
+		return $this->itemsPerPage;
 	}
 
 
 	public function setCollection(ICollection $collection): Dataset
 	{
 		$this->collection = $collection;
+		return $this;
+	}
+
+
+	public function setRepository(IRepository $repository): Dataset
+	{
+		$this->repository = $repository;
+		return $this;
+	}
+
+
+	public function setParentEntity(?IEntity $parentEntity): Dataset
+	{
+		$this->parentEntity = $parentEntity;
 		return $this;
 	}
 
@@ -248,13 +308,6 @@ class Dataset extends DatasetControl implements MainComponent
 	public function setItemsPerPage(?int $itemsPerPage): Dataset
 	{
 		$this->itemsPerPage = $itemsPerPage;
-		return $this;
-	}
-
-
-	public function setComponentLevel(?int $componentLevel): Dataset
-	{
-		$this->componentLevel = $componentLevel;
 		return $this;
 	}
 
@@ -342,7 +395,7 @@ class Dataset extends DatasetControl implements MainComponent
 		?string $itemTemplate = null,
 		?string $attributeTemplate = null,
 		?string $valueTemplate = DatasetView::VIEWS['list']['valueTemplate'],
-		?string $filteringTemplate = DatasetView::VIEWS['list']['filteringTemplate'],
+		?string $filterListTemplate = DatasetView::VIEWS['list']['filterListTemplate'],
 		?string $filterTemplate = DatasetView::VIEWS['list']['filterTemplate'],
 		?string $paginationTemplate = DatasetView::VIEWS['list']['paginationTemplate'],
 		?string $sortingTemplate = DatasetView::VIEWS['list']['sortingTemplate'],
@@ -359,7 +412,7 @@ class Dataset extends DatasetControl implements MainComponent
 			$itemTemplate,
 			$attributeTemplate,
 			$valueTemplate,
-			$filteringTemplate,
+			$filterListTemplate,
 			$filterTemplate,
 			$paginationTemplate,
 			$sortingTemplate,
@@ -370,9 +423,48 @@ class Dataset extends DatasetControl implements MainComponent
 		return $this->views[$name];
 	}
 
+
+	public function addButton(Button $button): Dataset
+	{
+		$this->buttons[$button->name] = $button;
+		return $this;
+	}
+
+
+	public function createAndAddButton(
+		string $name,
+		string $handleCallback,
+		string $hideCallback,
+		?string $label = null
+	): DatasetView
+	{
+		$this->buttons[$name] = new Button(
+			$name,
+			$handleCallback,
+			$hideCallback,
+			$label
+		);
+		return $this->buttons[$name];
+	}
+
+
 	public function setSearch(Search $search): Dataset
 	{
 		$this->search = $search;
+		return $this;
+	}
+
+
+	public function setDatasetCallback(callable $datasetCallback): Dataset
+	{
+		$this->datasetCallback = $datasetCallback;
+		return $this;
+	}
+
+
+	public function setFormCallback(callable $formCallback): Dataset
+	{
+		$this->formCallback = $formCallback;
 		return $this;
 	}
 
@@ -389,7 +481,8 @@ class Dataset extends DatasetControl implements MainComponent
 		?callable $suggestCallback = null,
 		?string $sortFunctionClass = null,
 		$sortFunctionArgs = null
-	): Dataset {
+	): Dataset
+	{
 		$this->search = new Search(
 			new OrmFunction($searchFunctionClass, (array) $searchFunctionArgs),
 			$placeholder,
@@ -401,100 +494,75 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function setFactory(DatasetFactory $factory): Dataset
+	public function createComponentForm(): Form
 	{
-		$this->factory = $factory;
-		return $this;
+		return ($this->getFormCallback())($this, $this->getParentEntity());
 	}
 
 
-	public function createAndSetFactory(
-		?string $itemListClass = SimpleItemList::class,
-		?string $itemClass = SimpleItem::class,
-		?string $attributeClass = SimpleAttribute::class,
-		?string $valueClass = SimpleValue::class,
-		?string $filteringClass = SimpleFiltering::class,
-		?string $filterClass = SimpleFilter::class,
-		?string $paginationClass = SimplePagination::class,
-		?string $sortingClass = SimpleSorting::class,
-		?string $displayClass = SimpleDisplay::class
-	): DatasetFactory {
-		$this->factory = new DatasetFactory(
-			$itemListClass,
-			$itemClass,
-			$attributeClass,
-			$valueClass,
-			$filteringClass,
-			$filterClass,
-			$paginationClass,
-			$sortingClass,
-			$displayClass
+	public function createComponentItemList(): ItemListControl
+	{
+		return new ItemListControl();
+	}
+
+
+	public function createComponentPagination(): PaginationControl
+	{
+		$pagination = new PaginationControl(
+			(new Paginator)
+				->setItemsPerPage($this->itemsPerPage)
+				->setItemCount($this->getCollectionCount()),
 		);
-		return $this->factory;
-	}
-
-
-	public function createComponentList(): ItemList
-	{
-		return $this->getFactory()->createItemList($this->paginatedCollection);
-	}
-
-
-	public function createComponentPagination(): Pagination
-	{
-		$pagination = $this->getFactory()->createPagination(
-			(new Paginator)->setItemsPerPage($this->itemsPerPage),
-		);
-		$pagination->onPaginate[] = function (Pagination $pagination) {
-			$this->getComponent('list')->redrawControl();
+		$pagination->onPaginate[] = function (PaginationControl $pagination) {
+			$this->getComponent('itemList')->redrawControl();
 		};
 		return $pagination;
 	}
 
 
-	public function createComponentFiltering(): Filtering
+	public function createComponentFilterList(): FilterListControl
 	{
-		$control = $this->getFactory()->createFiltering();
-		$control->onFilter[] = function (Filtering $filtering) {
+		$control = new FilterListControl();
+		$control->onFilter[] = function (FilterListControl $filtering) {
 			$this->redrawControl();
 		};
 		return $control;
 	}
 
 
-	public function createComponentSearchForm(): SearchForm
+	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = $this->getFactory()->createSearchForm($this->search->placeholder);
-		$control->onSearch[] = function (SearchForm $search) {
+		$control = new SearchFormControl($this->search->placeholder);
+		$control->onSearch[] = function (SearchFormControl $search) {
 			$this->redrawControl();
 		};
 		return $control;
 	}
 
 
-	public function createComponentSorting(): Sorting
+	public function createComponentSorting(): SortingControl
 	{
-		$control = $this->getFactory()->createSorting();
-		$control->onSort[] = function (Sorting $sorting) {
+		$control = new SortingControl();
+		$control->onSort[] = function (SortingControl $sorting) {
 			$this->redrawControl();
 		};
 		return $control;
 	}
 
 
-	public function createComponentDisplay(): Display
+	public function createComponentDisplay(): DisplayControl
 	{
-		$control = $this->getFactory()->createDisplay();
-		$control->onDisplay[] = function (Display $display) {
+		$control = new DisplayControl();
+		$control->onDisplay[] = function (DisplayControl $display) {
 			$this->redrawControl();
 		};
 		return $control;
 	}
 
 
-	private function filter(): Dataset
+	private function filter(ICollection $collection): ICollection
 	{
-		$this->filteredCollection = $this->collection;
+		$c = $collection;
 		foreach ($this->columns as $column) {
 			if (!$column->filter) {
 				continue;
@@ -503,48 +571,47 @@ class Dataset extends DatasetControl implements MainComponent
 			if (!$value) {
 				continue;
 			}
-			$this->filter[$column->name] = $value;
 			if ($column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
-				$this->filteredCollection = $this->filteredCollection->findBy($column->filter->options[$value]->condition);
+				$c = $c->findBy($column->filter->options[$value]->condition);
 			} elseif ($column->filter->function) {
-				$this->filteredCollection = $this->filteredCollection->findBy([$column->filter->function, $column->getNextrasName(), $value]);
+				$c = $c->findBy([$column->filter->function, $column->getNextrasName(), $value]);
 			} else {
-				$this->filteredCollection = $this->filteredCollection->findBy([$column->filter->columnName ? $column->filter->getNextrasName() : $column->name => $value]);
+				$c = $c->findBy([$column->filter->columnName ? $column->filter->getNextrasName() : $column->name => $value]);
 			}
 		}
-		return $this;
+		return $c;
 	}
 
 
-	private function search(): Dataset
+	private function search(ICollection $collection): ICollection
 	{
-		$this->searchedCollection = $this->filteredCollection;
+		$c = $collection;
 		if (!$this->search || !($term = $this->getComponent('searchForm')->term)) {
-			return $this;
+			return $c;
 		}
 		if ($this->search->prepareCallback and is_callable($this->search->prepareCallback)) {
 			$term = ($this->search->prepareCallback)($term);
 		}
 		array_walk($this->search->searchFunction->args, fn(&$v) => $v = $v == '%term%' ? $term : $v);
-		$this->searchedCollection = $this->searchedCollection->findBy(array_merge([$this->search->searchFunction->class], $this->search->searchFunction->args));
+		$c = $c->findBy(array_merge([$this->search->searchFunction->class], $this->search->searchFunction->args));
 		if ($this->search->sortFunction) {
 			array_walk($this->search->sortFunction->args, fn(&$v) => $v = $v == '%term%' ? $term : $v);
 		}
-		return $this;
+		return $c;
 	}
 
 
-	private function sort(): Dataset
+	private function sort(ICollection $collection): ICollection
 	{
-		$this->sortedCollection = $this->searchedCollection;
+		$c = $collection;
 		$sort = $this->getComponent('sorting')->sort;
 		if ($sort) {
 			$column = $this->columns[$sort];
 			$direction = $this->getComponent('sorting')->direction;
 			if ($column->sort->function) {
-				$this->sortedCollection = $this->sortedCollection->applyfunction($column->sort->function->class, $direction);
+				$c = $c->applyfunction($column->sort->function->class, $direction);
 			} else {
-				$this->sortedCollection = $this->sortedCollection->orderBy($column->getNextrasName(), $direction);
+				$c = $c->orderBy($column->getNextrasName(), $direction);
 			}
 		}
 		foreach ($this->columns as $column) {
@@ -552,9 +619,9 @@ class Dataset extends DatasetControl implements MainComponent
 				continue;
 			}
 			if ($column->sort->function) {
-				$this->sortedCollection = $this->sortedCollection->applyfunction($column->sort->function->class, $column->sort->direction);
+				$c = $c->applyfunction($column->sort->function->class, $column->sort->direction);
 			} else {
-				$this->sortedCollection = $this->sortedCollection->orderBy($column->getNextrasName(), $column->sort->direction);
+				$c = $c->orderBy($column->getNextrasName(), $column->sort->direction);
 			}
 
 		}
@@ -565,24 +632,22 @@ class Dataset extends DatasetControl implements MainComponent
 			&& $this->getComponent('searchForm')->term
 			&& ($this->getComponent('searchForm-form')->isSubmitted() || !$sort)
 		) {
-			$this->sortedCollection = $this->sortedCollection->applyFunction(...array_merge([$this->search->sortFunction->class], $this->search->sortFunction->args));
+			$c = $c->applyFunction(...array_merge([$this->search->sortFunction->class], $this->search->sortFunction->args));
 		}
-
-		return $this;
+		return $c;
 	}
 
 
-	private function paginate(): Dataset
+	private function paginate(ICollection $collection): ICollection
 	{
-		$this->paginatedCollection = $this->sortedCollection;
+		$c = $collection;
 		if ($this->itemsPerPage) {
-			$this->getComponent('pagination')->getPaginator()->setItemCount($this->count);
-			$this->paginatedCollection = $this->paginatedCollection->limitBy(
+			$c = $c->limitBy(
 				$this->getComponent('pagination')->getPaginator()->length,
 				$this->getComponent('pagination')->getPaginator()->offset
 			);
 		}
-		return $this;
+		return $c;
 	}
 
 

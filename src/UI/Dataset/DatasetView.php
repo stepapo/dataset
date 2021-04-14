@@ -21,12 +21,13 @@ class DatasetView implements View
 			'itemTemplate' => __DIR__ . '/Item/table.latte',
 			'attributeTemplate' => __DIR__ . '/Attribute/table.latte',
 			'valueTemplate' => __DIR__ . '/Value/value.latte',
-			'filteringTemplate' => __DIR__ . '/Filtering/list.latte',
+			'filterListTemplate' => __DIR__ . '/FilterList/list.latte',
 			'filterTemplate' => __DIR__ . '/Filter/list.latte',
 			'paginationTemplate' => __DIR__ . '/Pagination/list.latte',
 			'sortingTemplate' => __DIR__ . '/Sorting/table.latte',
 			'displayTemplate' => __DIR__ . '/Display/list.latte',
-			'searchTemplate' => __DIR__ . '/SearchForm/list.latte'
+			'searchTemplate' => __DIR__ . '/SearchForm/list.latte',
+			'buttonTemplate' => __DIR__ . '/Button/list.latte'
 		],
 		'list' => [
 			'name' => 'list',
@@ -36,12 +37,13 @@ class DatasetView implements View
 			'itemTemplate' => __DIR__ . '/Item/list.latte',
 			'attributeTemplate' => __DIR__ . '/Attribute/list.latte',
 			'valueTemplate' => __DIR__ . '/Value/value.latte',
-			'filteringTemplate' => __DIR__ . '/Filtering/list.latte',
+			'filterListTemplate' => __DIR__ . '/FilterList/list.latte',
 			'filterTemplate' => __DIR__ . '/Filter/list.latte',
 			'paginationTemplate' => __DIR__ . '/Pagination/list.latte',
 			'sortingTemplate' => __DIR__ . '/Sorting/list.latte',
 			'displayTemplate' => __DIR__ . '/Display/list.latte',
-			'searchTemplate' => __DIR__ . '/SearchForm/list.latte'
+			'searchTemplate' => __DIR__ . '/SearchForm/list.latte',
+			'buttonTemplate' => __DIR__ . '/Button/list.latte'
 		],
 		'grid' => [
 			'name' => 'grid',
@@ -51,12 +53,13 @@ class DatasetView implements View
 			'itemTemplate' => __DIR__ . '/Item/grid.latte',
 			'attributeTemplate' => __DIR__ . '/Attribute/list.latte',
 			'valueTemplate' => __DIR__ . '/Value/value.latte',
-			'filteringTemplate' => __DIR__ . '/Filtering/list.latte',
+			'filterListTemplate' => __DIR__ . '/FilterList/list.latte',
 			'filterTemplate' => __DIR__ . '/Filter/list.latte',
 			'paginationTemplate' => __DIR__ . '/Pagination/list.latte',
 			'sortingTemplate' => __DIR__ . '/Sorting/list.latte',
 			'displayTemplate' => __DIR__ . '/Display/list.latte',
-			'searchTemplate' => __DIR__ . '/SearchForm/list.latte'
+			'searchTemplate' => __DIR__ . '/SearchForm/list.latte',
+			'buttonTemplate' => __DIR__ . '/Button/list.latte'
 		],
 	];
 
@@ -74,7 +77,7 @@ class DatasetView implements View
 
 	public ?string $valueTemplate;
 
-	public string $filteringTemplate;
+	public string $filterListTemplate;
 
 	public string $filterTemplate;
 
@@ -85,6 +88,8 @@ class DatasetView implements View
 	public string $displayTemplate;
 
 	public string $searchTemplate;
+
+	public string $buttonTemplate;
 
 	public bool $isDefault;
 
@@ -97,12 +102,13 @@ class DatasetView implements View
 		string $itemTemplate = self::VIEWS['list']['itemTemplate'],
 		string $attributeTemplate = self::VIEWS['list']['attributeTemplate'],
 		string $valueTemplate = self::VIEWS['list']['valueTemplate'],
-		string $filteringTemplate = self::VIEWS['list']['filteringTemplate'],
+		string $filterListTemplate = self::VIEWS['list']['filterListTemplate'],
 		string $filterTemplate = self::VIEWS['list']['filterTemplate'],
 		string $paginationTemplate = self::VIEWS['list']['paginationTemplate'],
 		string $sortingTemplate = self::VIEWS['list']['sortingTemplate'],
 		string $displayTemplate = self::VIEWS['list']['displayTemplate'],
 		string $searchTemplate = self::VIEWS['list']['searchTemplate'],
+		string $buttonTemplate = self::VIEWS['list']['buttonTemplate'],
 		bool $isDefault = false
 	) {
 		$this->name = $name;
@@ -112,12 +118,13 @@ class DatasetView implements View
 		$this->itemTemplate = $itemTemplate;
 		$this->attributeTemplate = $attributeTemplate;
 		$this->valueTemplate = $valueTemplate;
-		$this->filteringTemplate = $filteringTemplate;
+		$this->filterListTemplate = $filterListTemplate;
 		$this->filterTemplate = $filterTemplate;
 		$this->paginationTemplate = $paginationTemplate;
 		$this->sortingTemplate = $sortingTemplate;
 		$this->displayTemplate = $displayTemplate;
 		$this->searchTemplate = $searchTemplate;
+		$this->buttonTemplate = $buttonTemplate;
 		$this->isDefault = $isDefault;
 	}
 
@@ -143,8 +150,8 @@ class DatasetView implements View
 		if (isset($config['valueTemplate'])) {
 			$view->setAttributeTemplate($config['valueTemplate']);
 		}
-		if (isset($config['filteringTemplate'])) {
-			$view->setFilteringTemplate($config['filteringTemplate']);
+		if (isset($config['filterListTemplate'])) {
+			$view->setFilterListTemplate($config['filterListTemplate']);
 		}
 		if (isset($config['filterTemplate'])) {
 			$view->setFilterTemplate($config['filterTemplate']);
@@ -160,6 +167,9 @@ class DatasetView implements View
 		}
 		if (isset($config['searchTemplate'])) {
 			$view->setSearchTemplate($config['searchTemplate']);
+		}
+		if (isset($config['buttonTemplate'])) {
+			$view->setButtonTemplate($config['buttonTemplate']);
 		}
 		if (isset($config['isDefault'])) {
 			$view->setIsDefault($config['isDefault']);
@@ -223,9 +233,9 @@ class DatasetView implements View
 	}
 
 
-	public function setFilteringTemplate(string $filteringTemplate): DatasetView
+	public function setFilterListTemplate(string $filterListTemplate): DatasetView
 	{
-		$this->filteringTemplate = $filteringTemplate;
+		$this->filterListTemplate = $filterListTemplate;
 		return $this;
 	}
 
@@ -261,6 +271,13 @@ class DatasetView implements View
 	public function setSearchTemplate(string $searchTemplate): DatasetView
 	{
 		$this->searchTemplate = $searchTemplate;
+		return $this;
+	}
+
+
+	public function setButtonTemplate(string $buttonTemplate): DatasetView
+	{
+		$this->buttonTemplate = $buttonTemplate;
 		return $this;
 	}
 

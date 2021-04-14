@@ -10,12 +10,13 @@ use Nette\Utils\Paginator;
 
 /**
  * @property-read PaginationTemplate $template
- * @method onPaginate(SimplePagination $control)
+ * @method onPaginate(PaginationControl $control)
  */
-class SimplePagination extends DatasetControl implements Pagination
+class PaginationControl extends DatasetControl
 {
 	public array $onPaginate = [];
 
+	/** @persistent */
 	public int $page = 1;
 
 	private Paginator $paginator;

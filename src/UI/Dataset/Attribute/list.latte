@@ -1,6 +1,6 @@
 {templateType Stepapo\Data\UI\Dataset\Attribute\AttributeTemplate}
 
-<li n:if="$control->getComponent('value')->getEntityValue()" n:snippet>
+<li n:if="$entityValue">
 	{if $column->label}{_$column->label}:{/}
 	{control value}
 </li>

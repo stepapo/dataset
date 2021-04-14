@@ -11,9 +11,9 @@ use Nette\Utils\ArrayHash;
 
 /**
  * @property-read SearchFormTemplate $template
- * @method onSearch(SimpleSearchForm $control)
+ * @method onSearch(SearchFormControl $control)
  */
-class SimpleSearchForm extends DatasetControl implements SearchForm
+class SearchFormControl extends DatasetControl
 {
 	/** @var callable[] */
 	public array $onSearch = [];
@@ -38,7 +38,7 @@ class SimpleSearchForm extends DatasetControl implements SearchForm
 	}
 
 
-	public function createComponentForm(): Form
+	public function createComponentF(): Form
 	{
 		$form = new Form();
 

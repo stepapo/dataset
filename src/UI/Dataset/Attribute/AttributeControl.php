@@ -6,14 +6,14 @@ namespace Stepapo\Data\UI\Dataset\Attribute;
 
 use Stepapo\Data\Column;
 use Stepapo\Data\UI\Dataset\DatasetControl;
-use Stepapo\Data\UI\Dataset\Value\Value;
+use Stepapo\Data\UI\Dataset\Value\ValueControl;
 use Nextras\Orm\Entity\IEntity;
 
 
 /**
  * @property-read AttributeTemplate $template
  */
-class SimpleAttribute extends DatasetControl implements Attribute
+class AttributeControl extends DatasetControl
 {
 	private IEntity $entity;
 
@@ -33,13 +33,14 @@ class SimpleAttribute extends DatasetControl implements Attribute
 	{
 		parent::render();
 		$this->template->column = $this->column;
+		$this->template->entityValue = $this->getComponent('value')->getEntityValue();
 		$this->template->render($this->getSelectedView()->attributeTemplate);
 	}
 
 
-	public function createComponentValue(): Value
+	public function createComponentValue(): ValueControl
 	{
-		return $this->getFactory()->createValue(
+		return new ValueControl(
 			$this->entity,
 			$this->column
 		);

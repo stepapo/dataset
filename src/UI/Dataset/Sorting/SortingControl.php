@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Stepapo\Data\UI\Dataset\Sorting;
 
 use Stepapo\Data\UI\Dataset\DatasetControl;
@@ -9,7 +11,7 @@ use Nextras\Orm\Collection\ICollection;
 /**
  * @property-read SortingTemplate $template
  */
-class SimpleSorting extends DatasetControl implements Sorting
+class SortingControl extends DatasetControl
 {
 	/** @persistent */
 	public ?string $sort = null;

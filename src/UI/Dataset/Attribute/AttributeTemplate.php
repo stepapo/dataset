@@ -11,4 +11,6 @@ use Nette\Bridges\ApplicationLatte\Template;
 class AttributeTemplate extends Template
 {
 	public Column $column;
+
+	public ?array $entityValue;
 }
