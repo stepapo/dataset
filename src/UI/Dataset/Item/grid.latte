@@ -1,7 +1,7 @@
 {templateType Stepapo\Data\UI\Dataset\Item\ItemTemplate}
 
 {snippet}
-	<ul n:inner-foreach="$columns as $column" n:if="!$column->hide" class="col-3{if $itemClassCallback} {($itemClassCallback)($item)}{/}">
+	<ul n:inner-foreach="$columns as $column" n:if="!$column->hide" class="col-3{if $column->class} {$column->class}{/}">
 		{control attribute-$column->name}
 		<ul n:inner-foreach="$buttons as $button" n:snippet="buttons">
 			<li>
