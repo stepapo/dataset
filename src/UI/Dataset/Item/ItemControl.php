@@ -40,6 +40,7 @@ class ItemControl extends DatasetControl
 	{
 		parent::render();
 		$this->template->showDataset = (bool) $this->getDatasetCallback();
+		$this->template->itemClassCallback = $this->getItemClassCallback();
 		$this->template->item = $this->entity;
 		$this->template->render($this->getSelectedView()->itemTemplate);
 	}

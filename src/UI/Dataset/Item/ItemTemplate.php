@@ -15,4 +15,7 @@ class ItemTemplate extends DatasetControlTemplate
 	public array $columns;
 
 	public bool $showDataset;
+
+	/** @var callable|null */
+	public $itemClassCallback;
 }

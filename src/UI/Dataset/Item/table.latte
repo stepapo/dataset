@@ -1,6 +1,6 @@
 {templateType Stepapo\Data\UI\Dataset\Item\ItemTemplate}
 
-<tr n:snippet>
+<tr{if $itemClassCallback} class="{$itemClassCallback($item)}"{/} n:snippet>
 	{foreach $columns as $column}
 		{if !$column->hide}
 			{control attribute-$column->name}

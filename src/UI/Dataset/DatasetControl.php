@@ -37,6 +37,12 @@ abstract class DatasetControl extends DataControl
 	}
 
 
+	public function getItemClassCallback(): ?callable
+	{
+		return $this->getMainComponent()->getItemClassCallback();
+	}
+
+
 	public function getDatasetCallback(): ?callable
 	{
 		return $this->getMainComponent()->getDatasetCallback();

@@ -67,6 +67,9 @@ class Dataset extends DatasetControl implements MainComponent
 	private ?Search $search;
 
 	/** @var callable|null */
+	public $itemClassCallback;
+
+	/** @var callable|null */
 	private $datasetCallback;
 
 	/** @var callable|null */
@@ -91,6 +94,7 @@ class Dataset extends DatasetControl implements MainComponent
 		array $buttons = [],
 		?int $itemsPerPage = null,
 		?Search $search = null,
+		?callable $itemClassCallback = null,
 		?callable $datasetCallback = null,
 		?callable $formCallback = null,
 	) {
@@ -103,6 +107,7 @@ class Dataset extends DatasetControl implements MainComponent
 		$this->itemsPerPage = $itemsPerPage;
 		$this->search = $search;
 		$this->translator = $translator;
+		$this->itemClassCallback = $itemClassCallback;
 		$this->datasetCallback = $datasetCallback;
 		$this->formCallback = $formCallback;
 	}
@@ -133,6 +138,9 @@ class Dataset extends DatasetControl implements MainComponent
 		}
 		if (array_key_exists('search', $config)) {
 			$dataset->setSearch(Search::createFromArray((array) $config['search']));
+		}
+		if (array_key_exists('itemClassCallback', $config)) {
+			$dataset->setItemClassCallback($config['itemClassCallback']);
 		}
 		if (array_key_exists('datasetCallback', $config)) {
 			$dataset->setDatasetCallback($config['datasetCallback']);
@@ -232,6 +240,12 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
+	public function getItemClassCallback(): ?callable
+	{
+		return $this->itemClassCallback;
+	}
+
+
 	public function getDatasetCallback(): ?callable
 	{
 		return $this->datasetCallback;
@@ -298,9 +312,16 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function setTranslator(?ITranslator $translator): Dataset
+	public function setTranslator(?Translator $translator): Dataset
 	{
 		$this->translator = $translator;
+		return $this;
+	}
+
+
+	public function setItemClassCallback(?callable $itemClassCallback): Dataset
+	{
+		$this->itemClassCallback = $itemClassCallback;
 		return $this;
 	}
 

@@ -2,7 +2,7 @@
 
 <thead n:snippet>
 	<tr>
-		<th n:foreach="$columns as $column" n:if="!$column->hide" class="text-{$column->align}"{if $column->width} style="width: {$column->width}px"{/}>
+		<th n:foreach="$columns as $column" n:if="!$column->hide" n:class="'text-' . $column->align, $column->class"{if $column->width} style="width: {$column->width}px"{/}>
 {*				<span n:if="$column->description" data-tooltip="{$column->description}"><i class="fas fa-fw fa-question-circle"></i></span>*}
 			{if $column->sort}
 				{php $newDirection = $column->name == $sort ? ($direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : (!$sort && $column->sort && $column->sort->isDefault ? ($column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : $column->sort->direction)}
