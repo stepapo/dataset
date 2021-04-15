@@ -38,7 +38,7 @@ class SearchFormControl extends DatasetControl
 	}
 
 
-	public function createComponentF(): Form
+	public function createComponentForm(): Form
 	{
 		$form = new Form();
 

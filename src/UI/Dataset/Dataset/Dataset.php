@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Stepapo\Data\UI\Dataset\Dataset;
 
 use Nette\Application\UI\Form;
-use Nette\Localization\Translator;
+use Nette\Localization\ITranslator;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Button;
@@ -51,7 +51,7 @@ class Dataset extends DatasetControl implements MainComponent
 
 	private ?IEntity $parentEntity;
 
-	private ?Translator $translator;
+	private ?ITranslator $translator;
 
 	/** @var Column[]|null */
 	private ?array $columns;
@@ -88,7 +88,7 @@ class Dataset extends DatasetControl implements MainComponent
 		ICollection $collection,
 		IRepository $repository,
 		?IEntity $parentEntity = null,
-		?Translator $translator = null,
+		?ITranslator $translator = null,
 		array $columns = [],
 		array $views = [],
 		array $buttons = [],
@@ -96,7 +96,7 @@ class Dataset extends DatasetControl implements MainComponent
 		?Search $search = null,
 		?callable $itemClassCallback = null,
 		?callable $datasetCallback = null,
-		?callable $formCallback = null,
+		?callable $formCallback = null
 	) {
 		$this->collection = $collection;
 		$this->repository = $repository;
@@ -234,7 +234,7 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function getTranslator(): ?Translator
+	public function getTranslator(): ?ITranslator
 	{
 		return $this->translator;
 	}
@@ -312,7 +312,7 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function setTranslator(?Translator $translator): Dataset
+	public function setTranslator(?ITranslator $translator): Dataset
 	{
 		$this->translator = $translator;
 		return $this;
@@ -588,7 +588,7 @@ class Dataset extends DatasetControl implements MainComponent
 			if (!$column->filter) {
 				continue;
 			}
-			$value = $this->getComponent('filtering')->getComponent('filter')->getComponent($column->name)->value;
+			$value = $this->getComponent('filterList')->getComponent('filter')->getComponent($column->name)->value;
 			if (!$value) {
 				continue;
 			}

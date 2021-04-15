@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI;
 
-use Nette\Localization\Translator;
+use Nette\Localization\ITranslator;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Column;
@@ -20,7 +20,7 @@ interface MainComponent
 
 	function getParentEntity(): ?IEntity;
 
-	function getTranslator(): ?Translator;
+	function getTranslator(): ?ITranslator;
 
 	/** @return Column[]|null */
 	function getColumns(): ?array;

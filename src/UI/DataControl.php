@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI;
 
-use Nette\Application\UI\Template;
-use Nette\Localization\Translator;
+use Nette\Application\UI\ITemplate;
+use Nette\Localization\ITranslator;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Column;
@@ -24,7 +24,7 @@ abstract class DataControl extends Control
 	}
 
 
-	protected function createTemplate(): Template
+	protected function createTemplate(): ITemplate
 	{
 		$template = parent::createTemplate();
 		$template->setTranslator($this->getTranslator());
@@ -53,7 +53,7 @@ abstract class DataControl extends Control
 	}
 
 
-	public function getTranslator(): ?Translator
+	public function getTranslator(): ?ITranslator
 	{
 		return $this->getMainComponent()->getTranslator();
 	}
