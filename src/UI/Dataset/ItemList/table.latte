@@ -1,5 +1,24 @@
 {templateType Stepapo\Data\UI\Dataset\ItemList\ItemListTemplate}
 
 <tbody n:inner-foreach="$items as $item" n:snippet>
-	{control item-$item->id}
+	{control 'item-' . $item->getValue($idColumnName)}
+	{*<tr{if $itemClassCallback} class="{$itemClassCallback($item)}"{/}>
+		{foreach $columns as $column}
+			{php $value = $control->getValue($item, $column->columnName)}
+			{if !$column->hide}
+				<td n:class="'text-' . $column->align, $column->class ? $column->class"{if $column->width} style="width: {$column->width}px"{/}>
+					{include
+						$column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate,
+						'entity' => $item,
+						'value' => $value,
+						'column' => $column,
+						'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($item, $a), $column->link->args) : null
+					}
+				</td>
+			{/}
+		{/}
+		<td n:if="$buttons" n:inner-foreach="$buttons as $button" class="text-right" n:snippet="buttons">
+			{control button-$button->name}
+		</td>
+	</tr>*}
 </tbody>

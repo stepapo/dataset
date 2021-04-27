@@ -21,7 +21,7 @@
         {else}
             <p>
                 {_}Nic nenalezeno{/}.
-                {if $suggestedTerm}
+                {if isset($term, $suggestedTerm)}
                     {_}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
                 {/}
             </p>

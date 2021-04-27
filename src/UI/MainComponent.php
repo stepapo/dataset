@@ -10,6 +10,7 @@ use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Column;
 use Stepapo\Data\View;
 use Nextras\Orm\Collection\ICollection;
+use Ublaboo\ImageStorage\ImageStorage;
 
 
 interface MainComponent
@@ -21,6 +22,8 @@ interface MainComponent
 	function getParentEntity(): ?IEntity;
 
 	function getTranslator(): ?ITranslator;
+
+    function getImageStorage(): ?ImageStorage;
 
 	/** @return Column[]|null */
 	function getColumns(): ?array;

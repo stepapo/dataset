@@ -2,6 +2,6 @@
 
 {snippet}
 	<div class="row" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
-		{control item-$item->id}
+		{control 'item-' . $item->getValue($idColumnName)}
 	</div>
 {/}

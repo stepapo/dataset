@@ -12,6 +12,7 @@ use Stepapo\Data\Column;
 use Stepapo\Data\View;
 use Nette\Application\UI\Control;
 use Nextras\Orm\Collection\ICollection;
+use Ublaboo\ImageStorage\ImageStorage;
 
 
 abstract class DataControl extends Control
@@ -21,6 +22,7 @@ abstract class DataControl extends Control
 		$this->template->columns = $this->getColumns();
 		$this->template->views = $this->getViews();
 		$this->template->selectedView = $this->getSelectedView();
+		$this->template->imageStorage = $this->getImageStorage();
 	}
 
 
@@ -57,6 +59,12 @@ abstract class DataControl extends Control
 	{
 		return $this->getMainComponent()->getTranslator();
 	}
+
+
+    public function getImageStorage(): ?ImageStorage
+    {
+        return $this->getMainComponent()->getImageStorage();
+    }
 
 
 	/** @var Column[]|null */

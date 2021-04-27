@@ -43,9 +43,9 @@ class SearchFormControl extends DatasetControl
 		$form = new Form();
 
 		$form->addText('term')
-			->setHtmlAttribute('placeholder', $this->placeholder ? $this->getTranslator()->translate($this->placeholder) . '...' : null);
+			->setHtmlAttribute('placeholder', $this->placeholder ? ($this->getTranslator() ? $this->getTranslator()->translate($this->placeholder) : $this->placeholder) . '...' : null);
 
-		$form->addSubmit('send', $this->getTranslator()->translate('Hledat'));
+		$form->addSubmit('send', $this->getTranslator() ? $this->getTranslator()->translate('Hledat') : 'Hledat');
 
 		$form->onValidate[] = [$this, 'formValidate'];
 		$form->onSuccess[] = [$this, 'formSucceeded'];

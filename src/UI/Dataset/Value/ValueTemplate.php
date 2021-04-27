@@ -19,6 +19,4 @@ class ValueTemplate extends DatasetControlTemplate
 	public ?array $linkArgs;
 
 	public Column $column;
-
-	public array $filter;
 }
