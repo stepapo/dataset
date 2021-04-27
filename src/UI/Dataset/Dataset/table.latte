@@ -9,28 +9,28 @@
 	<p n:if="$term">{_}Výsledky vyhledávání podle výrazu{/} "{$term}"</p>
 	{if $showForm}
 		{snippet form}
-		    {control form}
+			{control form}
 		{/}
 	{/}
 	{if $showPagination}
-        {if $count > 0}
-            <table>
-                {control sorting}
-                {control itemList}
-            </table>
-        {else}
-            <p>
-                {_}Nic nenalezeno{/}.
-                {if isset($term, $suggestedTerm)}
-                    {_}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
-                {/}
-            </p>
-        {/}
+		{if $count > 0}
+			<table>
+				{control sorting}
+				{control itemList}
+			</table>
+		{else}
+			<p>
+				{_}Nic nenalezeno{/}.
+				{if isset($term, $suggestedTerm)}
+					{_}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+				{/}
+			</p>
+		{/}
 		{control pagination}
 	{else}
-        <table>
-            {control sorting}
-            {control itemList}
-        </table>
+		<table>
+			{control sorting}
+			{control itemList}
+		</table>
 	{/}
 {/}

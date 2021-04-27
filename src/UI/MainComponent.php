@@ -23,7 +23,7 @@ interface MainComponent
 
 	function getTranslator(): ?ITranslator;
 
-    function getImageStorage(): ?ImageStorage;
+	function getImageStorage(): ?ImageStorage;
 
 	/** @return Column[]|null */
 	function getColumns(): ?array;

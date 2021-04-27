@@ -61,10 +61,10 @@ abstract class DataControl extends Control
 	}
 
 
-    public function getImageStorage(): ?ImageStorage
-    {
-        return $this->getMainComponent()->getImageStorage();
-    }
+	public function getImageStorage(): ?ImageStorage
+	{
+		return $this->getMainComponent()->getImageStorage();
+	}
 
 
 	/** @var Column[]|null */

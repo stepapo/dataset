@@ -14,11 +14,11 @@ use Ublaboo\ImageStorage\ImageStorage;
 
 abstract class DataControlTemplate extends Template
 {
-    public Presenter $presenter;
+	public Presenter $presenter;
 
-    public Control $control;
+	public Control $control;
 
-    public string $basePath;
+	public string $basePath;
 
 	/** @var Column[] */
 	public array $columns;

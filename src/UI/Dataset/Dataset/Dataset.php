@@ -94,7 +94,7 @@ class Dataset extends DatasetControl implements MainComponent
 		IRepository $repository,
 		?IEntity $parentEntity = null,
 		?ITranslator $translator = null,
-        ?ImageStorage $imageStorage = null,
+		?ImageStorage $imageStorage = null,
 		array $columns = [],
 		array $views = [],
 		array $buttons = [],
@@ -103,7 +103,7 @@ class Dataset extends DatasetControl implements MainComponent
 		?callable $itemClassCallback = null,
 		?callable $datasetCallback = null,
 		?callable $formCallback = null,
-        string $idColumnName = 'id'
+		string $idColumnName = 'id'
 	) {
 		$this->collection = $collection;
 		$this->repository = $repository;
@@ -114,7 +114,7 @@ class Dataset extends DatasetControl implements MainComponent
 		$this->itemsPerPage = $itemsPerPage;
 		$this->search = $search;
 		$this->translator = $translator;
-        $this->imageStorage = $imageStorage;
+		$this->imageStorage = $imageStorage;
 		$this->itemClassCallback = $itemClassCallback;
 		$this->datasetCallback = $datasetCallback;
 		$this->formCallback = $formCallback;
@@ -145,9 +145,9 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('translator', $config)) {
 			$dataset->setTranslator($config['translator']);
 		}
-        if (array_key_exists('imageStorage', $config)) {
-            $dataset->setImageStorage($config['imageStorage']);
-        }
+		if (array_key_exists('imageStorage', $config)) {
+			$dataset->setImageStorage($config['imageStorage']);
+		}
 		if (array_key_exists('search', $config)) {
 			$dataset->setSearch(Search::createFromArray((array) $config['search']));
 		}
@@ -160,9 +160,9 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('formCallback', $config)) {
 			$dataset->setFormCallback($config['formCallback']);
 		}
-        if (array_key_exists('idColumnName', $config)) {
-            $dataset->setIdColumnName($config['idColumnName']);
-        }
+		if (array_key_exists('idColumnName', $config)) {
+			$dataset->setIdColumnName($config['idColumnName']);
+		}
 		if (array_key_exists('columns', $config)) {
 			foreach ((array) $config['columns'] as $columnName => $columnConfig) {
 				$dataset->addColumn(Column::createFromArray((array) $columnConfig, $columnName));
@@ -255,10 +255,10 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-    public function getImageStorage(): ?ImageStorage
-    {
-        return $this->imageStorage;
-    }
+	public function getImageStorage(): ?ImageStorage
+	{
+		return $this->imageStorage;
+	}
 
 
 	public function getItemClassCallback(): ?callable
@@ -279,10 +279,10 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-    public function getIdColumnName(): string
-    {
-        return $this->idColumnName;
-    }
+	public function getIdColumnName(): string
+	{
+		return $this->idColumnName;
+	}
 
 
 	/** @return Column[]|null */
@@ -346,11 +346,11 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-    public function setImageStorage(?ImageStorage $imageStorage): Dataset
-    {
-        $this->imageStorage = $imageStorage;
-        return $this;
-    }
+	public function setImageStorage(?ImageStorage $imageStorage): Dataset
+	{
+		$this->imageStorage = $imageStorage;
+		return $this;
+	}
 
 
 	public function setItemClassCallback(?callable $itemClassCallback): Dataset
@@ -524,11 +524,11 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-    public function setIdColumnName(string $idColumnName): Dataset
-    {
-        $this->idColumnName = $idColumnName;
-        return $this;
-    }
+	public function setIdColumnName(string $idColumnName): Dataset
+	{
+		$this->idColumnName = $idColumnName;
+		return $this;
+	}
 
 
 	/**
