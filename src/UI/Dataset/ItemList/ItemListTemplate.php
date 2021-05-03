@@ -14,7 +14,4 @@ class ItemListTemplate extends DatasetControlTemplate
 	public array $items;
 
 	public string $idColumnName;
-
-	/** @var callable|null */
-	public $itemClassCallback;
 }

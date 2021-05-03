@@ -22,7 +22,6 @@ class ItemListControl extends DatasetControl
 		if ($this->getMainComponent()->shouldRetrieveItems) {
 			$this->template->items = $this->getItems();
 		}
-		$this->template->itemClassCallback = $this->getItemClassCallback();
 		$this->template->idColumnName = $this->getMainComponent()->getIdColumnName();
 		$this->template->render($this->getSelectedView()->itemListTemplate);
 	}
@@ -78,6 +77,6 @@ class ItemListControl extends DatasetControl
 
 	private function getItems()
 	{
-		return $this->getCollectionItems()->fetchPairs($this->getMainComponent()->getIdColumnName());
+		return $this->getMainComponent()->getCollectionItems()->fetchPairs($this->getMainComponent()->getIdColumnName());
 	}
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset\Item;
 
-use Stepapo\Data\UI\Dataset\Attribute\AttributeControl;
+use Nette\ComponentModel\IComponent;
 use Stepapo\Data\UI\Dataset\Button\ButtonControl;
 use Stepapo\Data\UI\Dataset\Dataset\Dataset;
 use Stepapo\Data\UI\Dataset\DatasetControl;
@@ -39,8 +39,9 @@ class ItemControl extends DatasetControl
 	public function render()
 	{
 		parent::render();
-		$this->template->showDataset = (bool) $this->getDatasetCallback();
-		$this->template->itemClassCallback = $this->getItemClassCallback();
+		$this->template->buttons = $this->getMainComponent()->getButtons();
+		$this->template->parts = $this->getMainComponent()->getItemParts();
+		$this->template->itemClassCallback = $this->getMainComponent()->getItemClassCallback();
 		$this->template->item = $this->entity;
 		$this->template->render($this->getSelectedView()->itemTemplate);
 	}
@@ -51,7 +52,7 @@ class ItemControl extends DatasetControl
 		return new Multiplier(function(string $columnName): ButtonControl {
 			$button = new ButtonControl(
 				$this->entity,
-				$this->getButtons()[$columnName],
+				$this->getMainComponent()->getButtons()[$columnName],
 			);
 			$button->onExecute[] = function (ButtonControl $control, IEntity $entity) {
 				$this->redrawControl('buttons');
@@ -65,25 +66,19 @@ class ItemControl extends DatasetControl
 	}
 
 
-	public function createComponentAttribute()
+	public function createComponentPart()
 	{
-		return new Multiplier(function(string $columnName): AttributeControl {
-			return new AttributeControl(
-				$this->entity,
-				$this->getColumns()[$columnName],
-			);
+		return new Multiplier(function(string $name): IComponent {
+			$itemPart = $this->getMainComponent()->getItemParts()[$name];
+			$control = ($itemPart->callback)($this, $this->entity);
+			if ($control instanceof Dataset) {
+				$control->onItemChange[] = function (Dataset $control, ?IEntity $entity = null) {
+					$this->getMainComponent()->shouldRetrieveItems = false;
+					$this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
+				};
+			}
+			return $control;
 		});
-	}
-
-
-	public function createComponentDataset(): Dataset
-	{
-		$control = ($this->getDatasetCallback())($this, $this->entity);
-		$control->onItemChange[] = function (Dataset $control, ?IEntity $entity = null) {
-			$this->getMainComponent()->shouldRetrieveItems = false;
-			$this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
-		};
-		return $control;
 	}
 
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset\Dataset;
 
+use Stepapo\Data\Part;
 use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 
 
@@ -13,7 +14,8 @@ class DatasetTemplate extends DatasetControlTemplate
 
 	public int $count;
 
-	public bool $showForm;
+	/** @var Part[]|null  */
+	public ?array $parts;
 
 	public bool $showPagination;
 

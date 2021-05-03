@@ -23,8 +23,8 @@ abstract class DataControlTemplate extends Template
 
 	public string $basePath;
 
-	/** @var Column[] */
-	public array $columns;
+	/** @var Column[]|null */
+	public ?array $columns;
 
 	/** @var View[]|null */
 	public ?array $views;

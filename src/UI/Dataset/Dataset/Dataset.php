@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset\Dataset;
 
-use Nette\Application\UI\Form;
+use Nette\Application\UI\Multiplier;
+use Nette\ComponentModel\IComponent;
 use Nette\Localization\ITranslator;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
@@ -15,6 +16,7 @@ use Stepapo\Data\LatteFilter;
 use Stepapo\Data\Link;
 use Stepapo\Data\Option;
 use Stepapo\Data\OrmFunction;
+use Stepapo\Data\Part;
 use Stepapo\Data\Sort;
 use Stepapo\Data\Search;
 use Stepapo\Data\UI\Dataset\DatasetControl;
@@ -65,18 +67,18 @@ class Dataset extends DatasetControl implements MainComponent
 	/** @var Button[]|null */
 	private ?array $buttons;
 
+	/** @var Part[]|null  */
+	private ?array $datasetParts;
+
+	/** @var Part[]|null  */
+	private ?array $itemParts;
+
 	private ?int $itemsPerPage;
 
 	private ?Search $search;
 
 	/** @var callable|null */
 	public $itemClassCallback;
-
-	/** @var callable|null */
-	private $datasetCallback;
-
-	/** @var callable|null */
-	private $formCallback;
 
 	private string $idColumnName;
 
@@ -98,11 +100,11 @@ class Dataset extends DatasetControl implements MainComponent
 		array $columns = [],
 		array $views = [],
 		array $buttons = [],
+		array $datasetParts = [],
+		array $itemParts = [],
 		?int $itemsPerPage = null,
 		?Search $search = null,
 		?callable $itemClassCallback = null,
-		?callable $datasetCallback = null,
-		?callable $formCallback = null,
 		string $idColumnName = 'id'
 	) {
 		$this->collection = $collection;
@@ -111,13 +113,13 @@ class Dataset extends DatasetControl implements MainComponent
 		$this->columns = $columns;
 		$this->views = $views;
 		$this->buttons = $buttons;
+		$this->datasetParts = $datasetParts;
+		$this->itemParts = $itemParts;
 		$this->itemsPerPage = $itemsPerPage;
 		$this->search = $search;
 		$this->translator = $translator;
 		$this->imageStorage = $imageStorage;
 		$this->itemClassCallback = $itemClassCallback;
-		$this->datasetCallback = $datasetCallback;
-		$this->formCallback = $formCallback;
 		$this->idColumnName = $idColumnName;
 	}
 
@@ -154,12 +156,6 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('itemClassCallback', $config)) {
 			$dataset->setItemClassCallback($config['itemClassCallback']);
 		}
-		if (array_key_exists('datasetCallback', $config)) {
-			$dataset->setDatasetCallback($config['datasetCallback']);
-		}
-		if (array_key_exists('formCallback', $config)) {
-			$dataset->setFormCallback($config['formCallback']);
-		}
 		if (array_key_exists('idColumnName', $config)) {
 			$dataset->setIdColumnName($config['idColumnName']);
 		}
@@ -174,8 +170,18 @@ class Dataset extends DatasetControl implements MainComponent
 			}
 		}
 		if (array_key_exists('buttons', $config)) {
-			foreach ((array) $config['buttons'] as $name => $viewConfig) {
-				$dataset->addButton(Button::createFromArray((array) $viewConfig, $name));
+			foreach ((array) $config['buttons'] as $name => $buttonConfig) {
+				$dataset->addButton(Button::createFromArray((array) $buttonConfig, $name));
+			}
+		}
+		if (array_key_exists('datasetParts', $config)) {
+			foreach ((array) $config['datasetParts'] as $name => $partConfig) {
+				$dataset->addDatasetPart(Part::createFromArray((array) $partConfig, $name));
+			}
+		}
+		if (array_key_exists('itemParts', $config)) {
+			foreach ((array) $config['itemParts'] as $name => $partConfig) {
+				$dataset->addItemPart(Part::createFromArray((array) $partConfig, $name));
 			}
 		}
 		return $dataset;
@@ -215,9 +221,9 @@ class Dataset extends DatasetControl implements MainComponent
 	public function render()
 	{
 		parent::render();
-		$this->template->showForm = (bool) $this->formCallback;
 		$this->template->showPagination = (bool) $this->itemsPerPage;
 		$this->template->showSearch = (bool) $this->search;
+		$this->template->parts = $this->getDatasetParts();
 		if ($this->itemsPerPage && $this->shouldRetrieveItems) {
 			$count = $this->getCollectionCount();
 			$term = $this->search ? $this->getComponent('searchForm')->term : null;
@@ -267,18 +273,6 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function getDatasetCallback(): ?callable
-	{
-		return $this->datasetCallback;
-	}
-
-
-	public function getFormCallback(): ?callable
-	{
-		return $this->formCallback;
-	}
-
-
 	public function getIdColumnName(): string
 	{
 		return $this->idColumnName;
@@ -303,6 +297,20 @@ class Dataset extends DatasetControl implements MainComponent
 	public function getButtons(): ?array
 	{
 		return $this->buttons;
+	}
+
+
+	/** @return Part[]|null */
+	public function getDatasetParts(): ?array
+	{
+		return $this->datasetParts;
+	}
+
+
+	/** @return Part[]|null */
+	public function getItemParts(): ?array
+	{
+		return $this->itemParts;
 	}
 
 
@@ -491,7 +499,7 @@ class Dataset extends DatasetControl implements MainComponent
 		string $handleCallback,
 		string $hideCallback,
 		?string $label = null
-	): DatasetView
+	): Button
 	{
 		$this->buttons[$name] = new Button(
 			$name,
@@ -503,23 +511,49 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
+	public function addDatasetPart(Part $part): Dataset
+	{
+		$this->datasetParts[$part->name] = $part;
+		return $this;
+	}
+
+
+	public function createAndAddDatasetPart(
+		string $name,
+		string $callback
+	): Part
+	{
+		$this->datasetParts[$name] = new Part(
+			$name,
+			$callback
+		);
+		return $this->datasetParts[$name];
+	}
+
+
+	public function addItemPart(Part $part): Dataset
+	{
+		$this->itemParts[$part->name] = $part;
+		return $this;
+	}
+
+
+	public function createAndAddItemPart(
+		string $name,
+		string $callback
+	): Part
+	{
+		$this->itemParts[$name] = new Part(
+			$name,
+			$callback
+		);
+		return $this->itemParts[$name];
+	}
+
+
 	public function setSearch(Search $search): Dataset
 	{
 		$this->search = $search;
-		return $this;
-	}
-
-
-	public function setDatasetCallback(callable $datasetCallback): Dataset
-	{
-		$this->datasetCallback = $datasetCallback;
-		return $this;
-	}
-
-
-	public function setFormCallback(callable $formCallback): Dataset
-	{
-		$this->formCallback = $formCallback;
 		return $this;
 	}
 
@@ -556,9 +590,12 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	public function createComponentForm(): Form
+	public function createComponentPart()
 	{
-		return ($this->getFormCallback())($this, $this->getParentEntity());
+		return new Multiplier(function(string $name): IComponent {
+			$part = $this->getDatasetParts()[$name];
+			return ($part->callback)($this, $this->getParentEntity());
+		});
 	}
 
 

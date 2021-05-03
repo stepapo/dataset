@@ -7,11 +7,11 @@
 	{control filterList}
 	{control display}
 	<p n:if="$term">{_}Výsledky vyhledávání podle výrazu{/} "{$term}"</p>
-	{if $showForm}
-		{snippet form}
-			{control form}
-		{/}
-	{/}
+	{snippet parts}
+        {foreach $parts as $part}
+            {control part-$part->name}
+        {/}
+    {/}
 	{if $showPagination}
 		{if $count > 0}
 			<table>

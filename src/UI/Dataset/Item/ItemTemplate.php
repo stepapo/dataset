@@ -2,7 +2,8 @@
 
 namespace Stepapo\Data\UI\Dataset\Item;
 
-use Stepapo\Data\Column;
+use Stepapo\Data\Button;
+use Stepapo\Data\Part;
 use Stepapo\Data\UI\Dataset\DatasetControlTemplate;
 use Nextras\Orm\Entity\IEntity;
 
@@ -11,10 +12,11 @@ class ItemTemplate extends DatasetControlTemplate
 {
 	public IEntity $item;
 
-	/** @var Column[] */
-	public array $columns;
+	/** @var Button[]|null  */
+	public ?array $buttons;
 
-	public bool $showDataset;
+	/** @var Part[]|null  */
+	public ?array $parts;
 
 	/** @var callable|null */
 	public $itemClassCallback;
