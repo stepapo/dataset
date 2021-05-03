@@ -6,6 +6,7 @@ namespace Stepapo\Data\UI;
 
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Presenter;
+use Nette\Security\User;
 use Stepapo\Data\Column;
 use Stepapo\Data\View;
 use Nette\Bridges\ApplicationLatte\Template;
@@ -17,6 +18,8 @@ abstract class DataControlTemplate extends Template
 	public Presenter $presenter;
 
 	public Control $control;
+
+	public User $user;
 
 	public string $basePath;
 
