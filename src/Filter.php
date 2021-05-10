@@ -17,6 +17,8 @@ class Filter
 
 	public ?string $columnName;
 
+    public bool $hide;
+
 
 	/** @var array|Option[]|null $options */
 	public function __construct(
@@ -24,13 +26,15 @@ class Filter
 		?string $prompt = null,
 		?string $columnName = null,
 		?string $function = null,
-		?int $collapse = null
+		?int $collapse = null,
+        bool $hide = false
 	) {
 		$this->options = $options;
 		$this->prompt = $prompt;
 		$this->collapse = $collapse;
 		$this->function = $function;
 		$this->columnName = $columnName;
+        $this->hide = $hide;
 	}
 
 
@@ -54,6 +58,9 @@ class Filter
 		if (array_key_exists('function', $config)) {
 			$filter->setFunction($config['function']);
 		}
+        if (array_key_exists('hide', $config)) {
+            $filter->setHide($config['hide']);
+        }
 		return $filter;
 	}
 
@@ -108,6 +115,19 @@ class Filter
 		$this->function = $function;
 		return $this;
 	}
+
+
+    public function getHide(): bool
+    {
+        return $this->hide;
+    }
+
+
+    public function setHide(bool $hide): Filter
+    {
+        $this->hide = $hide;
+        return $this;
+    }
 
 
 	public function addOption(Option $option): Filter
