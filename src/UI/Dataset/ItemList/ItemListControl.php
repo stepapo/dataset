@@ -33,23 +33,23 @@ class ItemListControl extends DatasetControl
 		return new Multiplier(function ($id): IComponent {
 			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
 			$control = $this->getMainComponent()->getSelectedView()->itemFactoryCallback
-                ? ($this->getMainComponent()->getSelectedView()->itemFactoryCallback)($entity)
-                : new ItemControl($entity);
+				? ($this->getMainComponent()->getSelectedView()->itemFactoryCallback)($entity)
+				: new ItemControl($entity);
 			if (property_exists($control, 'onChange')) {
-                $control->onChange[] = function (IComponent $control, IEntity $entity) {
-                    $this->getMainComponent()->shouldRetrieveItems = false;
-                    $this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
-                };
-            }
-            if (property_exists($control, 'onRemove')) {
-                $control->onRemove[] = function (IComponent $control) {
-                    $this->redrawControl();
-                    if ($this->getMainComponent()->getItemsPerPage()) {
-                        $this->getMainComponent()->getComponent('pagination')->redrawControl();
-                    }
-                    $this->getMainComponent()->onItemChange($this->getMainComponent());
-                };
-            }
+				$control->onChange[] = function (IComponent $control, IEntity $entity) {
+					$this->getMainComponent()->shouldRetrieveItems = false;
+					$this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
+				};
+			}
+			if (property_exists($control, 'onRemove')) {
+				$control->onRemove[] = function (IComponent $control) {
+					$this->redrawControl();
+					if ($this->getMainComponent()->getItemsPerPage()) {
+						$this->getMainComponent()->getComponent('pagination')->redrawControl();
+					}
+					$this->getMainComponent()->onItemChange($this->getMainComponent());
+				};
+			}
 			return $control;
 		});
 	}

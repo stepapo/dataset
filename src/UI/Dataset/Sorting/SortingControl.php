@@ -29,11 +29,11 @@ class SortingControl extends DatasetControl
 		$sortCount = 0;
 		foreach ($this->getColumns() as $column) {
 			if ($column->sort) {
-			    $sortCount++;
- 			    if ($sortCount > 1) {
-                    $this->template->show = true;
-                    break;
-                }
+				$sortCount++;
+ 				if ($sortCount > 1) {
+					$this->template->show = true;
+					break;
+				}
 			}
 		}
 		$this->template->showButtons = (bool) $this->getMainComponent()->getButtons();

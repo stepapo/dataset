@@ -143,9 +143,9 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('search', $config)) {
 			$dataset->setSearch(Search::createFromArray((array) $config['search']));
 		}
-        if (array_key_exists('itemClassCallback', $config)) {
-            $dataset->setItemClassCallback($config['itemClassCallback']);
-        }
+		if (array_key_exists('itemClassCallback', $config)) {
+			$dataset->setItemClassCallback($config['itemClassCallback']);
+		}
 		if (array_key_exists('idColumnName', $config)) {
 			$dataset->setIdColumnName($config['idColumnName']);
 		}
@@ -191,9 +191,9 @@ class Dataset extends DatasetControl implements MainComponent
 
 	public function getCollectionCount(): int
 	{
-	    if (isset($this->count)) {
-	        return $this->count;
-        }
+		if (isset($this->count)) {
+			return $this->count;
+		}
 		$c = $this->getCollection();
 		$c = $this->filter($c);
 		$c = $this->search($c);
@@ -208,7 +208,7 @@ class Dataset extends DatasetControl implements MainComponent
 		$this->template->showPagination = (bool) $this->itemsPerPage;
 		$this->template->showSearch = (bool) $this->search;
 		if ($this->itemsPerPage && $this->shouldRetrieveItems) {
-            $count = $this->getCollectionCount();
+			$count = $this->getCollectionCount();
 			$term = $this->search ? $this->getComponent('searchForm')->term : null;
 			$this->template->count = $count;
 			$this->template->term = $term;

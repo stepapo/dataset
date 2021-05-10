@@ -92,8 +92,8 @@ class DatasetView implements View
 
 	public string $buttonTemplate;
 
-    /** @var callable|null */
-    public $itemFactoryCallback;
+	/** @var callable|null */
+	public $itemFactoryCallback;
 
 	public bool $isDefault;
 
@@ -113,7 +113,7 @@ class DatasetView implements View
 		string $displayTemplate = self::VIEWS['list']['displayTemplate'],
 		string $searchTemplate = self::VIEWS['list']['searchTemplate'],
 		string $buttonTemplate = self::VIEWS['list']['buttonTemplate'],
-        ?callable $itemFactoryCallback = null,
+		?callable $itemFactoryCallback = null,
 		bool $isDefault = false
 	) {
 		$this->name = $name;
@@ -130,7 +130,7 @@ class DatasetView implements View
 		$this->displayTemplate = $displayTemplate;
 		$this->searchTemplate = $searchTemplate;
 		$this->buttonTemplate = $buttonTemplate;
-        $this->itemFactoryCallback = $itemFactoryCallback;
+		$this->itemFactoryCallback = $itemFactoryCallback;
 		$this->isDefault = $isDefault;
 	}
 
@@ -177,9 +177,9 @@ class DatasetView implements View
 		if (isset($config['buttonTemplate'])) {
 			$view->setButtonTemplate($config['buttonTemplate']);
 		}
-        if (array_key_exists('itemFactoryCallback', $config)) {
-            $view->setItemFactoryCallback($config['itemFactoryCallback']);
-        }
+		if (array_key_exists('itemFactoryCallback', $config)) {
+			$view->setItemFactoryCallback($config['itemFactoryCallback']);
+		}
 		if (isset($config['isDefault'])) {
 			$view->setIsDefault($config['isDefault']);
 		}
@@ -291,11 +291,11 @@ class DatasetView implements View
 	}
 
 
-    public function setItemFactoryCallback(?callable $itemFactoryCallback): DatasetView
-    {
-        $this->itemFactoryCallback = $itemFactoryCallback;
-        return $this;
-    }
+	public function setItemFactoryCallback(?callable $itemFactoryCallback): DatasetView
+	{
+		$this->itemFactoryCallback = $itemFactoryCallback;
+		return $this;
+	}
 
 
 	public function setIsDefault(bool $isDefault): DatasetView
