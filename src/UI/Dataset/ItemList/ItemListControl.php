@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Data\UI\Dataset\ItemList;
 
+use Nette\ComponentModel\IComponent;
 use Stepapo\Data\UI\Dataset\DatasetControl;
 use Stepapo\Data\UI\Dataset\Item\ItemControl;
 use Nette\Application\UI\Multiplier;
@@ -29,20 +30,26 @@ class ItemListControl extends DatasetControl
 
 	public function createComponentItem()
 	{
-		return new Multiplier(function ($id): ItemControl {
+		return new Multiplier(function ($id): IComponent {
 			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
-			$control = new ItemControl($entity);
-			$control->onChange[] = function (ItemControl $control, IEntity $entity) {
-				$this->getMainComponent()->shouldRetrieveItems = false;
-				$this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
-			};
-			$control->onRemove[] = function (ItemControl $control) {
-				$this->redrawControl();
-				if ($this->getMainComponent()->getItemsPerPage()) {
-					$this->getMainComponent()->getComponent('pagination')->redrawControl();
-				}
-				$this->getMainComponent()->onItemChange($this->getMainComponent());
-			};
+			$control = $this->getMainComponent()->getSelectedView()->itemFactoryCallback
+                ? ($this->getMainComponent()->getSelectedView()->itemFactoryCallback)($entity)
+                : new ItemControl($entity);
+			if (property_exists($control, 'onChange')) {
+                $control->onChange[] = function (IComponent $control, IEntity $entity) {
+                    $this->getMainComponent()->shouldRetrieveItems = false;
+                    $this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
+                };
+            }
+            if (property_exists($control, 'onRemove')) {
+                $control->onRemove[] = function (IComponent $control) {
+                    $this->redrawControl();
+                    if ($this->getMainComponent()->getItemsPerPage()) {
+                        $this->getMainComponent()->getComponent('pagination')->redrawControl();
+                    }
+                    $this->getMainComponent()->onItemChange($this->getMainComponent());
+                };
+            }
 			return $control;
 		});
 	}

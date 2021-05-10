@@ -40,7 +40,6 @@ class ItemControl extends DatasetControl
 	{
 		parent::render();
 		$this->template->buttons = $this->getMainComponent()->getButtons();
-		$this->template->parts = $this->getMainComponent()->getItemParts();
 		$this->template->itemClassCallback = $this->getMainComponent()->getItemClassCallback();
 		$this->template->item = $this->entity;
 		$this->template->render($this->getSelectedView()->itemTemplate);
@@ -62,22 +61,6 @@ class ItemControl extends DatasetControl
 				$this->onRemove($this);
 			};
 			return $button;
-		});
-	}
-
-
-	public function createComponentPart()
-	{
-		return new Multiplier(function(string $name): IComponent {
-			$itemPart = $this->getMainComponent()->getItemParts()[$name];
-			$control = ($itemPart->callback)($this, $this->entity);
-			if ($control instanceof Dataset) {
-				$control->onItemChange[] = function (Dataset $control, ?IEntity $entity = null) {
-					$this->getMainComponent()->shouldRetrieveItems = false;
-					$this->getMainComponent()->onItemChange($this->getMainComponent(), $entity);
-				};
-			}
-			return $control;
 		});
 	}
 

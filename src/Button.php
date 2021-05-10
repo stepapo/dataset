@@ -17,17 +17,21 @@ class Button
 
 	public $hideCallback;
 
+    public ?string $valueTemplateFile;
+
 
 	public function __construct(
 		string $name,
 		callable $handleCallback,
 		?callable $hideCallback = null,
-		?string $label = null
+		?string $label = null,
+        ?string $templateFile = null,
 	) {
 		$this->name = $name;
 		$this->label = $label;
 		$this->handleCallback = $handleCallback;
 		$this->hideCallback = $hideCallback;
+        $this->templateFile = $templateFile;
 	}
 
 
@@ -40,7 +44,8 @@ class Button
 			$name,
 			$config['handleCallback'],
 			$config['hideCallback'] ?? null,
-			$config['label'] ?? null
+			$config['label'] ?? null,
+            $config['templateFile'] ?? null
 		);
 	}
 }

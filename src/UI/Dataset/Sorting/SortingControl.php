@@ -26,12 +26,17 @@ class SortingControl extends DatasetControl
 	{
 		parent::render();
 		$this->template->show = false;
+		$sortCount = 0;
 		foreach ($this->getColumns() as $column) {
 			if ($column->sort) {
-				$this->template->show = true;
-				break;
+			    $sortCount++;
+ 			    if ($sortCount > 1) {
+                    $this->template->show = true;
+                    break;
+                }
 			}
 		}
+		$this->template->showButtons = (bool) $this->getMainComponent()->getButtons();
 		$this->template->sort = $this->sort;
 		$this->template->direction = $this->direction;
 		$this->template->render($this->getSelectedView()->sortingTemplate);

@@ -8,11 +8,6 @@
 	{control sorting}
 	{control display}
 	<p n:if="$term">{_}Výsledky vyhledávání podle výrazu{/} "{$term}"</p>
-	{snippet parts}
-        {foreach $parts as $part}
-            {control part-$part->name}
-        {/}
-    {/}
 	{if $count > 0}
 		{control itemList}
 	{else}

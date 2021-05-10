@@ -44,7 +44,7 @@ class ButtonControl extends DatasetControl
 			return;
 		}
 		$this->template->button = $this->button;
-		$this->template->render($this->getSelectedView()->buttonTemplate);
+		$this->template->render($this->button->templateFile ?: $this->getSelectedView()->buttonTemplate);
 	}
 
 

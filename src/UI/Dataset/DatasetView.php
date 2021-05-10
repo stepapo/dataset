@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Stepapo\Data\UI\Dataset;
 
 use Nette\InvalidArgumentException;
+use Stepapo\Data\UI\Dataset\Dataset\Dataset;
 use Stepapo\Data\View;
 
 
@@ -91,6 +92,9 @@ class DatasetView implements View
 
 	public string $buttonTemplate;
 
+    /** @var callable|null */
+    public $itemFactoryCallback;
+
 	public bool $isDefault;
 
 
@@ -109,6 +113,7 @@ class DatasetView implements View
 		string $displayTemplate = self::VIEWS['list']['displayTemplate'],
 		string $searchTemplate = self::VIEWS['list']['searchTemplate'],
 		string $buttonTemplate = self::VIEWS['list']['buttonTemplate'],
+        ?callable $itemFactoryCallback = null,
 		bool $isDefault = false
 	) {
 		$this->name = $name;
@@ -125,6 +130,7 @@ class DatasetView implements View
 		$this->displayTemplate = $displayTemplate;
 		$this->searchTemplate = $searchTemplate;
 		$this->buttonTemplate = $buttonTemplate;
+        $this->itemFactoryCallback = $itemFactoryCallback;
 		$this->isDefault = $isDefault;
 	}
 
@@ -171,6 +177,9 @@ class DatasetView implements View
 		if (isset($config['buttonTemplate'])) {
 			$view->setButtonTemplate($config['buttonTemplate']);
 		}
+        if (array_key_exists('itemFactoryCallback', $config)) {
+            $view->setItemFactoryCallback($config['itemFactoryCallback']);
+        }
 		if (isset($config['isDefault'])) {
 			$view->setIsDefault($config['isDefault']);
 		}
@@ -282,6 +291,13 @@ class DatasetView implements View
 	}
 
 
+    public function setItemFactoryCallback(?callable $itemFactoryCallback): DatasetView
+    {
+        $this->itemFactoryCallback = $itemFactoryCallback;
+        return $this;
+    }
+
+
 	public function setIsDefault(bool $isDefault): DatasetView
 	{
 		$this->isDefault = $isDefault;
@@ -291,7 +307,7 @@ class DatasetView implements View
 
 	public static function createDefault(bool $isDefault = false): DatasetView
 	{
-		return new self(...array_merge(array_values(self::DEFAULT_VIEW), [$isDefault]));
+		return new self(...array_merge(array_values(self::DEFAULT_VIEW), [null, $isDefault]));
 	}
 
 
@@ -300,6 +316,6 @@ class DatasetView implements View
 		if (!isset(self::VIEWS[$name])) {
 			throw new InvalidArgumentException();
 		}
-		return new self(...array_merge(array_values(self::VIEWS[$name]), [$isDefault]));
+		return new self(...array_merge(array_values(self::VIEWS[$name]), [null, $isDefault]));
 	}
 }

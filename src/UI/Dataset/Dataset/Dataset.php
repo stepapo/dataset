@@ -67,12 +67,6 @@ class Dataset extends DatasetControl implements MainComponent
 	/** @var Button[]|null */
 	private ?array $buttons;
 
-	/** @var Part[]|null  */
-	private ?array $datasetParts;
-
-	/** @var Part[]|null  */
-	private ?array $itemParts;
-
 	private ?int $itemsPerPage;
 
 	private ?Search $search;
@@ -82,7 +76,7 @@ class Dataset extends DatasetControl implements MainComponent
 
 	private string $idColumnName;
 
-	private int $count = 0;
+	private int $count;
 
 	public bool $shouldRetrieveItems = true;
 
@@ -100,8 +94,6 @@ class Dataset extends DatasetControl implements MainComponent
 		array $columns = [],
 		array $views = [],
 		array $buttons = [],
-		array $datasetParts = [],
-		array $itemParts = [],
 		?int $itemsPerPage = null,
 		?Search $search = null,
 		?callable $itemClassCallback = null,
@@ -113,8 +105,6 @@ class Dataset extends DatasetControl implements MainComponent
 		$this->columns = $columns;
 		$this->views = $views;
 		$this->buttons = $buttons;
-		$this->datasetParts = $datasetParts;
-		$this->itemParts = $itemParts;
 		$this->itemsPerPage = $itemsPerPage;
 		$this->search = $search;
 		$this->translator = $translator;
@@ -153,9 +143,9 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('search', $config)) {
 			$dataset->setSearch(Search::createFromArray((array) $config['search']));
 		}
-		if (array_key_exists('itemClassCallback', $config)) {
-			$dataset->setItemClassCallback($config['itemClassCallback']);
-		}
+        if (array_key_exists('itemClassCallback', $config)) {
+            $dataset->setItemClassCallback($config['itemClassCallback']);
+        }
 		if (array_key_exists('idColumnName', $config)) {
 			$dataset->setIdColumnName($config['idColumnName']);
 		}
@@ -172,16 +162,6 @@ class Dataset extends DatasetControl implements MainComponent
 		if (array_key_exists('buttons', $config)) {
 			foreach ((array) $config['buttons'] as $name => $buttonConfig) {
 				$dataset->addButton(Button::createFromArray((array) $buttonConfig, $name));
-			}
-		}
-		if (array_key_exists('datasetParts', $config)) {
-			foreach ((array) $config['datasetParts'] as $name => $partConfig) {
-				$dataset->addDatasetPart(Part::createFromArray((array) $partConfig, $name));
-			}
-		}
-		if (array_key_exists('itemParts', $config)) {
-			foreach ((array) $config['itemParts'] as $name => $partConfig) {
-				$dataset->addItemPart(Part::createFromArray((array) $partConfig, $name));
 			}
 		}
 		return $dataset;
@@ -211,10 +191,14 @@ class Dataset extends DatasetControl implements MainComponent
 
 	public function getCollectionCount(): int
 	{
+	    if (isset($this->count)) {
+	        return $this->count;
+        }
 		$c = $this->getCollection();
 		$c = $this->filter($c);
 		$c = $this->search($c);
-		return $c->countStored();
+		$this->count = $c->countStored();
+		return $this->count;
 	}
 
 
@@ -223,9 +207,8 @@ class Dataset extends DatasetControl implements MainComponent
 		parent::render();
 		$this->template->showPagination = (bool) $this->itemsPerPage;
 		$this->template->showSearch = (bool) $this->search;
-		$this->template->parts = $this->getDatasetParts();
 		if ($this->itemsPerPage && $this->shouldRetrieveItems) {
-			$count = $this->getCollectionCount();
+            $count = $this->getCollectionCount();
 			$term = $this->search ? $this->getComponent('searchForm')->term : null;
 			$this->template->count = $count;
 			$this->template->term = $term;
@@ -297,20 +280,6 @@ class Dataset extends DatasetControl implements MainComponent
 	public function getButtons(): ?array
 	{
 		return $this->buttons;
-	}
-
-
-	/** @return Part[]|null */
-	public function getDatasetParts(): ?array
-	{
-		return $this->datasetParts;
-	}
-
-
-	/** @return Part[]|null */
-	public function getItemParts(): ?array
-	{
-		return $this->itemParts;
 	}
 
 
@@ -464,6 +433,7 @@ class Dataset extends DatasetControl implements MainComponent
 		?string $sortingTemplate = DatasetView::VIEWS['list']['sortingTemplate'],
 		?string $displayTemplate = DatasetView::VIEWS['list']['displayTemplate'],
 		?string $searchTemplate = DatasetView::VIEWS['list']['searchTemplate'],
+		?callable $itemFactoryCallback = null,
 		bool $isDefault = false
 	): DatasetView
 	{
@@ -481,6 +451,7 @@ class Dataset extends DatasetControl implements MainComponent
 			$sortingTemplate,
 			$displayTemplate,
 			$searchTemplate,
+			$itemFactoryCallback,
 			$isDefault,
 		);
 		return $this->views[$name];
@@ -508,46 +479,6 @@ class Dataset extends DatasetControl implements MainComponent
 			$label
 		);
 		return $this->buttons[$name];
-	}
-
-
-	public function addDatasetPart(Part $part): Dataset
-	{
-		$this->datasetParts[$part->name] = $part;
-		return $this;
-	}
-
-
-	public function createAndAddDatasetPart(
-		string $name,
-		string $callback
-	): Part
-	{
-		$this->datasetParts[$name] = new Part(
-			$name,
-			$callback
-		);
-		return $this->datasetParts[$name];
-	}
-
-
-	public function addItemPart(Part $part): Dataset
-	{
-		$this->itemParts[$part->name] = $part;
-		return $this;
-	}
-
-
-	public function createAndAddItemPart(
-		string $name,
-		string $callback
-	): Part
-	{
-		$this->itemParts[$name] = new Part(
-			$name,
-			$callback
-		);
-		return $this->itemParts[$name];
 	}
 
 
@@ -587,15 +518,6 @@ class Dataset extends DatasetControl implements MainComponent
 			new OrmFunction($sortFunctionClass, (array) $sortFunctionArgs)
 		);
 		return $this;
-	}
-
-
-	public function createComponentPart()
-	{
-		return new Multiplier(function(string $name): IComponent {
-			$part = $this->getDatasetParts()[$name];
-			return ($part->callback)($this, $this->getParentEntity());
-		});
 	}
 
 
@@ -659,9 +581,8 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	private function filter(ICollection $collection): ICollection
+	private function filter(ICollection $c): ICollection
 	{
-		$c = $collection;
 		foreach ($this->columns as $column) {
 			if (!$column->filter) {
 				continue;
@@ -682,9 +603,8 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	private function search(ICollection $collection): ICollection
+	private function search(ICollection $c): ICollection
 	{
-		$c = $collection;
 		if (!$this->search || !($term = $this->getComponent('searchForm')->term)) {
 			return $c;
 		}
@@ -700,9 +620,8 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	private function sort(ICollection $collection): ICollection
+	private function sort(ICollection $c): ICollection
 	{
-		$c = $collection;
 		$sort = $this->getComponent('sorting')->sort;
 		if ($sort) {
 			$column = $this->columns[$sort];
@@ -737,9 +656,8 @@ class Dataset extends DatasetControl implements MainComponent
 	}
 
 
-	private function paginate(ICollection $collection): ICollection
+	private function paginate(ICollection $c): ICollection
 	{
-		$c = $collection;
 		if ($this->itemsPerPage) {
 			$c = $c->limitBy(
 				$this->getComponent('pagination')->getPaginator()->length,
