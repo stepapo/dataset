@@ -1,0 +1,28 @@
+{templateType Stepapo\Dataset\UI\Sorting\SortingTemplate}
+
+<thead n:snippet>
+	<tr>
+		<th n:foreach="$columns as $column" n:if="!$column->hide" n:class="'text-' . $column->align"{if $column->width} style="width: {$column->width}px"{/}>
+{*				<span n:if="$column->description" data-tooltip="{$column->description}"><i class="fas fa-fw fa-question-circle"></i></span>*}
+			{if $column->sort}
+				{php $newDirection = $column->name == $sort ? ($direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : (!$sort && $column->sort && $column->sort->isDefault ? ($column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : $column->sort->direction)}
+				<a n:href="sort! sort => $column->name, direction => $newDirection" class="ajax"{if $column->description} data-tooltip="{$column->description}"{/}>
+					{if $column->label}{_$column->label}{/}
+					{if $sort != $column->name}
+						{if !$sort && $column->sort->isDefault}
+							<i n:class="fa, fa-fw, $column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+						{else}
+							<i class="fa fa-fw fa-sort"></i>
+						{/}
+					{else}
+						<i n:class="fa, fa-fw, $direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+					{/}
+				</a>
+			{else}
+				<span{if $column->description} data-tooltip="{$column->description}"{/}>
+					{if $column->label}{_$column->label}{/}
+				</span>
+			{/}
+		</th>
+	</tr>
+</thead>

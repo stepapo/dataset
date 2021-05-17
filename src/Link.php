@@ -2,25 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 use Nette\InvalidArgumentException;
 
 
 class Link
 {
-	public string $destination;
-
-	public ?array $args;
-
-
 	public function __construct(
-		string $destination,
-		?array $args = null
-	) {
-		$this->destination = $destination;
-		$this->args = $args;
-	}
+		public string $destination,
+		public ?array $args = null
+	) {}
 
 
 	public static function createFromArray(array $config): Link

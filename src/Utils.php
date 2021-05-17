@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 
 class Utils
 {
-	public static function replaceParams(array $array, $params)
+	public static function replaceParams(array $array, mixed $params)
 	{
 		$parsedArray = [];
 		foreach ($array as $key => $value) {
@@ -19,7 +19,7 @@ class Utils
 	}
 
 
-	public static function replace($value, array $params)
+	public static function replace(mixed $value, array $params)
 	{
 		if (is_array($value)) {
 			array_walk($value, function(&$v) use ($params) {

@@ -1,9 +1,9 @@
 {
-	"name": "stepapo/data",
+	"name": "stepapo/dataset",
 	"type": "library",
 	"description": "Component for Nette Framework and Nextras ORM, that helps generate datasets from collections with paging, sorting and filtering capability.",
 	"keywords": ["nette", "nextras", "table", "grid", "component"],
-	"homepage": "https://github.com/stepapo/data",
+	"homepage": "https://github.com/stepapo/dataset",
 	"license": "MIT",
 	"authors": [
 		{
@@ -11,18 +11,18 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/stepapo/data/issues"
+		"issues": "https://github.com/stepapo/dataset/issues"
 	},
 	"require": {
-		"php": ">=7.4",
-		"nette/application": "^3.0",
+		"php": ">=8.0",
+		"nette/application": "^3.1",
 		"nette/neon": "^3.0",
-		"nette/utils": "^3.0",
-		"nextras/orm": "^3.0"
+		"nette/utils": "^3.1",
+		"nextras/orm": "^3.1"
 	},
 	"autoload": {
 		"psr-4": {
-			"Stepapo\\Data\\": "src/"
+			"Stepapo\\Dataset\\": "src/"
 		}
 	}
 }

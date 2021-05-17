@@ -2,29 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 use Nextras\Orm\Collection\ICollection;
 
 
 class Sort
 {
-	public bool $isDefault;
-
-	public string $direction;
-
-	public ?OrmFunction $function;
-
-
 	public function __construct(
-		bool $isDefault = false,
-		string $direction = ICollection::ASC,
-		?OrmFunction $function = null
-	) {
-		$this->isDefault = $isDefault;
-		$this->direction = $direction;
-		$this->function = $function;
-	}
+		public bool $isDefault = false,
+		public string $direction = ICollection::ASC,
+		public ?OrmFunction $function = null
+	) {}
 
 
 	public static function createFromArray(?array $config): Sort

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 use Nextras\Orm\Collection\ICollection;
 
@@ -15,69 +15,25 @@ class Column
 
 	public const ALIGN_RIGHT = 'right';
 
-	public string $name;
-
-	public ?string $label;
-
-	public ?string $description;
-
-	public ?int $width;
-
-	public string $align;
-
-	public string $columnName;
-
-	public ?LatteFilter $latteFilter;
-
-	public ?string $prepend;
-
-	public ?string $append;
-
-	public ?Link $link;
-
-	public ?string $valueTemplateFile;
-
-	public ?Sort $sort;
-
-	public ?Filter $filter;
-
-	public bool $hide;
-
-	public ?string $class;
-
 
 	public function __construct(
-		string $name,
-		?string $label = null,
-		?string $description = null,
-		?int $width = null,
-		string $align = self::ALIGN_LEFT,
-		?string $columnName = null,
-		?LatteFilter $latteFilter = null,
-		?string $prepend = null,
-		?string $append = null,
-		?Link $link = null,
-		?string $valueTemplateFile = null,
-		?Sort $sort = null,
-		?Filter $filter = null,
-		bool $hide = false,
-		?string $class = null
+		public string $name,
+		public ?string $label = null,
+		public ?string $description = null,
+		public ?int $width = null,
+		public string $align = self::ALIGN_LEFT,
+		public ?string $columnName = null,
+		public ?LatteFilter $latteFilter = null,
+		public ?string $prepend = null,
+		public ?string $append = null,
+		public ?Link $link = null,
+		public ?string $valueTemplateFile = null,
+		public ?Sort $sort = null,
+		public ?Filter $filter = null,
+		public bool $hide = false,
+		public ?string $class = null
 	) {
-		$this->name = $name;
-		$this->label = $label;
-		$this->description = $description;
-		$this->width = $width;
-		$this->align = $align;
 		$this->columnName = $columnName ?: $name;
-		$this->latteFilter = $latteFilter;
-		$this->prepend = $prepend;
-		$this->append = $append;
-		$this->link = $link;
-		$this->valueTemplateFile = $valueTemplateFile;
-		$this->sort = $sort;
-		$this->filter = $filter;
-		$this->hide = $hide;
-		$this->class = $class;
 	}
 
 
@@ -179,10 +135,12 @@ class Column
 	}
 
 
-	/** @var string|array|null $args */
-	public function createAndSetLatteFilter(string $name, $args): Column
+	public function createAndSetLatteFilter(string $name, string|array|null $args): Column
 	{
-		$this->latteFilter = new LatteFilter($name, (array) $args);
+		$this->latteFilter = new LatteFilter(
+			name: $name,
+			args: (array) $args
+		);
 		return $this;
 	}
 
@@ -201,10 +159,12 @@ class Column
 	}
 
 
-	/** @var string|array|null $args */
-	public function createAndSetLink(string $destination, $args): Column
+	public function createAndSetLink(string $destination, string|array|null $args): Column
 	{
-		$this->link = new Link($destination, (array) $args);
+		$this->link = new Link(
+			destination: $destination,
+			args: (array) $args
+		);
 		return $this;
 	}
 
@@ -232,7 +192,10 @@ class Column
 
 	public function createAndSetSort(bool $isDefault = false, string $direction = ICollection::ASC): Column
 	{
-		$this->sort = new Sort($isDefault, $direction);
+		$this->sort = new Sort(
+			isDefault: $isDefault,
+			direction: $direction
+		);
 		return $this;
 	}
 
@@ -252,7 +215,13 @@ class Column
 		?int $collapse = null
 	): Filter
 	{
-		$this->filter = new Filter($options, $prompt, $columnName, $function, $collapse);
+		$this->filter = new Filter(
+			options: $options,
+			prompt: $prompt,
+			columnName: $columnName,
+			function: $function,
+			collapse: $collapse
+		);
 		return $this->filter;
 	}
 

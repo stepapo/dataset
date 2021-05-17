@@ -2,25 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 use Nette\InvalidArgumentException;
 
 
 class LatteFilter
 {
-	public string $name;
-
-	public ?array $args;
-
-
 	public function __construct(
-		string $name,
-		?array $args = null
-	) {
-		$this->name = $name;
-		$this->args = $args;
-	}
+		public string $name,
+		public ?array $args = null
+	) {}
 
 
 	public static function createFromArray(array $config): LatteFilter

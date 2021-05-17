@@ -2,25 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 use Nette\InvalidArgumentException;
 
 
 class OrmFunction
 {
-	public string $class;
-
-	public ?array $args;
-
-
 	public function __construct(
-		string $class,
-		?array $args = null
-	) {
-		$this->class = $class;
-		$this->args = $args;
-	}
+		public string $class,
+		public ?array $args = null
+	) {}
 
 
 	public static function createFromArray(array $config): OrmFunction

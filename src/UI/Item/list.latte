@@ -1,0 +1,19 @@
+{templateType Stepapo\Dataset\UI\Item\ItemTemplate}
+
+{snippet}
+	<ul n:inner-foreach="$columns as $column">
+		{if !$column->hide}
+			{php $value = $control->getValue($column->columnName)}
+			<li n:if="$value" n:class="$column->class">
+				{if $column->label}{_$column->label}:{/}
+				{include
+					$column->valueTemplateFile ?: $control->getSelectedView()->valueTemplate,
+					'entity' => $item,
+					'value' => $value,
+					'column' => $column,
+					'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a), $column->link->args) : null
+				}
+			</li>
+		{/}
+	</ul>
+{/}

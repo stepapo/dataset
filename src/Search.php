@@ -2,39 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 use Nette\InvalidArgumentException;
 
 
 class Search
 {
-	public OrmFunction $searchFunction;
-
-	public ?string $placeholder;
-
-	/** @var callable|null */
-	public $prepareCallback;
-
-	/** @var callable|null */
-	public $suggestCallback;
-
-	public ?OrmFunction $sortFunction;
-
-
 	public function __construct(
-		OrmFunction $searchFunction,
-		?string $placeholder = null,
-		?callable $prepareCallback = null,
-		?callable $suggestCallback = null,
-		?OrmFunction $sortFunction = null
-	) {
-		$this->searchFunction = $searchFunction;
-		$this->placeholder = $placeholder;
-		$this->prepareCallback = $prepareCallback;
-		$this->suggestCallback = $suggestCallback;
-		$this->sortFunction = $sortFunction;
-	}
+		public OrmFunction $searchFunction,
+		public ?string $placeholder = null,
+		public $prepareCallback = null,
+		public $suggestCallback = null,
+		public ?OrmFunction $sortFunction = null
+	) {}
 
 
 	public static function createFromArray(array $config): Search
@@ -60,8 +41,7 @@ class Search
 	}
 
 
-	/** @var string|array|null $args */
-	public function createAndSetSearchFunction(string $class, $args = null): Search
+	public function createAndSetSearchFunction(string $class, string|array|null $args = null): Search
 	{
 		$this->searchFunction = new OrmFunction($class, (array) $args);
 		return $this;
@@ -96,8 +76,7 @@ class Search
 	}
 
 
-	/** @var string|array|null $args */
-	public function createAndSetSortFunction(string $class, $args = null): Search
+	public function createAndSetSortFunction(string $class, string|array|null $args = null): Search
 	{
 		$this->sortFunction = new OrmFunction($class, (array) $args);
 		return $this;

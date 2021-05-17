@@ -2,40 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Stepapo\Data;
+namespace Stepapo\Dataset;
 
 
 class Filter
 {
-	public ?array $options = null;
-
-	public ?string $prompt;
-
-	public ?int $collapse;
-
-	public ?string $function;
-
-	public ?string $columnName;
-
-	public bool $hide;
-
-
-	/** @var array|Option[]|null $options */
+	/** @var Option[] $options */
 	public function __construct(
-		?array $options = null,
-		?string $prompt = null,
-		?string $columnName = null,
-		?string $function = null,
-		?int $collapse = null,
-		bool $hide = false
-	) {
-		$this->options = $options;
-		$this->prompt = $prompt;
-		$this->collapse = $collapse;
-		$this->function = $function;
-		$this->columnName = $columnName;
-		$this->hide = $hide;
-	}
+		public ?array $options = [],
+		public ?string $prompt = null,
+		public ?string $columnName = null,
+		public ?string $function = null,
+		public ?int $collapse = null,
+		public bool $hide = false
+	) {}
 
 
 	public static function createFromArray(array $config, array $params = []): Filter
@@ -137,12 +117,12 @@ class Filter
 	}
 
 
-	public function createAndAddOption($name, $label, ?array $condition = null): Filter
+	public function createAndAddOption(int|string|null $name, int|string|null $label, ?array $condition = null): Filter
 	{
 		$this->options[$name] = new Option(
-			$name,
-			$label,
-			$condition
+			name: $name,
+			label: $label,
+			condition: $condition
 		);
 		return $this;
 	}
