@@ -11,7 +11,7 @@ use Nette\Utils\ArrayHash;
 
 
 /**
- * @property-read SearchFormTemplate $template
+ * @property SearchFormTemplate $template
  * @method onSearch(SearchFormControl $control)
  */
 class SearchFormControl extends DatasetControl
@@ -30,6 +30,7 @@ class SearchFormControl extends DatasetControl
 
 	public function render(): void
 	{
+	    parent::render();
 		$this->template->term = $this->term;
 		$this->template->render($this->getSelectedView()->searchTemplate);
 	}

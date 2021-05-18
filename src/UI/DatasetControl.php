@@ -9,6 +9,7 @@ use Nette\Localization\Translator;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Dataset\Column;
+use Stepapo\Dataset\Text;
 use Stepapo\Dataset\UI\Dataset\Dataset;
 use Stepapo\Dataset\View;
 use Nette\Application\UI\Control;
@@ -20,6 +21,7 @@ abstract class DatasetControl extends Control
 {
 	public function render()
 	{
+	    $this->template->text = $this->getText();
 		$this->template->columns = $this->getColumns();
 		$this->template->views = $this->getViews();
 		$this->template->selectedView = $this->getSelectedView();
@@ -51,6 +53,12 @@ abstract class DatasetControl extends Control
 	{
 		return $this->getDataset()->getRepository();
 	}
+
+
+    public function getText(): Text
+    {
+        return $this->getDataset()->getText();
+    }
 
 
 	public function getParentEntity(): ?IEntity

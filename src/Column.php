@@ -135,16 +135,6 @@ class Column
 	}
 
 
-	public function createAndSetLatteFilter(string $name, string|array|null $args): Column
-	{
-		$this->latteFilter = new LatteFilter(
-			name: $name,
-			args: (array) $args
-		);
-		return $this;
-	}
-
-
 	public function setPrepend(?string $prepend): Column
 	{
 		$this->prepend = $prepend;
@@ -155,16 +145,6 @@ class Column
 	public function setAppend(?string $append): Column
 	{
 		$this->append = $append;
-		return $this;
-	}
-
-
-	public function createAndSetLink(string $destination, string|array|null $args): Column
-	{
-		$this->link = new Link(
-			destination: $destination,
-			args: (array) $args
-		);
 		return $this;
 	}
 
@@ -190,39 +170,10 @@ class Column
 	}
 
 
-	public function createAndSetSort(bool $isDefault = false, string $direction = ICollection::ASC): Column
-	{
-		$this->sort = new Sort(
-			isDefault: $isDefault,
-			direction: $direction
-		);
-		return $this;
-	}
-
-
 	public function setFilter(Filter $filter): Column
 	{
 		$this->filter = $filter;
 		return $this;
-	}
-
-
-	public function createAndSetFilter(
-		?array $options = null,
-		?string $prompt = null,
-		?string $columnName = null,
-		?string $function = null,
-		?int $collapse = null
-	): Filter
-	{
-		$this->filter = new Filter(
-			options: $options,
-			prompt: $prompt,
-			columnName: $columnName,
-			function: $function,
-			collapse: $collapse
-		);
-		return $this->filter;
 	}
 
 

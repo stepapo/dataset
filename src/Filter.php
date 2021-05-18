@@ -117,17 +117,6 @@ class Filter
 	}
 
 
-	public function createAndAddOption(int|string|null $name, int|string|null $label, ?array $condition = null): Filter
-	{
-		$this->options[$name] = new Option(
-			name: $name,
-			label: $label,
-			condition: $condition
-		);
-		return $this;
-	}
-
-
 	public function getNextrasName(bool $withThis = true)
 	{
 		if (strpos($this->columnName, '.') !== false) {

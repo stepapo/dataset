@@ -15,6 +15,7 @@ use Stepapo\Dataset\Option;
 use Stepapo\Dataset\OrmFunction;
 use Stepapo\Dataset\Sort;
 use Stepapo\Dataset\Search;
+use Stepapo\Dataset\Text;
 use Stepapo\Dataset\UI\DatasetControl;
 use Stepapo\Dataset\UI\Display\DisplayControl;
 use Stepapo\Dataset\UI\FilterList\FilterListControl;
@@ -50,12 +51,13 @@ class Dataset extends DatasetControl
 
 	/**
 	 * @param Column[]|null $columns
-	 * @param \Stepapo\Dataset\View[]|null $views
+	 * @param View[]|null $views
 	 */
 	public function __construct(
 		private ICollection $collection,
 		private IRepository $repository,
-		private ?IEntity $parentEntity = null,
+        private Text $text,
+        private ?IEntity $parentEntity = null,
 		private ?Translator $translator = null,
 		private ?ImageStorage $imageStorage = null,
 		private array $columns = [],
@@ -63,7 +65,7 @@ class Dataset extends DatasetControl
 		private ?int $itemsPerPage = null,
 		private ?Search $search = null,
 		private $itemClassCallback = null,
-		private string $idColumnName = 'id'
+		private string $idColumnName = 'id',
 	) {}
 
 
@@ -80,7 +82,11 @@ class Dataset extends DatasetControl
 		if (!isset($config['collection'], $config['repository'])) {
 			throw new InvalidArgumentException('Dataset collection and repository has to be defined.');
 		}
-		$dataset = new self($config['collection'], $config['repository']);
+		$dataset = new self(
+		    collection: $config['collection'],
+            repository: $config['repository'],
+            text: Text::createFromArray($config['text'] ?? [])
+        );
 		if (array_key_exists('parentEntity', $config)) {
 			$dataset->setParentEntity($config['parentEntity']);
 		}
@@ -180,6 +186,12 @@ class Dataset extends DatasetControl
 	}
 
 
+    public function getText(): Text
+    {
+        return $this->text;
+    }
+
+
 	public function getParentEntity(): ?IEntity
 	{
 		return $this->parentEntity;
@@ -250,6 +262,13 @@ class Dataset extends DatasetControl
 	}
 
 
+    public function setText(Text $text): Dataset
+    {
+        $this->text = $text;
+        return $this;
+    }
+
+
 	public function setParentEntity(?IEntity $parentEntity): Dataset
 	{
 		$this->parentEntity = $parentEntity;
@@ -292,110 +311,16 @@ class Dataset extends DatasetControl
 	}
 
 
-	/**
-	 * @param string|array|null $latteFilterArgs
-	 * @param string|array|null $linkArgs
-	 */
-	public function createAndAddColumn(
-		string $name,
-		?string $label = null,
-		?string $description = null,
-		?int $width = null,
-		string $align = Column::ALIGN_LEFT,
-		?string $columnName = null,
-		?string $latteFilter = null,
-		$latteFilterArgs = null,
-		?string $prepend = null,
-		?string $append = null,
-		?string $link = null,
-		$linkArgs = null,
-		?string $valueTemplateFile = null,
-		bool $sortable = false,
-		bool $sortIsDefault = false,
-		string $sortDefaultDirection = ICollection::ASC,
-		?array $filterOptions = null,
-		?string $filterPrompt = null,
-		bool $hide = false,
-		?string $class = null
-	): Column
-	{
-		$this->columns[$name] = new Column(
-			name: $name,
-			label: $label,
-			description: $description,
-			width: $width,
-			align: $align,
-			columnName: $columnName,
-			latteFilter: $latteFilter ? new LatteFilter($latteFilter, (array) $latteFilterArgs) : null,
-			prepend: $prepend,
-			append: $append,
-			link: $link ? new Link($link, (array) $linkArgs) : null,
-			valueTemplateFile: $valueTemplateFile,
-			sort: $sortable ? new Sort($sortIsDefault, $sortDefaultDirection) : null,
-			filter: $filterOptions ? new Filter($filterOptions, $filterPrompt) : null,
-			hide: $hide,
-			class: $class
-		);
-		return $this->columns[$name];
-	}
+    public function createAndAddDefaultView(?string $name = null): Dataset
+    {
+        return $this->addView(!$name ? View::createDefault() : View::createView($name, true));
+    }
 
 
 	public function addView(View $view): Dataset
 	{
 		$this->views[$view->name] = $view;
 		return $this;
-	}
-
-
-	public function createAndAddDefaultView(?string $name = null, bool $isDefault = false): View
-	{
-		if (!$name) {
-			$defaultView = View::createDefault($isDefault);
-			$this->views[$defaultView->name] = $defaultView;
-			return $defaultView;
-		}
-		$view = View::createView($name, $isDefault);
-		$this->views[$view->name] = $view;
-		return $view;
-	}
-
-
-	public function createAndAddView(
-		string $name,
-		string $label,
-		?string $datasetTemplate = View::VIEWS['list']['datasetTemplate'],
-		?string $itemListTemplate = null,
-		?string $itemTemplate = null,
-		?string $attributeTemplate = null,
-		?string $valueTemplate = View::VIEWS['list']['valueTemplate'],
-		?string $filterListTemplate = View::VIEWS['list']['filterListTemplate'],
-		?string $filterTemplate = View::VIEWS['list']['filterTemplate'],
-		?string $paginationTemplate = View::VIEWS['list']['paginationTemplate'],
-		?string $sortingTemplate = View::VIEWS['list']['sortingTemplate'],
-		?string $displayTemplate = View::VIEWS['list']['displayTemplate'],
-		?string $searchTemplate = View::VIEWS['list']['searchTemplate'],
-		?callable $itemFactoryCallback = null,
-		bool $isDefault = false
-	): View
-	{
-		$this->views[$name] = new View(
-			name: $name,
-			label: $label,
-			datasetTemplate: $datasetTemplate,
-			itemListTemplate: $itemListTemplate,
-			itemTemplate: $itemTemplate,
-			attributeTemplate: $attributeTemplate,
-			valueTemplate: $valueTemplate,
-			filterListTemplate: $filterListTemplate,
-			filterTemplate: $filterTemplate,
-			paginationTemplate: $paginationTemplate,
-			sortingTemplate: $sortingTemplate,
-			displayTemplate: $displayTemplate,
-			searchTemplate: $searchTemplate,
-			itemFactoryCallback: $itemFactoryCallback,
-			isDefault: $isDefault,
-		);
-		return $this->views[$name];
 	}
 
 
@@ -409,31 +334,6 @@ class Dataset extends DatasetControl
 	public function setIdColumnName(string $idColumnName): Dataset
 	{
 		$this->idColumnName = $idColumnName;
-		return $this;
-	}
-
-
-	/**
-	 * @var string|array|null $searchFunctionArgs
-	 * @var string|array|null $sortFunctionArgs
-	 */
-	public function createAndSetSearch(
-		string $searchFunctionClass,
-		$searchFunctionArgs = null,
-		?string $placeholder = null,
-		?callable $prepareCallback = null,
-		?callable $suggestCallback = null,
-		?string $sortFunctionClass = null,
-		$sortFunctionArgs = null
-	): Dataset
-	{
-		$this->search = new Search(
-			searchFunction: new OrmFunction($searchFunctionClass, (array) $searchFunctionArgs),
-			placeholder: $placeholder,
-			prepareCallback: $prepareCallback,
-			suggestCallback: $suggestCallback,
-			sortFunction: new OrmFunction($sortFunctionClass, (array) $sortFunctionArgs)
-		);
 		return $this;
 	}
 

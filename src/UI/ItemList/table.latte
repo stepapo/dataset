@@ -10,7 +10,7 @@
 		{foreach $columns as $column}{if !$column->hide}{php $colspan++}{/}{/}
 		<tr>
 			<td colspan="{$colspan}">
-				{_}Nic nenalezeno.{/}
+				{_$text->noResults}
 			</td>
 		</tr>
 	{/}

@@ -239,9 +239,9 @@ class View
 	}
 
 
-	public static function createDefault(bool $isDefault = false): View
+	public static function createDefault(): View
 	{
-		return new self(...array_merge(array_values(self::DEFAULT_VIEW), [null, $isDefault]));
+		return new self(...array_merge(array_values(self::DEFAULT_VIEW), [null, true]));
 	}
 
 

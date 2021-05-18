@@ -2,7 +2,7 @@
 
 <div class="mb-2 responsive" n:if="$show">
 	<div class="btn-group space" n:snippet>
-		<div class="btn-group-header" style="width: 65px;">{_}Seřaď{/}:</div>
+		<div class="btn-group-header" style="width: 65px;">{_$text->sort}:</div>
 		{foreach $columns as $column}
 			{continueIf !$column->sort}
 			{php $newDirection = $column->name == $sort ? ($direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : (!$sort && $column->sort && $column->sort->isDefault ? ($column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : $column->sort->direction)}

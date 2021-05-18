@@ -7,11 +7,11 @@
 	{control filterList}
 	{control sorting}
 	{control display}
-	<p n:if="$term">{_}Výsledky vyhledávání podle výrazu{/} "{$term}"</p>
+	<p n:if="$term">{_$text->searchResults} "{$term}"</p>
 	{control itemList}
 	{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}
 		<p>
-			{_}Mysleli jste{/} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+            {_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
 		</p>
 	{/}
 	{if $showPagination}

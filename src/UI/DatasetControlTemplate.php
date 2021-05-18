@@ -7,6 +7,7 @@ namespace Stepapo\Dataset\UI;
 use Nette\Application\UI\Presenter;
 use Nette\Security\User;
 use Stepapo\Dataset\Column;
+use Stepapo\Dataset\Text;
 use Stepapo\Dataset\View;
 use Nette\Bridges\ApplicationLatte\Template;
 use Ublaboo\ImageStorage\ImageStorage;
@@ -19,6 +20,8 @@ abstract class DatasetControlTemplate extends Template
 	public User $user;
 
 	public string $basePath;
+
+	public Text $text;
 
 	/** @var Column[] */
 	public array $columns;

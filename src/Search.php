@@ -41,13 +41,6 @@ class Search
 	}
 
 
-	public function createAndSetSearchFunction(string $class, string|array|null $args = null): Search
-	{
-		$this->searchFunction = new OrmFunction($class, (array) $args);
-		return $this;
-	}
-
-
 	public function setSearchFunction(OrmFunction $searchFunction): Search
 	{
 		$this->searchFunction = $searchFunction;
@@ -72,13 +65,6 @@ class Search
 	public function setSuggestCallback(?callable $suggestCallback): Search
 	{
 		$this->suggestCallback = $suggestCallback;
-		return $this;
-	}
-
-
-	public function createAndSetSortFunction(string $class, string|array|null $args = null): Search
-	{
-		$this->sortFunction = new OrmFunction($class, (array) $args);
 		return $this;
 	}
 
