@@ -30,7 +30,7 @@ class SearchFormControl extends DatasetControl
 
 	public function render(): void
 	{
-	    parent::render();
+		parent::render();
 		$this->template->term = $this->term;
 		$this->template->render($this->getSelectedView()->searchTemplate);
 	}

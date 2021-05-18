@@ -56,8 +56,8 @@ class Dataset extends DatasetControl
 	public function __construct(
 		private ICollection $collection,
 		private IRepository $repository,
-        private Text $text,
-        private ?IEntity $parentEntity = null,
+		private Text $text,
+		private ?IEntity $parentEntity = null,
 		private ?Translator $translator = null,
 		private ?ImageStorage $imageStorage = null,
 		private array $columns = [],
@@ -83,10 +83,10 @@ class Dataset extends DatasetControl
 			throw new InvalidArgumentException('Dataset collection and repository has to be defined.');
 		}
 		$dataset = new self(
-		    collection: $config['collection'],
-            repository: $config['repository'],
-            text: Text::createFromArray($config['text'] ?? [])
-        );
+			collection: $config['collection'],
+			repository: $config['repository'],
+			text: Text::createFromArray($config['text'] ?? [])
+		);
 		if (array_key_exists('parentEntity', $config)) {
 			$dataset->setParentEntity($config['parentEntity']);
 		}
@@ -186,10 +186,10 @@ class Dataset extends DatasetControl
 	}
 
 
-    public function getText(): Text
-    {
-        return $this->text;
-    }
+	public function getText(): Text
+	{
+		return $this->text;
+	}
 
 
 	public function getParentEntity(): ?IEntity
@@ -262,11 +262,11 @@ class Dataset extends DatasetControl
 	}
 
 
-    public function setText(Text $text): Dataset
-    {
-        $this->text = $text;
-        return $this;
-    }
+	public function setText(Text $text): Dataset
+	{
+		$this->text = $text;
+		return $this;
+	}
 
 
 	public function setParentEntity(?IEntity $parentEntity): Dataset
@@ -311,10 +311,10 @@ class Dataset extends DatasetControl
 	}
 
 
-    public function createAndAddDefaultView(?string $name = null): Dataset
-    {
-        return $this->addView(!$name ? View::createDefault() : View::createView($name, true));
-    }
+	public function createAndAddDefaultView(?string $name = null): Dataset
+	{
+		return $this->addView(!$name ? View::createDefault() : View::createView($name, true));
+	}
 
 
 	public function addView(View $view): Dataset

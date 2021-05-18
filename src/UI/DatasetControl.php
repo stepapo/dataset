@@ -21,7 +21,7 @@ abstract class DatasetControl extends Control
 {
 	public function render()
 	{
-	    $this->template->text = $this->getText();
+		$this->template->text = $this->getText();
 		$this->template->columns = $this->getColumns();
 		$this->template->views = $this->getViews();
 		$this->template->selectedView = $this->getSelectedView();
@@ -55,10 +55,10 @@ abstract class DatasetControl extends Control
 	}
 
 
-    public function getText(): Text
-    {
-        return $this->getDataset()->getText();
-    }
+	public function getText(): Text
+	{
+		return $this->getDataset()->getText();
+	}
 
 
 	public function getParentEntity(): ?IEntity

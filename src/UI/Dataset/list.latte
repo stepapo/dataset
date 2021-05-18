@@ -11,7 +11,7 @@
 	{control itemList}
 	{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}
 		<p>
-            {_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+			{_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
 		</p>
 	{/}
 	{if $showPagination}
