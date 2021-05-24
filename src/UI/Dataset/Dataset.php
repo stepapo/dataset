@@ -371,14 +371,6 @@ class Dataset extends DatasetControl
 		return $this;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isAlwaysRetrieveItems(): bool
-	{
-		return $this->alwaysRetrieveItems;
-	}
-
 
 	public function createComponentItemList(): ItemListControl
 	{
