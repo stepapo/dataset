@@ -38,7 +38,9 @@ class ItemListControl extends DatasetControl
 				: new ItemControl($entity);
 			if (property_exists($control, 'onChange')) {
 				$control->onChange[] = function (IComponent $control, IEntity $entity) {
-					$this->getDataset()->shouldRetrieveItems = false;
+					if (!$this->getDataset()->getAlwaysRetrieveItems() && $this->presenter->isAjax()) {
+						$this->getDataset()->shouldRetrieveItems = false;
+					}
 					$this->getDataset()->onItemChange($this->getDataset(), $entity);
 				};
 			}

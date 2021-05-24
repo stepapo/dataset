@@ -1,7 +1,7 @@
 {templateType Stepapo\Dataset\UI\ItemList\ItemListTemplate}
 
 {snippet}
-	<div class="row" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
+	<div n:class="row, $control->getDataset()->getItemListClass()" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
 		{control 'item-' . $item->getValue($idColumnName)}
 	</div>
 	{if $control->getDataset()->getCollectionCount() == 0}

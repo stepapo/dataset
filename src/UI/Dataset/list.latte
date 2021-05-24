@@ -7,7 +7,7 @@
 	{control filterList}
 	{control sorting}
 	{control display}
-	<p n:if="$term">{_$text->searchResults} "{$term}"</p>
+	<p n:if="isset($term) && $term">{_$text->searchResults} "{$term}"</p>
 	{control itemList}
 	{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}
 		<p>

@@ -6,7 +6,7 @@
 	{/}
 	{control filterList}
 	{control display}
-	<p n:if="$term">{_$text->searchResults} "{$term}"</p>
+	<p n:if="isset($term) && $term">{_$text->searchResults} "{$term}"</p>
 	{if $showPagination}
 		<table>
 			{control sorting}

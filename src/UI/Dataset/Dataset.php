@@ -65,7 +65,9 @@ class Dataset extends DatasetControl
 		private ?int $itemsPerPage = null,
 		private ?Search $search = null,
 		private $itemClassCallback = null,
+		private ?string $itemListClass = null,
 		private string $idColumnName = 'id',
+		private bool $alwaysRetrieveItems = false,
 	) {}
 
 
@@ -105,8 +107,14 @@ class Dataset extends DatasetControl
 		if (array_key_exists('itemClassCallback', $config)) {
 			$dataset->setItemClassCallback($config['itemClassCallback']);
 		}
+		if (array_key_exists('itemListClass', $config)) {
+			$dataset->setItemListClass($config['itemListClass']);
+		}
 		if (array_key_exists('idColumnName', $config)) {
 			$dataset->setIdColumnName($config['idColumnName']);
+		}
+		if (array_key_exists('alwaysRetrieveItems', $config)) {
+			$dataset->setAlwaysRetrieveItems($config['alwaysRetrieveItems']);
 		}
 		if (array_key_exists('columns', $config)) {
 			foreach ((array) $config['columns'] as $columnName => $columnConfig) {
@@ -216,6 +224,12 @@ class Dataset extends DatasetControl
 	}
 
 
+	public function getItemListClass(): ?string
+	{
+		return $this->itemListClass;
+	}
+
+
 	public function getIdColumnName(): string
 	{
 		return $this->idColumnName;
@@ -245,6 +259,12 @@ class Dataset extends DatasetControl
 	public function getItemsPerPage(): ?int
 	{
 		return $this->itemsPerPage;
+	}
+
+
+	public function getAlwaysRetrieveItems(): bool
+	{
+		return $this->alwaysRetrieveItems;
 	}
 
 
@@ -290,13 +310,6 @@ class Dataset extends DatasetControl
 	}
 
 
-	public function setItemClassCallback(?callable $itemClassCallback): Dataset
-	{
-		$this->itemClassCallback = $itemClassCallback;
-		return $this;
-	}
-
-
 	public function setItemsPerPage(?int $itemsPerPage): Dataset
 	{
 		$this->itemsPerPage = $itemsPerPage;
@@ -331,10 +344,39 @@ class Dataset extends DatasetControl
 	}
 
 
+	public function setItemClassCallback(?callable $itemClassCallback): Dataset
+	{
+		$this->itemClassCallback = $itemClassCallback;
+		return $this;
+	}
+
+
+	public function setItemListClass(?string $itemListClass): Dataset
+	{
+		$this->itemListClass = $itemListClass;
+		return $this;
+	}
+
+
 	public function setIdColumnName(string $idColumnName): Dataset
 	{
 		$this->idColumnName = $idColumnName;
 		return $this;
+	}
+
+
+	public function setAlwaysRetrieveItems(bool $alwaysRetrieveItems): Dataset
+	{
+		$this->alwaysRetrieveItems = $alwaysRetrieveItems;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAlwaysRetrieveItems(): bool
+	{
+		return $this->alwaysRetrieveItems;
 	}
 
 
