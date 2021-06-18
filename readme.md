@@ -13,30 +13,30 @@ collection: %collection%
 repository: %repository%
 itemsPerPage: 10
 columns:
-	fullname:
-		label: Name
-		link:
-			destination: PersonDetail:deafult
-			args:
-				id: id
-		sort:
-			isDefault: true
-	gender:
-		label: Gender
-		columnName: genderLabel
-		filter:
-			options: %genderFilterOptions%
-			prompt: Both		
-	birthday:
-		label: Birthday
-		align: right
-		latteFilter:
-			name: date
-			args: j. n. Y
-		sort:
+    fullname:
+        label: Name
+        link:
+            destination: PersonDetail:deafult
+            args:
+                id: id
+        sort:
+            isDefault: true
+    gender:
+        label: Gender
+        columnName: genderLabel
+        filter:
+            options: %genderFilterOptions%
+            prompt: Both        
+    birthday:
+        label: Birthday
+        align: right
+        latteFilter:
+            name: date
+            args: j. n. Y
+        sort:
 views:
-	table:
-	grid:
+    table:
+    grid:
 ```
 
 ### Component
@@ -44,11 +44,11 @@ views:
 ```php
 public function createComponentPersonDataset()
 {
-	return Stepapo\Dataset\UI\Dataset::createFromNeon(__DIR__ . '/personDataset.neon', [
-		'collection' => $this->orm->personRepository->findAll()
-		'repository' => $this->orm->personRepository
-		'genderFilterOptions' => ['m' => 'Male', 'f' => 'Female']
-	]);
+    return Stepapo\Dataset\UI\Dataset::createFromNeon(__DIR__ . '/personDataset.neon', [
+        'collection' => $this->orm->personRepository->findAll()
+        'repository' => $this->orm->personRepository
+        'genderFilterOptions' => ['m' => 'Male', 'f' => 'Female']
+    ]);
 }
 ```
 
@@ -73,11 +73,11 @@ itemClassCallback:
 idColumnName:
 alwaysRetrieveItems:
 columns:
-	example column: # include Column configuration
- 	another example column: # include Column configuration
+    example column: # include Column configuration
+     another example column: # include Column configuration
 views:
-	table: # include View configuration
-	list: # include View configuration
+    table: # include View configuration
+    list: # include View configuration
 text: # include Text configuration
 search: # include Search configuration
 ```
@@ -151,8 +151,8 @@ columnName:
 function:
 hide:
 options:
-	example option: # include Option configuration
-	another example option: # include Option configuration
+    example option: # include Option configuration
+    another example option: # include Option configuration
 ```
 
 ### Sort
