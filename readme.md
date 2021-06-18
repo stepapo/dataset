@@ -1,6 +1,6 @@
 # Dataset
 
-Component for Nette Framework, that helps generate datasets from Nextras ORM collections with paging, sorting and filtering capability.
+Component for Nette Framework, that helps generate datasets from Nextras ORM collections with paging, sorting and filtering capability. The docs show basic example and ways of configuring datasets.
 
 ## Example
 
