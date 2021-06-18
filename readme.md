@@ -4,7 +4,7 @@ Component for Nette Framework, that helps generate datasets from Nextras ORM col
 
 ## Example
 
-Let's create a list of all persons in database sorted alphabeticaly by name. The list shows 10 items per page, is sortable by name, gender, birthday and filterable by gender. Name contains a link to person detail page.
+Let's create a list of all persons in database sorted alphabeticaly by name. The list shows 10 items per page, is sortable by name, gender, birthday and filterable by gender. Name contains a link to person detail page. It is possible to switch between table view and grid view.
 
 ### Definition
 
@@ -37,6 +37,7 @@ columns:
 		sort:
 views:
 	table:
+	grid:
 ```
 
 ### Component
