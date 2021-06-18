@@ -65,12 +65,10 @@ public function createComponentPersonDataset()
 ```neon
 collection:
 repository:
-text: # include Text configuration
 parentEntity:
 itemsPerPage:
 translator:
 imageStorage:
-search: # include Search configuration
 itemClassCallback:
 idColumnName:
 alwaysRetrieveItems:
@@ -80,6 +78,8 @@ columns:
 views:
 	table: # include View configuration
 	list: # include View configuration
+text: # include Text configuration
+search: # include Search configuration
 ```
 
 ### Column
@@ -90,15 +90,15 @@ description:
 width:
 align:
 columnName:
-latteFilter: # include LatteFilter configuration
 prepend:
 append:
-link: # include Link configuration
 valueTemplateFile:
-sort: # include Sort configuration
-filter: # include Filter configuration
 hide:
 class:
+filter: # include Filter configuration
+sort: # include Sort configuration
+latteFilter: # include LatteFilter configuration
+link: # include Link configuration
 ```
 
 ### View
@@ -122,10 +122,10 @@ isDefault:
 ### Search
 
 ```neon
-searchFunction: # include OrmFunction configuration
 placeholder:
 prepareCallback:
 suggestCallback:
+searchFunction: # include OrmFunction configuration
 sortFunction: # include OrmFunction configuration 
 ```
 
@@ -145,14 +145,14 @@ didYouMean:
 ### Filter
 
 ```neon
-options:
-	example option: # include Option configuration
-	another example option: # include Option configuration
 prompt:
 collapse:
 columnName:
 function:
 hide:
+options:
+	example option: # include Option configuration
+	another example option: # include Option configuration
 ```
 
 ### Sort
