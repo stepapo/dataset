@@ -123,11 +123,11 @@ isDefault:
 ### Search
 
 ```neon
-searchFunction: # include OrmFunction sonfiguration
+searchFunction: # include OrmFunction configuration
 placeholder:
 prepareCallback:
 suggestCallback:
-sortFunction: # include OrmFunction sonfiguration 
+sortFunction: # include OrmFunction configuration 
 ```
 
 ### Text
