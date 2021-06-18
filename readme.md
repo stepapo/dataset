@@ -4,7 +4,7 @@ Component for Nette Framework, that helps generate datasets from Nextras ORM col
 
 ## Example
 
-Let's create a list of all persons in database. Number of items per page is 10, default sort is alphbeticaly by name. List is sortable by name, gender, birthday and filterable by gender.
+Let's create a list of all persons in database sorted alphabeticaly by name. The list shows 10 items per page, is sortable by name, gender, birthday and filterable by gender.
 
 ### Definition
 
