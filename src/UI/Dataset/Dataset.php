@@ -478,7 +478,7 @@ class Dataset extends DatasetControl
 			$column = $this->columns[$sort];
 			$direction = $this->getComponent('sorting')->direction;
 			if ($column->sort->function) {
-				$c = $c->applyfunction($column->sort->function->class, $direction);
+				$c = $c->orderBy([$column->sort->function->class], $direction);
 			} else {
 				$c = $c->orderBy($column->getNextrasName(), $direction);
 			}
@@ -488,11 +488,10 @@ class Dataset extends DatasetControl
 				continue;
 			}
 			if ($column->sort->function) {
-				$c = $c->applyfunction($column->sort->function->class, $column->sort->direction);
+				$c = $c->orderBy([$column->sort->function->class], $column->sort->direction);
 			} else {
 				$c = $c->orderBy($column->getNextrasName(), $column->sort->direction);
 			}
-
 		}
 
 		if (
@@ -501,7 +500,7 @@ class Dataset extends DatasetControl
 			&& $this->getComponent('searchForm')->term
 			&& ($this->getComponent('searchForm-form')->isSubmitted() || !$sort)
 		) {
-			$c = $c->applyFunction(...array_merge([$this->search->sortFunction->class], $this->search->sortFunction->args));
+			$c = $c->orderBy(array_merge([$this->search->sortFunction->class], (array) $this->search->sortFunction->args), $this->search->sortDirection);
 		}
 		return $c;
 	}

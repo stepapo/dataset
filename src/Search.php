@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Stepapo\Dataset;
 
 use Nette\InvalidArgumentException;
+use Nextras\Orm\Collection\ICollection;
 
 
 class Search
@@ -14,7 +15,8 @@ class Search
 		public ?string $placeholder = null,
 		public $prepareCallback = null,
 		public $suggestCallback = null,
-		public ?OrmFunction $sortFunction = null
+		public ?OrmFunction $sortFunction = null,
+		public string $sortDirection = ICollection::ASC,
 	) {}
 
 
@@ -36,6 +38,9 @@ class Search
 		}
 		if (array_key_exists('sortFunction', $config)) {
 			$search->setSortFunction(OrmFunction::createFromArray((array) $config['sortFunction']));
+		}
+		if (array_key_exists('sortDirection', $config)) {
+			$search->setSortDirection($config['sortDirection']);
 		}
 		return $search;
 	}
@@ -72,6 +77,13 @@ class Search
 	public function setSortFunction(?OrmFunction $sortFunction): Search
 	{
 		$this->sortFunction = $sortFunction;
+		return $this;
+	}
+
+
+	public function setSortDirection(string $sortDirection): Search
+	{
+		$this->sortDirection = $sortDirection;
 		return $this;
 	}
 }
