@@ -79,7 +79,7 @@ class View
 	) {}
 
 
-	public static function createFromArray(?array $config = null, string $name): View
+	public static function createFromArray(array $config, string $name): View
 	{
 		$view = array_key_exists($name, self::VIEWS) ? self::createView($name) : new self($name);
 		if (isset($config['label'])) {
