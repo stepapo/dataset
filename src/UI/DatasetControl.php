@@ -9,6 +9,7 @@ use Nette\Localization\Translator;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Dataset\Column;
+use Stepapo\Dataset\Latte\Filters;
 use Stepapo\Dataset\Text;
 use Stepapo\Dataset\UI\Dataset\Dataset;
 use Stepapo\Dataset\View;
@@ -33,6 +34,7 @@ abstract class DatasetControl extends Control
 	{
 		$template = parent::createTemplate();
 		$template->setTranslator($this->getTranslator());
+		$template->addFilter('intlDate', [Filters::class, 'intlDate']);
 		return $template;
 	}
 

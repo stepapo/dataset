@@ -502,7 +502,8 @@ class Dataset extends DatasetControl
 		) {
 			$c = $c->orderBy(array_merge([$this->search->sortFunction->class], (array) $this->search->sortFunction->args), $this->search->sortDirection);
 		}
-		return $c;
+		$primaryKey = $this->repository->getEntityMetadata()->getPrimaryKey();
+		return count($primaryKey) === 1 ? $c->orderBy($primaryKey[0]) : $c;
 	}
 
 
