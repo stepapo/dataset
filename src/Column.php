@@ -194,11 +194,11 @@ class Column
 	public function getNextrasName(bool $withThis = true)
 	{
 		if (strpos($this->columnName, '.') !== false) {
-			return ($withThis ? 'this->' : '') . str_replace('.', '->', $this->columnName);
+			return str_replace('.', '->', $this->columnName);
 		}
 
 		if (strpos($this->columnName, '_') !== false) {
-			return ($withThis ? 'this->' : '') . str_replace('_', '->', $this->columnName);
+			return str_replace('_', '->', $this->columnName);
 		}
 
 		return $this->columnName;
