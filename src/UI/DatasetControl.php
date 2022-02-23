@@ -34,7 +34,8 @@ abstract class DatasetControl extends Control
 	{
 		$template = parent::createTemplate();
 		$template->setTranslator($this->getTranslator());
-		$template->addFilter('intlDate', [Filters::class, 'intlDate']);
+		$template->addFilter('intlDate', [Filters::class, 'intlDate']);		
+		$template->addFilter('plural', [Filters::class, 'plural']);
 		return $template;
 	}
 
