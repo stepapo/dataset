@@ -17,4 +17,16 @@ class Filters
 		$formatter->setPattern($pattern);
 		return $formatter->format($time);
 	}
+
+
+	public static function plural(int $count, string $first, string $second, string $third): string
+	{
+		if ($count === 0 || $count > 4) {
+			return $third;
+		}
+		if ($count === 1) {
+			return $first;
+		}
+		return $second;
+	}
 }
