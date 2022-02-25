@@ -44,7 +44,9 @@ class Dataset extends DatasetControl
 
 	private View $selectedView;
 
-	private int $count;
+	private int $currentCount;
+
+	private int $totalCount;
 
 	public bool $shouldRetrieveItems = true;
 
@@ -151,16 +153,25 @@ class Dataset extends DatasetControl
 	}
 
 
+	public function getCurrentCount(): int
+	{
+		if (isset($this->currentCount)) {
+			return $this->currentCount;
+		}
+		return $this->getCollectionItems()->count();
+	}
+
+
 	public function getCollectionCount(): int
 	{
-		if (isset($this->count)) {
-			return $this->count;
+		if (isset($this->totalCount)) {
+			return $this->totalCount;
 		}
 		$c = $this->getCollection();
 		$c = $this->filter($c);
 		$c = $this->search($c);
-		$this->count = $c->countStored();
-		return $this->count;
+		$this->totalCount = $c->countStored();
+		return $this->totalCount;
 	}
 
 
@@ -170,7 +181,7 @@ class Dataset extends DatasetControl
 		$this->template->showPagination = (bool) $this->itemsPerPage;
 		$this->template->showSearch = (bool) $this->search;
 		if ($this->itemsPerPage && $this->shouldRetrieveItems) {
-			$count = $this->getCollectionCount();
+			$count = $this->getCurrentCount();
 			$term = $this->search ? $this->getComponent('searchForm')->term : null;
 			$this->template->count = $count;
 			$this->template->term = $term;
@@ -382,8 +393,7 @@ class Dataset extends DatasetControl
 	{
 		$pagination = new PaginationControl(
 			(new Paginator)
-				->setItemsPerPage($this->itemsPerPage)
-				->setItemCount($this->getCollectionCount()),
+				->setItemsPerPage($this->itemsPerPage),
 		);
 		$pagination->onPaginate[] = function (PaginationControl $pagination) {
 			$this->getComponent('itemList')->redrawControl();
@@ -511,7 +521,7 @@ class Dataset extends DatasetControl
 	{
 		if ($this->itemsPerPage) {
 			$c = $c->limitBy(
-				$this->getComponent('pagination')->getPaginator()->length,
+				$this->getComponent('pagination')->getPaginator()->length + 1,
 				$this->getComponent('pagination')->getPaginator()->offset
 			);
 		}

@@ -52,6 +52,12 @@ abstract class DatasetControl extends Control
 	}
 
 
+	public function getCurrentCount(): int
+	{
+		return $this->getDataset()->getCurrentCount();
+	}
+
+
 	public function getRepository(): IRepository
 	{
 		return $this->getDataset()->getRepository();

@@ -39,6 +39,7 @@ class PaginationControl extends DatasetControl
 	{
 		parent::render();
 		$this->template->paginator = $this->paginator;
+		$this->template->shouldRenderNextPage = $this->shouldRenderNextPage();
 		$this->template->render($this->getSelectedView()->paginationTemplate);
 	}
 
@@ -57,5 +58,11 @@ class PaginationControl extends DatasetControl
 	public function getPaginator(): Paginator
 	{
 		return $this->paginator;
+	}
+
+
+	private function shouldRenderNextPage()
+	{
+		return $this->getCurrentCount() > $this->paginator->getItemsPerPage();
 	}
 }

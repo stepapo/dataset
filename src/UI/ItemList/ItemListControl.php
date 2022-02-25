@@ -78,6 +78,10 @@ class ItemListControl extends DatasetControl
 
 	private function getItems()
 	{
-		return $this->getDataset()->getCollectionItems()->fetchPairs($this->getDataset()->getIdColumnName());
+		$items = $this->getDataset()->getCollectionItems()->fetchPairs($this->getDataset()->getIdColumnName());
+		if ($this->getDataset()->getItemsPerPage() && $this->getCurrentCount() > $this->getDataset()->getItemsPerPage()) {
+			array_pop($items);
+		}
+		return $items;
 	}
 }
