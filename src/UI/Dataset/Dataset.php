@@ -44,6 +44,8 @@ class Dataset extends DatasetControl
 
 	private View $selectedView;
 
+	private ICollection $items;
+
 	private int $currentCount;
 
 	private int $totalCount;
@@ -144,12 +146,17 @@ class Dataset extends DatasetControl
 
 	public function getCollectionItems(): ICollection
 	{
+		if (isset($this->items)) {
+			return $this->items;
+		}
 		$c = $this->getCollection();
 		$c = $this->filter($c);
 		$c = $this->search($c);
 		$c = $this->sort($c);
 		$c = $this->paginate($c);
-		return $c;
+		$this->currentCount = $c->count();
+		$this->items = $c;
+		return $this->items;
 	}
 
 
@@ -184,7 +191,6 @@ class Dataset extends DatasetControl
 		if ($this->itemsPerPage && $this->shouldRetrieveItems) {
 			$count = $this->getCurrentCount();
 			$term = $this->search ? $this->getComponent('searchForm')->term : null;
-			$this->template->count = $count;
 			$this->template->term = $term;
 			if ($count == 0 && $term && $this->search->suggestCallback) {
 				$this->template->suggestedTerm = ($this->search->suggestCallback)($term);
