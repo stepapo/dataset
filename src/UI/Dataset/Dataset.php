@@ -158,7 +158,8 @@ class Dataset extends DatasetControl
 		if (isset($this->currentCount)) {
 			return $this->currentCount;
 		}
-		return $this->getCollectionItems()->count();
+		$this->currentCount = $this->getCollectionItems()->count();
+		return $this->currentCount;
 	}
 
 
