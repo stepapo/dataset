@@ -17,7 +17,6 @@ class PaginationControl extends DatasetControl
 {
 	public array $onPaginate;
 
-	#[Persistent]
 	public int $page = 1;
 
 
