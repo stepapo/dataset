@@ -3,7 +3,7 @@
 <div n:snippet>
 	{foreach $columns as $column}
 		{if $column->filter && !$column->filter->hide}
-			{control filter-$column->name}
+			{control 'filter-' . $column->name}
 		{/}
 	{/}
 </div>

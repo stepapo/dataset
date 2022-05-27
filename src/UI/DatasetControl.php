@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\UI;
 
+use Latte\Engine;
+use Latte\Essential\RawPhpExtension;
 use Nette\Application\UI\Template;
 use Nette\Localization\Translator;
 use Nextras\Orm\Entity\IEntity;
@@ -36,6 +38,9 @@ abstract class DatasetControl extends Control
 		$template->setTranslator($this->getTranslator());
 		$template->addFilter('intlDate', [Filters::class, 'intlDate']);		
 		$template->addFilter('plural', [Filters::class, 'plural']);
+		if (version_compare(Engine::VERSION, '3', '>=')) {
+			$template->getLatte()->addExtension(new RawPhpExtension);
+		}
 		return $template;
 	}
 
