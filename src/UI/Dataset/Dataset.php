@@ -495,7 +495,7 @@ class Dataset extends DatasetControl
 			$column = $this->columns[$sort];
 			$direction = $this->getComponent('sorting')->direction;
 			if ($column->sort->function) {
-				$c = $c->orderBy(array_merge([$column->sort->function->class], $column->sort->function->args), $direction);
+				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), $direction);
 			} else {
 				$c = $c->orderBy($column->getNextrasName(), $direction);
 			}
@@ -505,7 +505,7 @@ class Dataset extends DatasetControl
 				continue;
 			}
 			if ($column->sort->function) {
-				$c = $c->orderBy(array_merge([$column->sort->function->class], $column->sort->function->args), $column->sort->direction);
+				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), $column->sort->direction);
 			} else {
 				$c = $c->orderBy($column->getNextrasName(), $column->sort->direction);
 			}
