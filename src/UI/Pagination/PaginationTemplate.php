@@ -13,4 +13,6 @@ class PaginationTemplate extends DatasetControlTemplate
 	public PaginationControl $control;
 
 	public Paginator $paginator;
+
+	public bool $shouldRenderNextPage;
 }
