@@ -17,7 +17,7 @@ use Stepapo\Dataset\UI\Dataset\Dataset;
 use Stepapo\Dataset\View;
 use Nette\Application\UI\Control;
 use Nextras\Orm\Collection\ICollection;
-use Ublaboo\ImageStorage\ImageStorage;
+use Contributte\ImageStorage\ImageStorage;
 
 
 abstract class DatasetControl extends Control
