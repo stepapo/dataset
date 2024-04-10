@@ -10,7 +10,7 @@ use Stepapo\Dataset\Column;
 use Stepapo\Dataset\Text;
 use Stepapo\Dataset\View;
 use Nette\Bridges\ApplicationLatte\Template;
-use Ublaboo\ImageStorage\ImageStorage;
+use Contributte\ImageStorage\ImageStorage;
 
 
 abstract class DatasetControlTemplate extends Template
