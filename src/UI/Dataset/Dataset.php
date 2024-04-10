@@ -30,7 +30,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Paginator;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Dataset\View;
-use Ublaboo\ImageStorage\ImageStorage;
+use Contributte\ImageStorage\ImageStorage;
 
 
 /**
