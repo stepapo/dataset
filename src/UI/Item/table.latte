@@ -1,6 +1,6 @@
 {templateType Stepapo\Dataset\UI\Item\ItemTemplate}
 
-<tr{if $itemClassCallback} class="{$itemClassCallback($item)}"{/} n:snippet>
+<tr{if $itemClassCallback} class="{$itemClassCallback($item)}"{/}{if $itemLink} data-href="{plink $itemLink->destination ...array_values($linkArgs)}"{/} n:snippet>
 	{foreach $columns as $column}
 		{php $value = $control->getValue($column->columnName)}
 		{if !$column->hide}
@@ -10,7 +10,7 @@
 					'entity' => $item,
 					'value' => $value,
 					'column' => $column,
-					'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a), $column->link->args) : null
+					'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args) : null
 				}
 			</td>
 		{/}

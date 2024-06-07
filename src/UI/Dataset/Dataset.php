@@ -30,7 +30,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Paginator;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Dataset\View;
-use Contributte\ImageStorage\ImageStorage;
+use Ublaboo\ImageStorage\ImageStorage;
 
 
 /**
@@ -69,6 +69,7 @@ class Dataset extends DatasetControl
 		private ?int $itemsPerPage = null,
 		private ?Search $search = null,
 		private $itemClassCallback = null,
+		private ?Link $itemLink = null,
 		private ?string $itemListClass = null,
 		private string $idColumnName = 'id',
 		private bool $alwaysRetrieveItems = false,
@@ -110,6 +111,9 @@ class Dataset extends DatasetControl
 		}
 		if (array_key_exists('itemClassCallback', $config)) {
 			$dataset->setItemClassCallback($config['itemClassCallback']);
+		}
+		if (array_key_exists('itemLink', $config)) {
+			$dataset->setItemLink(Link::createFromArray($config['itemLink']));
 		}
 		if (array_key_exists('itemListClass', $config)) {
 			$dataset->setItemListClass($config['itemListClass']);
@@ -242,6 +246,12 @@ class Dataset extends DatasetControl
 	}
 
 
+	public function getItemLink(): ?Link
+	{
+		return $this->itemLink;
+	}
+
+
 	public function getItemListClass(): ?string
 	{
 		return $this->itemListClass;
@@ -365,6 +375,13 @@ class Dataset extends DatasetControl
 	public function setItemClassCallback(?callable $itemClassCallback): Dataset
 	{
 		$this->itemClassCallback = $itemClassCallback;
+		return $this;
+	}
+
+
+	public function setItemLink(Link $itemLink): Dataset
+	{
+		$this->itemLink = $itemLink;
 		return $this;
 	}
 

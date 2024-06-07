@@ -33,6 +33,9 @@ class ItemControl extends DatasetControl
 	{
 		parent::render();
 		$this->template->itemClassCallback = $this->getDataset()->getItemClassCallback();
+		$itemLink = $this->getDataset()->getItemLink();
+		$this->template->itemLink = $itemLink;
+		$this->template->linkArgs = $itemLink && $itemLink->args ? array_map(fn($a) => $this->getValue($a) ?: $a, $itemLink->args) : null;
 		$this->template->item = $this->entity;
 		$this->template->render($this->getSelectedView()->itemTemplate);
 	}

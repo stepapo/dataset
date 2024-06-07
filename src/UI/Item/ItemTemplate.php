@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\UI\Item;
 
+use Stepapo\Dataset\Link;
 use Stepapo\Dataset\UI\DatasetControlTemplate;
 use Nextras\Orm\Entity\IEntity;
 
@@ -16,4 +17,8 @@ class ItemTemplate extends DatasetControlTemplate
 
 	/** @var callable|null */
 	public $itemClassCallback;
+
+	public ?Link $itemLink;
+
+	public ?array $linkArgs;
 }

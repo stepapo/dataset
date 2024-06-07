@@ -1,7 +1,7 @@
 {templateType Stepapo\Dataset\UI\Item\ItemTemplate}
 
 {snippet}
-	<ul n:inner-foreach="$columns as $column" class="col-3">
+	<ul n:inner-foreach="$columns as $column" class="col-3"{if $itemLink} data-href="{plink $itemLink->destination ...array_values($linkArgs)}"{/}>
 		{if !$column->hide}
 			{php $value = $control->getValue($column->columnName)}
 			<li n:if="$value" n:class="$column->class">
