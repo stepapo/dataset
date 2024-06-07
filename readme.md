@@ -70,6 +70,7 @@ itemsPerPage:
 translator:
 imageStorage:
 itemClassCallback:
+itemLink: # include Link configuration
 idColumnName:
 alwaysRetrieveItems:
 columns:
