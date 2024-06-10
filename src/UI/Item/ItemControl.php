@@ -17,6 +17,8 @@ use Nextras\Orm\Relationships\HasMany;
  */
 class ItemControl extends DatasetControl
 {
+	private const UNDEFINED_VALUE = 'undefined_value';
+
 	/** @var callable[] */
 	public array $onChange;
 
@@ -35,7 +37,7 @@ class ItemControl extends DatasetControl
 		$this->template->itemClassCallback = $this->getDataset()->getItemClassCallback();
 		$itemLink = $this->getDataset()->getItemLink();
 		$this->template->itemLink = $itemLink;
-		$this->template->linkArgs = $itemLink && $itemLink->args ? array_map(fn($a) => $this->getValue($a) ?: $a, $itemLink->args) : null;
+		$this->template->linkArgs = $itemLink && $itemLink->args ? array_map(fn($a) => $this->getValue($a) === self::UNDEFINED_VALUE ? $a : $this->getValue($a), $itemLink->args) : null;
 		$this->template->item = $this->entity;
 		$this->template->render($this->getSelectedView()->itemTemplate);
 	}
@@ -49,8 +51,8 @@ class ItemControl extends DatasetControl
 			if ($value instanceof HasMany) {
 				throw new InvalidArgumentException();
 			} else {
-				if (!isset($value->{$columnName})) {
-					return null;
+				if (!$value?->getMetadata()->hasProperty($columnName)) {
+					return self::UNDEFINED_VALUE;
 				}
 				$value = $value->{$columnName};
 			}
