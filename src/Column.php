@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Stepapo\Dataset;
 
 use Nextras\Orm\Collection\ICollection;
+use Webovac\Core\Attribute\Type;
 
 
 class Column
@@ -29,7 +30,7 @@ class Column
 		public ?Link $link = null,
 		public ?string $valueTemplateFile = null,
 		public ?Sort $sort = null,
-		public ?Filter $filter = null,
+		#[Type(Filter::class)] public ?Filter $filter = null,
 		public bool $hide = false,
 		public ?string $class = null
 	) {

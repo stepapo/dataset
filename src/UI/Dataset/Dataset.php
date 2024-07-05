@@ -92,7 +92,7 @@ class Dataset extends DatasetControl
 		$dataset = new self(
 			collection: $config['collection'],
 			repository: $config['repository'],
-			text: Text::createFromArray($config['text'] ?? [])
+			text: Text::createFromArray($config['text'] ?? []),
 		);
 		if (array_key_exists('parentEntity', $config)) {
 			$dataset->setParentEntity($config['parentEntity']);
