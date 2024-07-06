@@ -5,23 +5,13 @@ declare(strict_types=1);
 namespace Stepapo\Dataset;
 
 use Nextras\Orm\Collection\ICollection;
+use Stepapo\Utils\Attribute\Type;
+use Stepapo\Utils\Schematic;
 
 
-class Sort
+class Sort extends Schematic
 {
-	public function __construct(
-		public bool $isDefault = false,
-		public string $direction = ICollection::ASC,
-		public ?OrmFunction $function = null
-	) {}
-
-
-	public static function createFromArray(?array $config): Sort
-	{
-		return new self(
-			$config['isDefault'] ?? false,
-			$config['direction'] ?? ICollection::ASC,
-			isset($config['function']) ? OrmFunction::createFromArray($config['function']) : null
-		);
-	}
+	public bool $isDefault = false;
+	public string $direction = ICollection::ASC;
+	#[Type(OrmFunction::class)] public OrmFunction|array|null $function = null;
 }

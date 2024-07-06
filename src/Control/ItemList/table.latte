@@ -1,0 +1,17 @@
+{templateType Stepapo\Dataset\Control\ItemList\ItemListTemplate}
+
+<tbody n:class="$itemListClass" n:snippet>
+	{if $control->getDatasetControl()->getCurrentCount() > 0}
+		{foreach $items as $item}
+			{control 'item-' . $item->getValue($idColumnName)}
+		{/}
+	{else}
+		{php $colspan = 0}
+		{foreach $columns as $column}{if !$column->hide}{php $colspan++}{/}{/}
+		<tr>
+			<td colspan="{$colspan}">
+				{_$text->noResults}
+			</td>
+		</tr>
+	{/}
+</tbody>

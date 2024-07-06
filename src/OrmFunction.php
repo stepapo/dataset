@@ -4,25 +4,11 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
-use Nette\InvalidArgumentException;
+use Stepapo\Utils\Schematic;
 
 
-class OrmFunction
+class OrmFunction extends Schematic
 {
-	public function __construct(
-		public string $class,
-		public ?array $args = null
-	) {}
-
-
-	public static function createFromArray(array $config): OrmFunction
-	{
-		if (!isset($config['class'])) {
-			throw new InvalidArgumentException('Function class has to be defined.');
-		}
-		return new self(
-			$config['class'],
-			isset($config['args']) ? (array) $config['args'] : null
-		);
-	}
+	public string $class;
+	public ?array $args = null;
 }

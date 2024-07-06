@@ -44,7 +44,7 @@ views:
 ```php
 public function createComponentPersonDataset()
 {
-    return Stepapo\Dataset\UI\Dataset::createFromNeon(__DIR__ . '/personDataset.neon', [
+    return Stepapo\Dataset\Control\Dataset::createFromNeon(__DIR__ . '/personDataset.neon', [
         'collection' => $this->orm->personRepository->findAll()
         'repository' => $this->orm->personRepository
         'genderFilterOptions' => ['m' => 'Male', 'f' => 'Female']

@@ -1,0 +1,3 @@
+{templateType Stepapo\Dataset\Control\Value\ValueTemplate}
+
+<a n:tag-if="$column->link" href="{plink $column->link->destination ...array_values($linkArgs)}"><span class="nobreak">{if $value !== null}{$column->prepend}{$column->latteFilter ? ($this->filters->{$column->latteFilter->name})($value, ...$column->latteFilter->args) : $value}{$column->append}{/}</span></a>
