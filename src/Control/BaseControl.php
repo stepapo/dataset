@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control;
 
+use Contributte\ImageStorage\ImageStorage;
 use Latte\Engine;
 use Latte\Essential\RawPhpExtension;
+use Nette\Application\UI\Control;
 use Nette\Application\UI\Template;
 use Nette\Localization\Translator;
-use Nextras\Orm\Entity\IEntity;
-use Nextras\Orm\Repository\IRepository;
 use Stepapo\Dataset\Column;
-use Stepapo\Utils\Latte\Filters;
-use Stepapo\Dataset\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
+use Stepapo\Dataset\Text;
 use Stepapo\Dataset\View;
-use Nette\Application\UI\Control;
-use Nextras\Orm\Collection\ICollection;
-use Contributte\ImageStorage\ImageStorage;
+use Stepapo\Utils\Latte\Filters;
 
 
 abstract class BaseControl extends Control

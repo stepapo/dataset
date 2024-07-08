@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
+use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Schematic;
 
 
@@ -60,7 +61,7 @@ class View extends Schematic
 	];
 
 
-	public string $name;
+	#[KeyProperty] public string $name;
 	public ?string $label = null;
 	public string $datasetTemplate = self::VIEWS['list']['datasetTemplate'];
 	public string $itemListTemplate = self::VIEWS['list']['itemListTemplate'];

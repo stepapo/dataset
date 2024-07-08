@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Value;
 
+use Nextras\Orm\Entity\IEntity;
 use Stepapo\Dataset\Column;
 use Stepapo\Dataset\Control\BaseTemplate;
-use Nextras\Orm\Entity\IEntity;
 
 
 class ValueTemplate extends BaseTemplate

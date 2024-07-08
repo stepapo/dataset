@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
+use Stepapo\Utils\Attribute\ToArray;
+use Stepapo\Utils\Attribute\ValueProperty;
 use Stepapo\Utils\Schematic;
 
 
 class OrmFunction extends Schematic
 {
-	public string $class;
-	public ?array $args = null;
+	#[ValueProperty] public string $class;
+	#[ToArray] public ?array $args = null;
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Sorting;
 
 use Nette\Application\Attributes\Persistent;
-use Stepapo\Dataset\Control\BaseControl;
 use Nextras\Orm\Collection\ICollection;
+use Stepapo\Dataset\Control\BaseControl;
 
 
 /**

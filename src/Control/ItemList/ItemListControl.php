@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\ItemList;
 
+use Nette\Application\UI\Multiplier;
 use Nette\ComponentModel\IComponent;
 use Nette\InvalidArgumentException;
-use Stepapo\Dataset\Link;
-use Stepapo\Dataset\Control\BaseControl;
-use Stepapo\Dataset\Control\Item\ItemControl;
-use Nette\Application\UI\Multiplier;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
+use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Dataset\Control\Item\ItemControl;
+use Stepapo\Dataset\Link;
 
 
 /**
@@ -73,12 +73,12 @@ class ItemListControl extends BaseControl
 	{
 		$columnNames = explode('.', $columnName);
 		$value = $entity;
-		foreach ($columnNames as $columnName) {
-			if ($value instanceof HasMany) {
-				throw new InvalidArgumentException();
-			} else {
-				if (!isset($value->{$columnName})) {
-					return null;
+		if ($value instanceof HasMany) {
+			throw new InvalidArgumentException("Value is a collection.");
+		} else {
+			foreach ($columnNames as $columnName) {
+				if (!$value?->getMetadata()->hasProperty($columnName)) {
+					return ItemControl::UNDEFINED_VALUE;
 				}
 				$value = $value->{$columnName};
 			}

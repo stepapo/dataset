@@ -6,18 +6,9 @@ namespace Stepapo\Dataset\Control\Dataset;
 
 use Contributte\ImageStorage\ImageStorage;
 use Nette\Localization\Translator;
+use Nette\Utils\Paginator;
+use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
-use Nextras\Orm\Repository\IRepository;
-use Stepapo\Dataset\Column;
-use Stepapo\Dataset\Dataset;
-use Stepapo\Dataset\Filter;
-use Stepapo\Dataset\LatteFilter;
-use Stepapo\Dataset\Link;
-use Stepapo\Dataset\Option;
-use Stepapo\Dataset\OrmFunction;
-use Stepapo\Dataset\Sort;
-use Stepapo\Dataset\Search;
-use Stepapo\Dataset\Text;
 use Stepapo\Dataset\Control\BaseControl;
 use Stepapo\Dataset\Control\Display\DisplayControl;
 use Stepapo\Dataset\Control\FilterList\FilterListControl;
@@ -25,14 +16,9 @@ use Stepapo\Dataset\Control\ItemList\ItemListControl;
 use Stepapo\Dataset\Control\Pagination\PaginationControl;
 use Stepapo\Dataset\Control\SearchForm\SearchFormControl;
 use Stepapo\Dataset\Control\Sorting\SortingControl;
-use Stepapo\Utils\Attribute\ArrayOfType;
-use Stepapo\Utils\Attribute\Type;
-use Stepapo\Utils\ConfigProcessor;
-use Nette\InvalidArgumentException;
-use Nette\Neon\Neon;
-use Nette\Utils\FileSystem;
-use Nette\Utils\Paginator;
-use Nextras\Orm\Collection\ICollection;
+use Stepapo\Dataset\Dataset;
+use Stepapo\Dataset\Option;
+use Stepapo\Dataset\Text;
 use Stepapo\Dataset\View;
 
 

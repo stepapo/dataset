@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Item;
 
-use Stepapo\Dataset\Link;
-use Stepapo\Dataset\Control\BaseTemplate;
 use Nextras\Orm\Entity\IEntity;
+use Stepapo\Dataset\Control\BaseTemplate;
+use Stepapo\Dataset\Link;
 
 
 class ItemTemplate extends BaseTemplate

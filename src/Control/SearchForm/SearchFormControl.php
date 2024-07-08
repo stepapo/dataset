@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\SearchForm;
 
 use Nette\Application\Attributes\Persistent;
-use Stepapo\Dataset\Control\BaseControl;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
+use Stepapo\Dataset\Control\BaseControl;
 
 
 /**

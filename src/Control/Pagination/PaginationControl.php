@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Pagination;
 
-use Nette\Application\Attributes\Persistent;
-use Stepapo\Dataset\Control\BaseControl;
 use Nette\Utils\Paginator;
+use Stepapo\Dataset\Control\BaseControl;
 
 
 /**

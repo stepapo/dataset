@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\FilterList;
 
 use Nette\Application\Attributes\Persistent;
+use Nette\Application\UI\Multiplier;
 use Stepapo\Dataset\Control\BaseControl;
 use Stepapo\Dataset\Control\Filter\FilterControl;
-use Nette\Application\UI\Multiplier;
 
 
 /**

@@ -18,7 +18,7 @@ class Filter extends Schematic
 	#[ArrayOfType(Option::class)] /** @var Option[] */ public ?array $options = [];
 
 
-	public function getNextrasName(bool $withThis = true)
+	public function getNextrasName()
 	{
 		if (str_contains($this->columnName, '.')) {
 			return str_replace('.', '->', $this->columnName);

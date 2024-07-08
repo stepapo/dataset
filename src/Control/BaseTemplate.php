@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control;
 
+use Contributte\ImageStorage\ImageStorage;
 use Nette\Application\UI\Presenter;
+use Nette\Bridges\ApplicationLatte\Template;
 use Nette\Security\User;
 use Stepapo\Dataset\Column;
 use Stepapo\Dataset\Text;
 use Stepapo\Dataset\View;
-use Nette\Bridges\ApplicationLatte\Template;
-use Contributte\ImageStorage\ImageStorage;
 
 
 abstract class BaseTemplate extends Template

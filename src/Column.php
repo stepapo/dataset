@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
-use Nextras\Orm\Collection\ICollection;
+use Stepapo\Utils\Attribute\CopyValue;
+use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Attribute\Type;
 use Stepapo\Utils\Schematic;
-use Webovac\Core\Model\CmsDataRepository;
 
 
 class Column extends Schematic
@@ -16,12 +16,12 @@ class Column extends Schematic
 	public const ALIGN_CENTER = 'center';
 	public const ALIGN_RIGHT = 'right';
 
-	public string $name;
+	#[KeyProperty] public string $name;
 	public ?string $label = null;
 	public ?string $description = null;
 	public ?int $width = null;
 	public string $align = self::ALIGN_LEFT;
-	public ?string $columnName = null;
+	#[CopyValue('name')] public ?string $columnName = null;
 	public ?string $prepend = null;
 	public ?string $append = null;
 	public ?string $valueTemplateFile = null;
@@ -33,14 +33,15 @@ class Column extends Schematic
 	#[Type(Filter::class)] public Filter|array|null $filter = null;
 
 
-	public static function createFromArray(array $config, string $mode = CmsDataRepository::MODE_INSTALL): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
-		$config['columnName'] ??= $config['name'];
-		return parent::createFromArray($config, $mode);
+		$column = parent::createFromArray($config, $key, $skipDefaults);
+//		$column->columnName ??= $column->name;
+		return $column;
 	}
 
 
-	public function getNextrasName(bool $withThis = true)
+	public function getNextrasName()
 	{
 		if (str_contains($this->columnName, '.')) {
 			return str_replace('.', '->', $this->columnName);
