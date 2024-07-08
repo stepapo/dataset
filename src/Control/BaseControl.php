@@ -15,7 +15,6 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Dataset\Text;
 use Stepapo\Dataset\View;
 use Stepapo\Utils\Latte\Filters;
-use Nextras\Orm\Collection\ICollection;
 
 
 abstract class BaseControl extends Control
