@@ -4,25 +4,13 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
-use Nette\InvalidArgumentException;
+use Stepapo\Utils\Attribute\ToArray;
+use Stepapo\Utils\Attribute\ValueProperty;
+use Stepapo\Utils\Schematic;
 
 
-class Link
+class Link extends Schematic
 {
-	public function __construct(
-		public string $destination,
-		public ?array $args = null
-	) {}
-
-
-	public static function createFromArray(array $config): Link
-	{
-		if (!isset($config['destination'])) {
-			throw new InvalidArgumentException('Link destination has to be defined.');
-		}
-		return new self(
-			$config['destination'],
-			isset($config['args']) ? (array) $config['args'] : null
-		);
-	}
+	#[ValueProperty] public string $destination;
+	#[ToArray] public ?array $args = null;
 }

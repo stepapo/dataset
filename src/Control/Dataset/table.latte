@@ -1,0 +1,27 @@
+{templateType Stepapo\Dataset\Control\Dataset\DatasetTemplate}
+
+{snippet}
+	{if $showSearch}
+		{control searchForm}
+	{/}
+	{control filterList}
+	{control display}
+	<p n:if="isset($term) && $term">{_$text->searchResults} "{$term}"</p>
+	{if $showPagination}
+		<table>
+			{control sorting}
+			{control itemList}
+		</table>
+		{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}
+			<p>
+				{_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+			</p>
+		{/}
+		{control pagination}
+	{else}
+		<table>
+			{control sorting}
+			{control itemList}
+		</table>
+	{/}
+{/}
