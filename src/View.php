@@ -8,7 +8,7 @@ use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Schematic;
 
 
-class View extends Schematic
+class View extends Schematic implements \Stepapo\Data\View
 {
 	public const DEFAULT_VIEW = self::VIEWS['table'];
 
@@ -20,9 +20,9 @@ class View extends Schematic
 			'itemListTemplate' => __DIR__ . '/Control/ItemList/table.latte',
 			'itemTemplate' => __DIR__ . '/Control/Item/table.latte',
 			'attributeTemplate' => __DIR__ . '/Control/Attribute/table.latte',
-			'valueTemplate' => __DIR__ . '/Control/Value/value.latte',
-			'filterListTemplate' => __DIR__ . '/Control/FilterList/list.latte',
-			'filterTemplate' => __DIR__ . '/Control/Filter/list.latte',
+			'valueTemplate' => __DIR__ . '/../../data/src/Control/Value/value.latte',
+			'filterListTemplate' => __DIR__ . '/../../data/src/Control/FilterList/list.latte',
+			'filterTemplate' => __DIR__ . '/../../data/src/Control/Filter/list.latte',
 			'paginationTemplate' => __DIR__ . '/Control/Pagination/list.latte',
 			'sortingTemplate' => __DIR__ . '/Control/Sorting/table.latte',
 			'displayTemplate' => __DIR__ . '/Control/Display/list.latte',
@@ -35,9 +35,9 @@ class View extends Schematic
 			'itemListTemplate' => __DIR__ . '/Control/ItemList/list.latte',
 			'itemTemplate' => __DIR__ . '/Control/Item/list.latte',
 			'attributeTemplate' => __DIR__ . '/Control/Attribute/list.latte',
-			'valueTemplate' => __DIR__ . '/Control/Value/value.latte',
-			'filterListTemplate' => __DIR__ . '/Control/FilterList/list.latte',
-			'filterTemplate' => __DIR__ . '/Control/Filter/list.latte',
+			'valueTemplate' => __DIR__ . '/../../data/src/Control/Value/value.latte',
+			'filterListTemplate' => __DIR__ . '/../../data/src/Control/FilterList/list.latte',
+			'filterTemplate' => __DIR__ . '/../../data/src/Control/Filter/list.latte',
 			'paginationTemplate' => __DIR__ . '/Control/Pagination/list.latte',
 			'sortingTemplate' => __DIR__ . '/Control/Sorting/list.latte',
 			'displayTemplate' => __DIR__ . '/Control/Display/list.latte',
@@ -50,9 +50,9 @@ class View extends Schematic
 			'itemListTemplate' => __DIR__ . '/Control/ItemList/grid.latte',
 			'itemTemplate' => __DIR__ . '/Control/Item/grid.latte',
 			'attributeTemplate' => __DIR__ . '/Control/Attribute/list.latte',
-			'valueTemplate' => __DIR__ . '/Control/Value/value.latte',
-			'filterListTemplate' => __DIR__ . '/Control/FilterList/list.latte',
-			'filterTemplate' => __DIR__ . '/Control/Filter/list.latte',
+			'valueTemplate' => __DIR__ . '/../../data/src/Control/Value/value.latte',
+			'filterListTemplate' => __DIR__ . '/../../data/src/Control/FilterList/list.latte',
+			'filterTemplate' => __DIR__ . '/../../data/src/Control/Filter/list.latte',
 			'paginationTemplate' => __DIR__ . '/Control/Pagination/list.latte',
 			'sortingTemplate' => __DIR__ . '/Control/Sorting/list.latte',
 			'displayTemplate' => __DIR__ . '/Control/Display/list.latte',
@@ -76,4 +76,10 @@ class View extends Schematic
 	public string $searchTemplate = self::VIEWS['list']['searchTemplate'];
 	public $itemFactoryCallback = null;
 	public bool $isDefault = false;
+
+
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
+	{
+		return parent::createFromArray(self::VIEWS[$key], $key, $skipDefaults);
+	}
 }

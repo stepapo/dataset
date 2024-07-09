@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Sorting;
 
-use Stepapo\Dataset\Control\BaseTemplate;
+use Stepapo\Data\Control\DataTemplate;
+use Stepapo\Data\Text;
 
 
-class SortingTemplate extends BaseTemplate
+class SortingTemplate extends DataTemplate
 {
 	public SortingControl $control;
 
@@ -16,4 +17,8 @@ class SortingTemplate extends BaseTemplate
 	public ?string $sort;
 
 	public ?string $direction;
+
+	public Text $text;
+
+	public array $columns;
 }

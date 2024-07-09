@@ -9,27 +9,28 @@ use Nette\Localization\Translator;
 use Nette\Utils\Paginator;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
-use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Option;
+use Stepapo\Data\Text;
+use Stepapo\Dataset\View;
 use Stepapo\Dataset\Control\Display\DisplayControl;
-use Stepapo\Dataset\Control\FilterList\FilterListControl;
+use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Dataset\Control\ItemList\ItemListControl;
 use Stepapo\Dataset\Control\Pagination\PaginationControl;
 use Stepapo\Dataset\Control\SearchForm\SearchFormControl;
 use Stepapo\Dataset\Control\Sorting\SortingControl;
 use Stepapo\Dataset\Dataset;
-use Stepapo\Dataset\Option;
-use Stepapo\Dataset\Text;
-use Stepapo\Dataset\View;
 
 
 /**
  * @property-read DatasetTemplate $template
  * @method onItemChange(DatasetControl $control, ?IEntity $entity = null)
  */
-class DatasetControl extends BaseControl
+class DatasetControl extends DataControl implements MainComponent
 {
 	/** @var callable[] */ public array $onItemChange;
-	private View $selectedView;
+	private View $view;
 	private ICollection $items;
 	private int $currentCount;
 	private int $totalCount;
@@ -44,7 +45,7 @@ class DatasetControl extends BaseControl
 	public function loadState(array $params): void
 	{
 		parent::loadState($params);
-		$this->selectedView = $this->selectView();
+		$this->view = $this->selectView();
 	}
 
 
@@ -92,7 +93,7 @@ class DatasetControl extends BaseControl
 	}
 
 
-	public function getTranslator(): Translator
+	public function getTranslator(): ?Translator
 	{
 		return $this->dataset->translator;
 	}
@@ -104,9 +105,9 @@ class DatasetControl extends BaseControl
 	}
 
 
-	public function getSelectedView(): View
+	public function getView(): View
 	{
-		return $this->selectedView;
+		return $this->view;
 	}
 
 
@@ -125,7 +126,6 @@ class DatasetControl extends BaseControl
 
 	public function render()
 	{
-		parent::render();
 		$this->template->showPagination = (bool) $this->dataset->itemsPerPage;
 		$this->template->showSearch = (bool) $this->dataset->search;
 		if ($this->dataset->itemsPerPage && $this->shouldRetrieveItems) {
@@ -136,13 +136,15 @@ class DatasetControl extends BaseControl
 				$this->template->suggestedTerm = ($this->dataset->search->suggestCallback)($term);
 			}
 		}
-		$this->template->render($this->selectedView->datasetTemplate);
+		$this->template->render($this->view->datasetTemplate);
 	}
 
 
 	public function createComponentItemList(): ItemListControl
 	{
 		return new ItemListControl(
+			$this,
+			$this->dataset->columns,
 			$this->dataset->idColumnName,
 			$this->dataset->itemsPerPage,
 			$this->dataset->itemListClass,
@@ -155,8 +157,9 @@ class DatasetControl extends BaseControl
 	public function createComponentPagination(): PaginationControl
 	{
 		$pagination = new PaginationControl(
-			(new Paginator)
-				->setItemsPerPage($this->dataset->itemsPerPage),
+			$this,
+			(new Paginator)->setItemsPerPage($this->dataset->itemsPerPage),
+			$this->dataset->text,
 		);
 		$pagination->onPaginate[] = function (PaginationControl $pagination) {
 			$this->getComponent('itemList')->redrawControl();
@@ -167,8 +170,8 @@ class DatasetControl extends BaseControl
 
 	public function createComponentFilterList(): FilterListControl
 	{
-		$control = new FilterListControl($this->dataset->columns);
-		$control->onFilter[] = function (FilterListControl $filtering) {
+		$control = new FilterListControl($this, $this->dataset->columns);
+		$control->onFilter[] = function (FilterListControl $filterList) {
 			$this->redrawControl();
 		};
 		return $control;
@@ -177,7 +180,7 @@ class DatasetControl extends BaseControl
 
 	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = new SearchFormControl($this->dataset->search->placeholder);
+		$control = new SearchFormControl($this->dataset->translator, $this->dataset->search->placeholder);
 		$control->onSearch[] = function (SearchFormControl $search) {
 			$this->redrawControl();
 		};
@@ -187,7 +190,7 @@ class DatasetControl extends BaseControl
 
 	public function createComponentSorting(): SortingControl
 	{
-		$control = new SortingControl();
+		$control = new SortingControl($this, $this->dataset->columns, $this->dataset->text);
 		$control->onSort[] = function (SortingControl $sorting) {
 			$this->redrawControl();
 		};
@@ -197,7 +200,11 @@ class DatasetControl extends BaseControl
 
 	public function createComponentDisplay(): DisplayControl
 	{
-		$control = new DisplayControl();
+		$control = new DisplayControl(
+			$this,
+			$this->dataset->views,
+			$this->dataset->text,
+		);
 		$control->onDisplay[] = function (DisplayControl $display) {
 			$this->redrawControl();
 		};

@@ -3,6 +3,6 @@
 <div class="mb-2 responsive">
 	<div class="d-inline-block" style="width: 65px;">{_$text->display}:</div>
 	<div class="btn-group space" n:snippet>
-		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name == $selectedView->name ? btn-primary : btn-secondary">{$view->label}</a>
+		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name == $view->name ? btn-primary : btn-secondary">{$view->label}</a>
 	</div>
 </div>

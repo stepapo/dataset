@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\SearchForm;
 
-use Stepapo\Dataset\Control\BaseTemplate;
+use Stepapo\Data\Control\DataTemplate;
 
 
-class SearchFormTemplate extends BaseTemplate
+class SearchFormTemplate extends DataTemplate
 {
 	public SearchFormControl $control;
 

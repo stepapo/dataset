@@ -9,17 +9,20 @@ use Nette\ComponentModel\IComponent;
 use Nette\InvalidArgumentException;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
-use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\MainComponent;
 use Stepapo\Dataset\Control\Item\ItemControl;
-use Stepapo\Dataset\Link;
+use Stepapo\Data\Link;
 
 
 /**
  * @property-read ItemListTemplate $template
  */
-class ItemListControl extends BaseControl
+class ItemListControl extends DataControl
 {
 	public function __construct(
+		private MainComponent $main,
+		private array $columns,
 		private string $idColumnName,
 		private ?int $itemsPerPage,
 		private ?string $itemListClass,
@@ -30,13 +33,13 @@ class ItemListControl extends BaseControl
 
 	public function render()
 	{
-		parent::render();
-		if ($this->getDatasetControl()->shouldRetrieveItems) {
+		if ($this->main->shouldRetrieveItems) {
 			$this->template->items = $this->getItems();
 		}
+		$this->template->main = $this->main;
 		$this->template->idColumnName = $this->idColumnName;
 		$this->template->itemListClass = $this->itemListClass;
-		$this->template->render($this->getSelectedView()->itemListTemplate);
+		$this->template->render($this->main->getView()->itemListTemplate);
 	}
 
 
@@ -44,24 +47,24 @@ class ItemListControl extends BaseControl
 	{
 		return new Multiplier(function ($id): IComponent {
 			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
-			$control = $this->getDatasetControl()->getSelectedView()->itemFactoryCallback
-				? ($this->getDatasetControl()->getSelectedView()->itemFactoryCallback)($entity)
-				: new ItemControl($entity, $this->itemClassCallback, $this->itemLink);
+			$control = $this->main->getView()->itemFactoryCallback
+				? ($this->main->getView()->itemFactoryCallback)($entity)
+				: new ItemControl($this->main, $entity, $this->columns, $this->itemClassCallback, $this->itemLink);
 			if (property_exists($control, 'onChange')) {
 				$control->onChange[] = function (IComponent $control, IEntity $entity) {
-					if (!$this->getDatasetControl()->getAlwaysRetrieveItems() && $this->presenter->isAjax()) {
-						$this->getDatasetControl()->shouldRetrieveItems = false;
+					if (!$this->main->getAlwaysRetrieveItems() && $this->presenter->isAjax()) {
+						$this->main->shouldRetrieveItems = false;
 					}
-					$this->getDatasetControl()->onItemChange($this->getDatasetControl(), $entity);
+					$this->main->onItemChange($this->main, $entity);
 				};
 			}
 			if (property_exists($control, 'onRemove')) {
 				$control->onRemove[] = function (IComponent $control) {
 					$this->redrawControl();
 					if ($this->itemsPerPage) {
-						$this->getDatasetControl()->getComponent('pagination')->redrawControl();
+						$this->main->getComponent('pagination')->redrawControl();
 					}
-					$this->getDatasetControl()->onItemChange($this->getDatasetControl());
+					$this->main->onItemChange($this->main);
 				};
 			}
 			return $control;
@@ -89,8 +92,8 @@ class ItemListControl extends BaseControl
 
 	private function getItems()
 	{
-		$items = $this->getDatasetControl()->getCollectionItems()->fetchPairs($this->idColumnName);
-		if ($this->itemsPerPage && $this->getCurrentCount() > $this->itemsPerPage) {
+		$items = $this->main->getCollectionItems()->fetchPairs($this->idColumnName);
+		if ($this->itemsPerPage && $this->main->getCurrentCount() > $this->itemsPerPage) {
 			array_pop($items);
 		}
 		return $items;

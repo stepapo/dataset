@@ -6,15 +6,16 @@ namespace Stepapo\Dataset\Control\SearchForm;
 
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
+use Nette\Localization\Translator;
 use Nette\Utils\ArrayHash;
-use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Data\Control\DataControl;
 
 
 /**
  * @property SearchFormTemplate $template
  * @method onSearch(SearchFormControl $control)
  */
-class SearchFormControl extends BaseControl
+class SearchFormControl extends DataControl
 {
 	/** @var callable[] */
 	public array $onSearch;
@@ -24,15 +25,15 @@ class SearchFormControl extends BaseControl
 
 
 	public function __construct(
-		private ?string $placeholder = null
+		private ?Translator $translator,
+		private ?string $placeholder = null,
 	) {}
 
 
 	public function render(): void
 	{
-		parent::render();
 		$this->template->term = $this->term;
-		$this->template->render($this->getSelectedView()->searchTemplate);
+		$this->template->render($this->getView()->searchTemplate);
 	}
 
 
@@ -41,9 +42,9 @@ class SearchFormControl extends BaseControl
 		$form = new Form();
 
 		$form->addText('term')
-			->setHtmlAttribute('placeholder', $this->placeholder ? ($this->getTranslator() ? $this->getTranslator()->translate($this->placeholder) : $this->placeholder) . '...' : null);
+			->setHtmlAttribute('placeholder', $this->placeholder ? ($this->translator ? $this->translator->translate($this->placeholder) : $this->placeholder) . '...' : null);
 
-		$form->addSubmit('send', $this->getTranslator() ? $this->getTranslator()->translate('Hledat') : 'Hledat');
+		$form->addSubmit('send', $this->translator ? $this->translator->translate('Hledat') : 'Hledat');
 
 		$form->onSuccess[] = [$this, 'formSucceeded'];
 

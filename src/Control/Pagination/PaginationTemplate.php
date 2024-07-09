@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Pagination;
 
 use Nette\Utils\Paginator;
-use Stepapo\Dataset\Control\BaseTemplate;
+use Stepapo\Data\Control\DataTemplate;
+use Stepapo\Data\Text;
 
 
-class PaginationTemplate extends BaseTemplate
+class PaginationTemplate extends DataTemplate
 {
 	public PaginationControl $control;
 
 	public Paginator $paginator;
 
 	public bool $shouldRenderNextPage;
+
+	public Text $text;
 }

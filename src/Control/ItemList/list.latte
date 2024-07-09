@@ -1,13 +1,10 @@
 {templateType Stepapo\Dataset\Control\ItemList\ItemListTemplate}
 
-<ul n:class="$itemListClass" n:snippet>
-	{if $control->getDatasetControl()->getCurrentCount() > 0}
-		{foreach $items as $item}
-			{control 'item-' . $item->getValue($idColumnName)}
-		{/}
-	{else}
-		<li>
-			{_$text->noResults}
-		</li>
-	{/}
+<ul n:class="$itemListClass, mt-3" n:snippet>
+	<li n:if="$main->getCurrentCount() > 0" n:foreach="$items as $item">
+		{control 'item-' . $item->getValue($idColumnName)}
+	</li>
+	<li n:else>
+		{_$text->noResults}
+	</li>
 </ul>

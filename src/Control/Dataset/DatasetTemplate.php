@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Dataset;
 
-use Stepapo\Dataset\Control\BaseTemplate;
+use Stepapo\Data\Control\DataTemplate;
 
 
-class DatasetTemplate extends BaseTemplate
+class DatasetTemplate extends DataTemplate
 {
 	public DatasetControl $control;
 

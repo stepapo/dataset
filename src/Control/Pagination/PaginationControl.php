@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Pagination;
 
 use Nette\Utils\Paginator;
-use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Text;
 
 
 /**
  * @property-read PaginationTemplate $template
  * @method onPaginate(PaginationControl $control)
  */
-class PaginationControl extends BaseControl
+class PaginationControl extends DataControl
 {
 	public array $onPaginate;
 
@@ -20,7 +22,9 @@ class PaginationControl extends BaseControl
 
 
 	public function __construct(
-		private Paginator $paginator
+		private MainComponent $main,
+		private Paginator $paginator,
+		private Text $text,
 	) {}
 
 
@@ -35,10 +39,10 @@ class PaginationControl extends BaseControl
 
 	public function render()
 	{
-		parent::render();
 		$this->template->paginator = $this->paginator;
+		$this->template->text = $this->text;
 		$this->template->shouldRenderNextPage = $this->shouldRenderNextPage();
-		$this->template->render($this->getSelectedView()->paginationTemplate);
+		$this->template->render($this->main->getView()->paginationTemplate);
 	}
 
 
@@ -61,6 +65,6 @@ class PaginationControl extends BaseControl
 
 	private function shouldRenderNextPage()
 	{
-		return $this->getCurrentCount() > $this->paginator->getItemsPerPage();
+		return $this->main->getCurrentCount() > $this->paginator->getItemsPerPage();
 	}
 }

@@ -6,13 +6,15 @@ namespace Stepapo\Dataset\Control\Sorting;
 
 use Nette\Application\Attributes\Persistent;
 use Nextras\Orm\Collection\ICollection;
-use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Text;
 
 
 /**
  * @property-read SortingTemplate $template
  */
-class SortingControl extends BaseControl
+class SortingControl extends DataControl
 {
 	#[Persistent]
 	public ?string $sort = null;
@@ -23,12 +25,18 @@ class SortingControl extends BaseControl
 	public array $onSort;
 
 
+	public function __construct(
+		private MainComponent $main,
+		private array $columns,
+		private Text $text,
+	) {}
+
+
 	public function render()
 	{
-		parent::render();
 		$this->template->show = false;
 		$sortCount = 0;
-		foreach ($this->getColumns() as $column) {
+		foreach ($this->columns as $column) {
 			if ($column->sort) {
 				$sortCount++;
  				if ($sortCount > 1) {
@@ -37,9 +45,11 @@ class SortingControl extends BaseControl
 				}
 			}
 		}
+		$this->template->columns = $this->columns;
 		$this->template->sort = $this->sort;
 		$this->template->direction = $this->direction;
-		$this->template->render($this->getSelectedView()->sortingTemplate);
+		$this->template->text = $this->text;
+		$this->template->render($this->main->getView()->sortingTemplate);
 	}
 
 

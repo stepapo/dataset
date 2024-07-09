@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\ItemList;
 
 use Nextras\Orm\Entity\IEntity;
-use Stepapo\Dataset\Control\BaseTemplate;
+use Stepapo\Data\Control\DataTemplate;
+use Stepapo\Data\Control\MainComponent;
 
 
-class ItemListTemplate extends BaseTemplate
+class ItemListTemplate extends DataTemplate
 {
 	public ItemListControl $control;
 
@@ -18,4 +19,6 @@ class ItemListTemplate extends BaseTemplate
 	public string $idColumnName;
 
 	public ?string $itemListClass;
+
+	public MainComponent $main;
 }

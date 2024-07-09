@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Display;
 
 use Nette\Application\Attributes\Persistent;
-use Stepapo\Dataset\Control\BaseControl;
+use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Text;
+use Stepapo\Dataset\View;
 
 
 /**
  * @property-read DisplayTemplate $template
  * @method onDisplay(DisplayControl $control)
  */
-class DisplayControl extends BaseControl
+class DisplayControl extends DataControl
 {
 	#[Persistent]
 	public ?string $viewName = null;
@@ -20,14 +23,24 @@ class DisplayControl extends BaseControl
 	public array $onDisplay;
 
 
+	/** @param View[] $views */
+	public function __construct(
+		private MainComponent $main,
+		public array $views,
+		private Text $text,
+	) {}
+
+
 	public function render()
 	{
-		if (count($this->getViews()) < 2) {
+		if (count($this->views) < 2) {
 			return;
 		}
-		parent::render();
 		$this->template->viewName = $this->viewName;
-		$this->template->render($this->getSelectedView()->displayTemplate);
+		$this->template->views = $this->views;
+		$this->template->main = $this->main;
+		$this->template->text = $this->text;
+		$this->template->render($this->main->getView()->displayTemplate);
 	}
 
 

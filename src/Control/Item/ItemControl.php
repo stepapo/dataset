@@ -7,8 +7,9 @@ namespace Stepapo\Dataset\Control\Item;
 use Nette\InvalidArgumentException;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
-use Stepapo\Dataset\Control\BaseControl;
-use Stepapo\Dataset\Link;
+use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Link;
 
 
 /**
@@ -16,7 +17,7 @@ use Stepapo\Dataset\Link;
  * @method onChange(ItemControl $control, IEntity $entity)
  * @method onRemove(ItemControl $control)
  */
-class ItemControl extends BaseControl
+class ItemControl extends DataControl
 {
 	public const UNDEFINED_VALUE = 'undefined_value';
 
@@ -28,7 +29,9 @@ class ItemControl extends BaseControl
 
 
 	public function __construct(
+		private MainComponent $main,
 		private IEntity $entity,
+		private array $columns,
 		private $itemClassCallback,
 		private ?Link $itemLink,
 	) {}
@@ -36,12 +39,13 @@ class ItemControl extends BaseControl
 
 	public function render()
 	{
-		parent::render();
 		$this->template->itemClassCallback = $this->itemClassCallback;
 		$this->template->itemLink = $this->itemLink;
 		$this->template->linkArgs = $this->itemLink && $this->itemLink->args ? array_map(fn($a) => $this->getValue($a) === self::UNDEFINED_VALUE ? $a : $this->getValue($a), $this->itemLink->args) : null;
 		$this->template->item = $this->entity;
-		$this->template->render($this->getSelectedView()->itemTemplate);
+		$this->template->main = $this->main;
+		$this->template->columns = $this->columns;
+		$this->template->render($this->main->getView()->itemTemplate);
 	}
 
 

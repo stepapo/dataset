@@ -1,10 +1,10 @@
 {templateType Stepapo\Dataset\Control\ItemList\ItemListTemplate}
 
 {snippet}
-	<div n:class="row, $itemListClass" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
+	<div n:class="grid, text-center, $itemListClass, mt-3" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
 		{control 'item-' . $item->getValue($idColumnName)}
 	</div>
-	{if $control->getDatasetControl()->getCurrentCount() == 0}
+	{if $main->getCurrentCount() == 0}
 		<p>
 			{_$text->noResults}
 		</p>
