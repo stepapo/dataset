@@ -8,7 +8,7 @@ use Nette\Application\Attributes\Persistent;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
-use Stepapo\Dataset\View;
+use Stepapo\Dataset\DatasetView;
 
 
 /**
@@ -17,13 +17,11 @@ use Stepapo\Dataset\View;
  */
 class DisplayControl extends DataControl
 {
-	#[Persistent]
-	public ?string $viewName = null;
-
+	#[Persistent] public ?string $viewName = null;
 	public array $onDisplay;
 
 
-	/** @param View[] $views */
+	/** @param DatasetView[] $views */
 	public function __construct(
 		private MainComponent $main,
 		public array $views,

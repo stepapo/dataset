@@ -12,4 +12,6 @@ class SearchFormTemplate extends DataTemplate
 	public SearchFormControl $control;
 
 	public ?string $term;
+
+	public string $placeholder;
 }

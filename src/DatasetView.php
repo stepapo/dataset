@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
+use Stepapo\Data\View;
 use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Schematic;
 
 
-class View extends Schematic implements \Stepapo\Data\View
+class DatasetView extends Schematic implements View
 {
 	public const DEFAULT_VIEW = self::VIEWS['table'];
-
 	public const VIEWS = [
 		'table' => [
 			'name' => 'table',
@@ -59,7 +59,6 @@ class View extends Schematic implements \Stepapo\Data\View
 			'searchTemplate' => __DIR__ . '/Control/SearchForm/list.latte',
 		],
 	];
-
 
 	#[KeyProperty] public string $name;
 	public ?string $label = null;

@@ -22,7 +22,7 @@ class ItemListControl extends DataControl
 {
 	public function __construct(
 		private MainComponent $main,
-		private array $columns,
+		private ?array $columns,
 		private string $idColumnName,
 		private ?int $itemsPerPage,
 		private ?string $itemListClass,
@@ -37,6 +37,7 @@ class ItemListControl extends DataControl
 			$this->template->items = $this->getItems();
 		}
 		$this->template->main = $this->main;
+		$this->template->columns = $this->columns;
 		$this->template->idColumnName = $this->idColumnName;
 		$this->template->itemListClass = $this->itemListClass;
 		$this->template->render($this->main->getView()->itemListTemplate);
@@ -45,7 +46,6 @@ class ItemListControl extends DataControl
 
 	public function createComponentItem()
 	{
-		bdump($this->main->getView());
 		return new Multiplier(function ($id): IComponent {
 			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
 			$control = $this->main->getView()->itemFactoryCallback

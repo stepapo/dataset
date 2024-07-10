@@ -13,17 +13,10 @@ use Stepapo\Data\Link;
 class ItemTemplate extends DataTemplate
 {
 	public MainComponent $main;
-
 	public ItemControl $control;
-
 	public IEntity $item;
-
-	/** @var callable|null */
-	public $itemClassCallback;
-
+	/** @var callable|null */ public $itemClassCallback;
 	public ?Link $itemLink;
-
 	public ?array $linkArgs;
-
 	public array $columns;
 }

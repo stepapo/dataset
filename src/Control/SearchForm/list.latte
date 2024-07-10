@@ -1,18 +1,11 @@
 {templateType Stepapo\Dataset\Control\SearchForm\SearchFormTemplate}
-
-{snippet}
-	{form form class => 'ajax form-inline'}
-		<div class="mb-2">
-			<div class="d-inline-block" style="width: 65px;">{_$text->search}:</div>
-			<div class="form-group d-inline-flex">
-				<div class="input-group input-group-sm space">
-					<input n:name="term" type="text" class="form-control">
-					<div class="input-group-append">
-						<button n:class="btn, $term ? btn-primary : btn-secondary, ajax" n:name="send"><i class="fas fa-fw fa-search"></i></button>
-						<a n:if="$term" href="{link search! term => null}" class="btn btn-secondary ajax"><i class="fas fa-fw fa-times"></i></a>
-					</div>
-				</div>
-			</div>
+<div class="my-1" n:snippet>
+	{form form class => 'ajax inline-form'}
+		<div class="input-group input-group-sm">
+			<div class="btn btn-sm btn-label">{_$text->search}:</div>
+			<input n:name="term"{if $placeholder} placeholder="{_$placeholder}"{/} type="text" class="form-control form-control-sm search-form-field">
+			<button n:class="btn, btn-sm, $term ? btn-primary : btn-secondary, ajax" n:name="send"><i class="fas fa-fw fa-search"></i></button>
+			<a n:if="$term" href="{link search! term => null}" class="btn btn-sm btn-danger ajax"><i class="fas fa-fw fa-times"></i></a>
 		</div>
 	{/}
-{/}
+</div>

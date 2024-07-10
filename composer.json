@@ -15,8 +15,6 @@
 	},
 	"require": {
 		"php": ">=8.1",
-		"nette/utils": "^4.0",
-		"nextras/orm": "^4.0",
 		"stepapo/data": "^0.1"
 	},
 	"autoload": {

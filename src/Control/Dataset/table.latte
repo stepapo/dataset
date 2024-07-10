@@ -5,22 +5,17 @@
 	{/}
 	{control filterList}
 	{control display}
-	<p n:if="isset($term) && $term">{_$text->searchResults} "{$term}"</p>
+	<p n:if="$term" class="mt-4">{_$text->searchResults} "{$term}":</p>
+	<div class="table-responsive override-padding">
+		<table class="table table-hover override-padding">
+			{control sorting}
+			{control itemList}
+		</table>
+	</div>
+	<p n:if="isset($term, $suggestedTerm)" class="mt-4">
+		{_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
+	</p>
 	{if $showPagination}
-		<table>
-			{control sorting}
-			{control itemList}
-		</table>
-		{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}
-			<p>
-				{_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
-			</p>
-		{/}
 		{control pagination}
-	{else}
-		<table>
-			{control sorting}
-			{control itemList}
-		</table>
 	{/}
 </div>

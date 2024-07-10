@@ -11,14 +11,9 @@ use Stepapo\Data\Text;
 class SortingTemplate extends DataTemplate
 {
 	public SortingControl $control;
-
 	public bool $show;
-
 	public ?string $sort;
-
 	public ?string $direction;
-
 	public Text $text;
-
 	public array $columns;
 }

@@ -1,8 +1,10 @@
 {templateType Stepapo\Dataset\Control\Display\DisplayTemplate}
 
-<div class="mb-2 responsive">
-	<div class="d-inline-block" style="width: 65px;">{_$text->display}:</div>
-	<div class="btn-group space" n:snippet>
-		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name == $view->name ? btn-primary : btn-secondary">{$view->label}</a>
+<div class="my-1 table-responsive clearfix" n:snippet>
+	<div class="input-group input-group-sm">
+		<div class="btn btn-sm btn-label">{_$text->display}:</div>
+		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name === $main->getView()->name ? btn-primary : btn-secondary">
+			{_$view->label}
+		</a>
 	</div>
 </div>

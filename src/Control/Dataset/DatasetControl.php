@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Dataset;
 
-use Contributte\ImageStorage\ImageStorage;
-use Nette\Localization\Translator;
 use Nette\Utils\Paginator;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
@@ -13,7 +11,7 @@ use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Option;
 use Stepapo\Data\Text;
-use Stepapo\Dataset\View;
+use Stepapo\Dataset\DatasetView;
 use Stepapo\Dataset\Control\Display\DisplayControl;
 use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Dataset\Control\ItemList\ItemListControl;
@@ -30,7 +28,7 @@ use Stepapo\Dataset\Dataset;
 class DatasetControl extends DataControl implements MainComponent
 {
 	/** @var callable[] */ public array $onItemChange;
-	private View $view;
+	private DatasetView $view;
 	private ICollection $items;
 	private int $currentCount;
 	private int $totalCount;
@@ -93,19 +91,7 @@ class DatasetControl extends DataControl implements MainComponent
 	}
 
 
-	public function getTranslator(): ?Translator
-	{
-		return $this->dataset->translator;
-	}
-
-
-	public function getImageStorage(): ?ImageStorage
-	{
-		return $this->dataset->imageStorage;
-	}
-
-
-	public function getView(): View
+	public function getView(): DatasetView
 	{
 		return $this->view;
 	}
@@ -180,7 +166,7 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = new SearchFormControl($this->dataset->translator, $this->dataset->search->placeholder);
+		$control = new SearchFormControl($this->dataset->search->placeholder);
 		$control->onSearch[] = function (SearchFormControl $search) {
 			$this->redrawControl();
 		};
@@ -299,7 +285,7 @@ class DatasetControl extends DataControl implements MainComponent
 	}
 
 
-	private function selectView(): View
+	private function selectView(): DatasetView
 	{
 		if ($viewName = $this->getComponent('display')->viewName) {
 			if (isset($this->dataset->views[$viewName])) {

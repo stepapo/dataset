@@ -12,10 +12,7 @@ use Stepapo\Data\Text;
 class PaginationTemplate extends DataTemplate
 {
 	public PaginationControl $control;
-
 	public Paginator $paginator;
-
 	public bool $shouldRenderNextPage;
-
 	public Text $text;
 }

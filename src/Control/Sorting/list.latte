@@ -1,11 +1,22 @@
 {templateType Stepapo\Dataset\Control\Sorting\SortingTemplate}
-
-<div class="my-1 table-responsive clearfix" n:if="$show">
+<div class="my-1 table-responsive" n:if="$show">
 	<div class="input-group input-group-sm" n:snippet>
-		<div class="btn btn-sm btn-label" style="width: 65px;">{_$text->sort}:</div>
+		<div class="btn btn-sm btn-label">{_$text->sort}:</div>
 		{foreach $columns as $column}
 			{continueIf !$column->sort}
-			{php $newDirection = $column->name == $sort ? ($direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : (!$sort && $column->sort && $column->sort->isDefault ? ($column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? Nextras\Orm\Collection\ICollection::DESC : Nextras\Orm\Collection\ICollection::ASC) : $column->sort->direction)}
+			{php $newDirection = $column->name == $sort ? (
+				$direction == Nextras\Orm\Collection\ICollection::ASC
+					? Nextras\Orm\Collection\ICollection::DESC
+					: Nextras\Orm\Collection\ICollection::ASC
+			) : (
+				!$sort && $column->sort && $column->sort->isDefault
+					? (
+						$column->sort->direction == Nextras\Orm\Collection\ICollection::ASC
+							? Nextras\Orm\Collection\ICollection::DESC
+							: Nextras\Orm\Collection\ICollection::ASC
+					)
+					: $column->sort->direction
+			)}
 			<a n:href="sort! sort => $column->name, direction => $newDirection" n:class="btn, btn-sm, ajax, $sort == $column->name ? btn-primary : (!$sort && $column->sort->isDefault ? btn-primary : btn-secondary)"{if $column->description} data-tooltip="{$column->description}"{/}>
 				{if $column->label}{_$column->label}{/}
 				{if $sort != $column->name}

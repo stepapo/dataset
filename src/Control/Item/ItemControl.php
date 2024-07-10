@@ -20,12 +20,8 @@ use Stepapo\Data\Link;
 class ItemControl extends DataControl
 {
 	public const UNDEFINED_VALUE = 'undefined_value';
-
-	/** @var callable[] */
-	public array $onChange;
-
-	/** @var callable[] */
-	public array $onRemove;
+	/** @var callable[] */ public array $onChange;
+	/** @var callable[] */ public array $onRemove;
 
 
 	public function __construct(

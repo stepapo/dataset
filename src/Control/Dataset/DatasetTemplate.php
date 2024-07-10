@@ -10,14 +10,9 @@ use Stepapo\Data\Control\DataTemplate;
 class DatasetTemplate extends DataTemplate
 {
 	public DatasetControl $control;
-
 	public bool $showSearch;
-
 	public int $count;
-
 	public bool $showPagination;
-
 	public ?string $term;
-
 	public ?string $suggestedTerm;
 }

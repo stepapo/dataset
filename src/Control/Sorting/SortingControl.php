@@ -16,12 +16,8 @@ use Stepapo\Data\Text;
  */
 class SortingControl extends DataControl
 {
-	#[Persistent]
-	public ?string $sort = null;
-
-	#[Persistent]
-	public ?string $direction = ICollection::ASC;
-
+	#[Persistent] public ?string $sort = null;
+	#[Persistent] public ?string $direction = ICollection::ASC;
 	public array $onSort;
 
 

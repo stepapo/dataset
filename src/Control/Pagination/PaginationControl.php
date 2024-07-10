@@ -17,7 +17,6 @@ use Stepapo\Data\Text;
 class PaginationControl extends DataControl
 {
 	public array $onPaginate;
-
 	public int $page = 1;
 
 

@@ -1,8 +1,6 @@
 {templateType Stepapo\Dataset\Control\Pagination\PaginationTemplate}
 
-{snippet}
-	<div n:if="!$paginator->isFirst() || !$paginator->isLast()" class="my-4 clearfix">
-		<a class="btn btn-sm btn-secondary float-left ajax" n:if="!$paginator->isFirst()" n:href="paginate! page => $paginator->getPage() - 1" rel="prev"><i class="fas fa-arrow-left fa-fw"></i> {_$text->previous}</a>
-		<a class="btn btn-sm btn-secondary float-right ajax" n:if="$shouldRenderNextPage" n:href="paginate! page => $paginator->getPage() + 1" rel="next">{_$text->next} <i class="fas fa-arrow-right fa-fw"></i></a>
-	</div>
-{/}
+<div n:if="!$paginator->isFirst() || !$paginator->isLast()" class="mt-3" n:snippet>
+	<a class="float-start btn btn-sm btn-secondary ajax" n:if="!$paginator->isFirst()" n:href="paginate! page => $paginator->getPage() - 1" rel="prev"><i class="fas fa-arrow-left fa-fw"></i> {_$text->previous}</a>
+	<a class="d-inline float-end btn btn-sm btn-secondary ajax" n:if="$shouldRenderNextPage" n:href="paginate! page => $paginator->getPage() + 1" rel="next">{_$text->next} <i class="fas fa-arrow-right fa-fw"></i></a>
+</div>
