@@ -45,6 +45,7 @@ class ItemListControl extends DataControl
 
 	public function createComponentItem()
 	{
+		bdump($this->main->getView());
 		return new Multiplier(function ($id): IComponent {
 			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
 			$control = $this->main->getView()->itemFactoryCallback

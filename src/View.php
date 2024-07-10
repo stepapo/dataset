@@ -80,6 +80,6 @@ class View extends Schematic implements \Stepapo\Data\View
 
 	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
 	{
-		return parent::createFromArray(self::VIEWS[$key], $key, $skipDefaults);
+		return parent::createFromArray(array_merge(self::VIEWS[$key], (array) $config), $key, $skipDefaults);
 	}
 }
