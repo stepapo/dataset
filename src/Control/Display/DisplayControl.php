@@ -8,6 +8,7 @@ use Nette\Application\Attributes\Persistent;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
+use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Dataset\DatasetView;
 
 
@@ -23,13 +24,13 @@ class DisplayControl extends DataControl
 
 	/** @param DatasetView[] $views */
 	public function __construct(
-		private MainComponent $main,
+		private DatasetControl $main,
 		public array $views,
 		private Text $text,
 	) {}
 
 
-	public function render()
+	public function render(): void
 	{
 		if (count($this->views) < 2) {
 			return;

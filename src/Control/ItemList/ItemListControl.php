@@ -9,10 +9,12 @@ use Nette\ComponentModel\IComponent;
 use Nette\InvalidArgumentException;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
+use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
-use Stepapo\Dataset\Control\Item\ItemControl;
 use Stepapo\Data\Link;
+use Stepapo\Dataset\Control\Dataset\DatasetControl;
+use Stepapo\Dataset\Control\Item\ItemControl;
 
 
 /**
@@ -21,17 +23,19 @@ use Stepapo\Data\Link;
 class ItemListControl extends DataControl
 {
 	public function __construct(
-		private MainComponent $main,
+		private DatasetControl $main,
 		private ?array $columns,
 		private string $idColumnName,
 		private ?int $itemsPerPage,
 		private ?string $itemListClass,
 		private $itemClassCallback,
 		private ?Link $itemLink,
+		private bool $alwaysRetrieveItems,
+		private IRepository $repository
 	) {}
 
 
-	public function render()
+	public function render(): void
 	{
 		if ($this->main->shouldRetrieveItems) {
 			$this->template->items = $this->getItems();
@@ -44,16 +48,16 @@ class ItemListControl extends DataControl
 	}
 
 
-	public function createComponentItem()
+	public function createComponentItem(): Multiplier
 	{
 		return new Multiplier(function ($id): IComponent {
-			$entity = $this->template->items[$id] ?? $this->getRepository()->getById($id);
+			$entity = $this->template->items[$id] ?? $this->repository->getById($id);
 			$control = $this->main->getView()->itemFactoryCallback
 				? ($this->main->getView()->itemFactoryCallback)($entity)
 				: new ItemControl($this->main, $entity, $this->columns, $this->itemClassCallback, $this->itemLink);
 			if (property_exists($control, 'onChange')) {
 				$control->onChange[] = function (IComponent $control, IEntity $entity) {
-					if (!$this->main->getAlwaysRetrieveItems() && $this->presenter->isAjax()) {
+					if (!$this->alwaysRetrieveItems && $this->presenter->isAjax()) {
 						$this->main->shouldRetrieveItems = false;
 					}
 					$this->main->onItemChange($this->main, $entity);

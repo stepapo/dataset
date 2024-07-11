@@ -8,17 +8,16 @@ use Nette\Utils\Paginator;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Option;
-use Stepapo\Data\Text;
-use Stepapo\Dataset\DatasetView;
 use Stepapo\Dataset\Control\Display\DisplayControl;
-use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Dataset\Control\ItemList\ItemListControl;
 use Stepapo\Dataset\Control\Pagination\PaginationControl;
 use Stepapo\Dataset\Control\SearchForm\SearchFormControl;
 use Stepapo\Dataset\Control\Sorting\SortingControl;
 use Stepapo\Dataset\Dataset;
+use Stepapo\Dataset\DatasetView;
 
 
 /**
@@ -40,77 +39,66 @@ class DatasetControl extends DataControl implements MainComponent
 	) {}
 
 
-	public function loadState(array $params): void
-	{
-		parent::loadState($params);
-		$this->view = $this->selectView();
-	}
-
-
 	public function getCollectionItems(): ICollection
 	{
-		if (isset($this->items)) {
-			return $this->items;
+		if (!isset($this->items)) {
+			$c = $this->dataset->collection;
+			$c = $this->filter($c);
+			$c = $this->search($c);
+			$c = $this->sort($c);
+			$c = $this->paginate($c);
+			$this->currentCount = $c->count();
+			$this->items = $c;
 		}
-		$c = $this->dataset->collection;
-		$c = $this->filter($c);
-		$c = $this->search($c);
-		$c = $this->sort($c);
-		$c = $this->paginate($c);
-		$this->currentCount = $c->count();
-		$this->items = $c;
 		return $this->items;
 	}
 
 
 	public function getCurrentCount(): int
 	{
-		if (isset($this->currentCount)) {
-			return $this->currentCount;
+		if (!isset($this->currentCount)) {
+			$this->currentCount = $this->getCollectionItems()->count();
 		}
-		$this->currentCount = $this->getCollectionItems()->count();
 		return $this->currentCount;
-	}
-
-
-	public function getText(): Text
-	{
-		return $this->dataset->text;
-	}
-
-
-	public function getColumns(): array
-	{
-		return $this->dataset->columns;
-	}
-
-
-	public function getViews(): array
-	{
-		return $this->dataset->views;
 	}
 
 
 	public function getView(): DatasetView
 	{
+		if (!isset($this->view)) {
+			if ($viewName = $this->getComponent('display')->viewName) {
+				if (isset($this->dataset->views[$viewName])) {
+					$this->view = $this->dataset->views[$viewName];
+					return $this->view;
+				}
+			} else {
+				foreach ($this->dataset->views as $view) {
+					if ($view->isDefault) {
+						$this->view = $view;
+						return $this->view;
+					}
+				}
+				$this->view = array_values($this->dataset->views)[0];
+				return $this->view;
+			}
+		}
 		return $this->view;
 	}
 
 
 	public function getCollectionCount(): int
 	{
-		if (isset($this->totalCount)) {
-			return $this->totalCount;
+		if (!isset($this->totalCount)) {
+			$c = $this->dataset->collection;
+			$c = $this->filter($c);
+			$c = $this->search($c);
+			$this->totalCount = $c->countStored();
 		}
-		$c = $this->dataset->collection;
-		$c = $this->filter($c);
-		$c = $this->search($c);
-		$this->totalCount = $c->countStored();
 		return $this->totalCount;
 	}
 
 
-	public function render()
+	public function render(): void
 	{
 		$this->template->showPagination = (bool) $this->dataset->itemsPerPage;
 		$this->template->showSearch = (bool) $this->dataset->search;
@@ -122,7 +110,7 @@ class DatasetControl extends DataControl implements MainComponent
 				$this->template->suggestedTerm = ($this->dataset->search->suggestCallback)($term);
 			}
 		}
-		$this->template->render($this->view->datasetTemplate);
+		$this->template->render($this->getView()->datasetTemplate);
 	}
 
 
@@ -135,7 +123,9 @@ class DatasetControl extends DataControl implements MainComponent
 			$this->dataset->itemsPerPage,
 			$this->dataset->itemListClass,
 			$this->dataset->itemClassCallback,
-			$this->dataset->itemLink
+			$this->dataset->itemLink,
+			$this->dataset->alwaysRetrieveItems,
+			$this->dataset->repository,
 		);
 	}
 
@@ -166,7 +156,7 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = new SearchFormControl($this->dataset->search->placeholder);
+		$control = new SearchFormControl($this, $this->dataset->search->placeholder);
 		$control->onSearch[] = function (SearchFormControl $search) {
 			$this->redrawControl();
 		};
@@ -282,22 +272,5 @@ class DatasetControl extends DataControl implements MainComponent
 			);
 		}
 		return $c;
-	}
-
-
-	private function selectView(): DatasetView
-	{
-		if ($viewName = $this->getComponent('display')->viewName) {
-			if (isset($this->dataset->views[$viewName])) {
-				return $this->dataset->views[$viewName];
-			}
-		}
-
-		foreach ($this->dataset->views as $view) {
-			if ($view->isDefault) {
-				return $view;
-			}
-		}
-		return array_values($this->dataset->views)[0];
 	}
 }

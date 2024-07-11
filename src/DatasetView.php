@@ -11,8 +11,8 @@ use Stepapo\Utils\Schematic;
 
 class DatasetView extends Schematic implements View
 {
-	public const DEFAULT_VIEW = self::VIEWS['table'];
-	public const VIEWS = [
+	public const array DEFAULT_VIEW = self::VIEWS['table'];
+	public const array VIEWS = [
 		'table' => [
 			'name' => 'table',
 			'label' => 'Tabulka',
@@ -73,7 +73,7 @@ class DatasetView extends Schematic implements View
 	public string $sortingTemplate = self::VIEWS['list']['sortingTemplate'];
 	public string $displayTemplate = self::VIEWS['list']['displayTemplate'];
 	public string $searchTemplate = self::VIEWS['list']['searchTemplate'];
-	public $itemFactoryCallback = null;
+	/** @var ?callable */ public $itemFactoryCallback = null;
 	public bool $isDefault = false;
 
 

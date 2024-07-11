@@ -8,6 +8,7 @@ use Nette\Utils\Paginator;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
+use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 
 /**
@@ -21,7 +22,7 @@ class PaginationControl extends DataControl
 
 
 	public function __construct(
-		private MainComponent $main,
+		private DatasetControl $main,
 		private Paginator $paginator,
 		private Text $text,
 	) {}
@@ -36,7 +37,7 @@ class PaginationControl extends DataControl
 
 
 
-	public function render()
+	public function render(): void
 	{
 		$this->template->paginator = $this->paginator;
 		$this->template->text = $this->text;
@@ -62,7 +63,7 @@ class PaginationControl extends DataControl
 	}
 
 
-	private function shouldRenderNextPage()
+	private function shouldRenderNextPage(): bool
 	{
 		return $this->main->getCurrentCount() > $this->paginator->getItemsPerPage();
 	}

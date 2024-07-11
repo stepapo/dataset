@@ -9,6 +9,7 @@ use Nextras\Orm\Collection\ICollection;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
+use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 
 /**
@@ -18,17 +19,17 @@ class SortingControl extends DataControl
 {
 	#[Persistent] public ?string $sort = null;
 	#[Persistent] public ?string $direction = ICollection::ASC;
-	public array $onSort;
+	/** @var callable[] */ public array $onSort;
 
 
 	public function __construct(
-		private MainComponent $main,
+		private DatasetControl $main,
 		private array $columns,
 		private Text $text,
 	) {}
 
 
-	public function render()
+	public function render(): void
 	{
 		$this->template->show = false;
 		$sortCount = 0;

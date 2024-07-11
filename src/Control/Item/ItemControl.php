@@ -10,6 +10,7 @@ use Nextras\Orm\Relationships\HasMany;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Link;
+use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 
 /**
@@ -19,13 +20,13 @@ use Stepapo\Data\Link;
  */
 class ItemControl extends DataControl
 {
-	public const UNDEFINED_VALUE = 'undefined_value';
+	public const string UNDEFINED_VALUE = 'undefined_value';
 	/** @var callable[] */ public array $onChange;
 	/** @var callable[] */ public array $onRemove;
 
 
 	public function __construct(
-		private MainComponent $main,
+		private DatasetControl $main,
 		private IEntity $entity,
 		private array $columns,
 		private $itemClassCallback,
@@ -33,7 +34,7 @@ class ItemControl extends DataControl
 	) {}
 
 
-	public function render()
+	public function render(): void
 	{
 		$this->template->itemClassCallback = $this->itemClassCallback;
 		$this->template->itemLink = $this->itemLink;
