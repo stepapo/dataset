@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Sorting;
 
 use Nette\Application\Attributes\Persistent;
+use Nette\Application\BadRequestException;
 use Nextras\Orm\Collection\ICollection;
 use Stepapo\Data\Control\DataControl;
-use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
@@ -54,6 +54,9 @@ class SortingControl extends DataControl
 	{
 		$this->sort = $sort;
 		$this->direction = $direction;
+		if (!isset($this->columns[$sort]) || $this->columns[$sort]->hide) {
+			throw new BadRequestException;
+		}
 		if ($this->presenter->isAjax()) {
 			$this->onSort($this);
 			$this->redrawControl();

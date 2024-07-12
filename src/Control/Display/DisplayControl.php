@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Display;
 
 use Nette\Application\Attributes\Persistent;
+use Nette\Application\BadRequestException;
 use Stepapo\Data\Control\DataControl;
-use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Dataset\DatasetView;
@@ -46,6 +46,9 @@ class DisplayControl extends DataControl
 	public function handleDisplay(?string $viewName = null): void
 	{
 		$this->viewName = $viewName;
+		if (!isset($this->views[$viewName]) || $this->views[$viewName]->hide) {
+			throw new BadRequestException;
+		}
 		if ($this->presenter->isAjax()) {
 			$this->onDisplay($this);
 			$this->redrawControl();

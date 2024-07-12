@@ -6,7 +6,6 @@ namespace Stepapo\Dataset\Control\Pagination;
 
 use Nette\Utils\Paginator;
 use Stepapo\Data\Control\DataControl;
-use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 

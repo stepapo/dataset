@@ -11,7 +11,6 @@ use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Control\DataControl;
-use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Link;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Dataset\Control\Item\ItemControl;
