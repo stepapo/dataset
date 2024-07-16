@@ -37,7 +37,7 @@ class ItemControl extends DataControl
 	{
 		$this->template->itemClassCallback = $this->itemClassCallback;
 		$this->template->itemLink = $this->itemLink;
-		$this->template->linkArgs = $this->itemLink && $this->itemLink->args ? array_map(fn($a) => $this->getValue($a) === self::UNDEFINED_VALUE ? $a : $this->getValue($a), $this->itemLink->args) : null;
+		$this->template->linkArgs = $this->itemLink && $this->itemLink->args ? $this->getLinkArgs($this->itemLink->args) : null;
 		$this->template->item = $this->entity;
 		$this->template->main = $this->main;
 		$this->template->columns = $this->columns;
@@ -60,5 +60,19 @@ class ItemControl extends DataControl
 			}
 		}
 		return $value;
+	}
+
+
+	private function getLinkArgs(array $args): array
+	{
+		$linkArgs = [];
+		foreach ($args as $key => $value) {
+			if (is_array($value)) {
+				$linkArgs[$key] = $this->getLinkArgs($value);
+			} else {
+				$linkArgs[$key] = $this->getValue($value) === self::UNDEFINED_VALUE ? $value : $this->getValue($value);
+			}
+		}
+		return $linkArgs;
 	}
 }

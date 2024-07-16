@@ -1,14 +1,15 @@
 {templateType Stepapo\Dataset\Control\Item\ItemTemplate}
-<tr n:class="$itemClassCallback ? $itemClassCallback($item)" n:attr="data-href: $itemLink ? $presenter->link($itemLink->destination, ...array_values($linkArgs))" n:inner-foreach="$columns as $column" n:snippet>
+<tr n:class="$itemClassCallback ? $itemClassCallback($item)" n:attr="data-href: $itemLink ? $presenter->link($itemLink->destination, $linkArgs)" n:inner-foreach="$columns as $column" n:snippet>
 	{continueIf $column->hide}
 	{var $value = $control->getValue($column->columnName)}
 	<td n:class="'text-' . str_replace('left', 'start', str_replace('right', 'end', $column->align)), $column->class ? $column->class" n:attr='style: $column->width ? "width: {$column->width}px"'>
+		{dump $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args)}
 		{include
 			$column->valueTemplateFile ?: $main->getView()->valueTemplate,
 			'entity' => $item,
 			'value' => $value,
 			'column' => $column,
-			'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args) : null
+			'linkArgs' => $linkArgs,
 		}
 	</td>
 </tr>
