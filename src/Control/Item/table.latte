@@ -3,7 +3,6 @@
 	{continueIf $column->hide}
 	{var $value = $control->getValue($column->columnName)}
 	<td n:class="'text-' . str_replace('left', 'start', str_replace('right', 'end', $column->align)), $column->class ? $column->class" n:attr='style: $column->width ? "width: {$column->width}px"'>
-		{dump $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args)}
 		{include
 			$column->valueTemplateFile ?: $main->getView()->valueTemplate,
 			'entity' => $item,
