@@ -62,6 +62,7 @@ class DatasetView extends Schematic implements View
 
 	#[KeyProperty] public string $name;
 	public ?string $label = null;
+	public bool $hide = false;
 	public string $datasetTemplate = self::VIEWS['list']['datasetTemplate'];
 	public string $itemListTemplate = self::VIEWS['list']['itemListTemplate'];
 	public string $itemTemplate = self::VIEWS['list']['itemTemplate'];
