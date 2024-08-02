@@ -126,6 +126,7 @@ class DatasetControl extends DataControl implements MainComponent
 			$this->dataset->itemLink,
 			$this->dataset->alwaysRetrieveItems,
 			$this->dataset->repository,
+			$this->dataset->text,
 		);
 	}
 

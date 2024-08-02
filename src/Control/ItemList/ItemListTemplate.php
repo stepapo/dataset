@@ -7,6 +7,7 @@ namespace Stepapo\Dataset\Control\ItemList;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\Control\DataTemplate;
 use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Text;
 
 
 class ItemListTemplate extends DataTemplate
@@ -17,4 +18,5 @@ class ItemListTemplate extends DataTemplate
 	public ?string $itemListClass;
 	public MainComponent $main;
 	public ?array $columns;
+	public Text $text;
 }
