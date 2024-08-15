@@ -15,4 +15,5 @@ class PaginationTemplate extends DataTemplate
 	public Paginator $paginator;
 	public bool $shouldRenderNextPage;
 	public Text $text;
+	public bool $hide;
 }

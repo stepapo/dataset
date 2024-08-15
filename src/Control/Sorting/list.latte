@@ -3,7 +3,7 @@
 	<div class="input-group input-group-sm" n:snippet>
 		<div class="btn btn-sm btn-label">{_$text->sort}:</div>
 		{foreach $columns as $column}
-			{continueIf !$column->sort}
+			{continueIf !$column->sort || $column->sort->hide}
 			{php $newDirection = $column->name == $sort ? (
 				$direction == Nextras\Orm\Collection\ICollection::ASC
 					? Nextras\Orm\Collection\ICollection::DESC

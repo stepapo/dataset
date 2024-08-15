@@ -8,6 +8,7 @@ use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
 use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 
@@ -24,6 +25,7 @@ class SearchFormControl extends DataControl
 	public function __construct(
 		private DatasetControl $main,
 		private ?string $placeholder = null,
+		private Text $text,
 	) {}
 
 
@@ -31,6 +33,7 @@ class SearchFormControl extends DataControl
 	{
 		$this->template->term = $this->term;
 		$this->template->placeholder = $this->placeholder;
+		$this->template->text = $this->text;
 		$this->template->render($this->main->getView()->searchTemplate);
 	}
 

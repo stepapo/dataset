@@ -34,7 +34,7 @@ class SortingControl extends DataControl
 		$this->template->show = false;
 		$sortCount = 0;
 		foreach ($this->columns as $column) {
-			if ($column->sort) {
+			if ($column->sort && !$column->sort->hide) {
 				$sortCount++;
  				if ($sortCount > 1) {
 					$this->template->show = true;
@@ -54,7 +54,7 @@ class SortingControl extends DataControl
 	{
 		$this->sort = $sort;
 		$this->direction = $direction;
-		if (!isset($this->columns[$sort]) || $this->columns[$sort]->hide) {
+		if (!isset($this->columns[$sort]) || $this->columns[$sort]->hide || $this->columns[$sort]->sort->hide) {
 			throw new BadRequestException;
 		}
 		if ($this->presenter->isAjax()) {

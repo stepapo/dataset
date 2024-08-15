@@ -24,6 +24,7 @@ class PaginationControl extends DataControl
 		private DatasetControl $main,
 		private Paginator $paginator,
 		private Text $text,
+		private bool $hidePagination,
 	) {}
 
 
@@ -41,6 +42,7 @@ class PaginationControl extends DataControl
 		$this->template->paginator = $this->paginator;
 		$this->template->text = $this->text;
 		$this->template->shouldRenderNextPage = $this->shouldRenderNextPage();
+		$this->template->hide = $this->hidePagination;
 		$this->template->render($this->main->getView()->paginationTemplate);
 	}
 

@@ -12,7 +12,6 @@ use Nextras\Orm\Relationships\HasMany;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Link;
-use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Dataset\Control\Item\ItemControl;
 
@@ -31,8 +30,7 @@ class ItemListControl extends DataControl
 		private $itemClassCallback,
 		private ?Link $itemLink,
 		private bool $alwaysRetrieveItems,
-		private IRepository $repository,
-		private Text $text,
+		private IRepository $repository
 	) {}
 
 
@@ -45,7 +43,6 @@ class ItemListControl extends DataControl
 		$this->template->columns = $this->columns;
 		$this->template->idColumnName = $this->idColumnName;
 		$this->template->itemListClass = $this->itemListClass;
-		$this->template->text = $this->text;
 		$this->template->render($this->main->getView()->itemListTemplate);
 	}
 

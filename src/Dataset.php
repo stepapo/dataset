@@ -30,4 +30,5 @@ class Dataset extends Schematic
 	#[Type(Link::class)] public Link|array|null $itemLink = null;
 	/** @var Column[] */ #[ArrayOfType(Column::class)] public array $columns = [];
 	/** @var DatasetView[] */ #[ArrayOfType(DatasetView::class)] public array $views;
+	public bool $hidePagination = false;
 }

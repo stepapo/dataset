@@ -1,11 +1,13 @@
 {templateType Stepapo\Dataset\Control\Dataset\DatasetTemplate}
 <div class="override-padding" n:snippet>
-	{if $showSearch}
-		{control searchForm}
-	{/}
-	{control filterList}
-	{control display}
-	<p n:if="$term" class="mt-4">{_$text->searchResults} "{$term}":</p>
+	<div n:ifcontent class="override-padding mb-3">
+		{if $showSearch}
+			{control searchForm}
+		{/}
+		{control filterList}
+		{control display}
+	</div>
+	<p n:if="$term">{_$text->searchResults} "{$term}":</p>
 	<div class="table-responsive override-padding">
 		<table class="table table-hover override-padding">
 			{control sorting}

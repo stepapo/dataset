@@ -101,7 +101,7 @@ class DatasetControl extends DataControl implements MainComponent
 	public function render(): void
 	{
 		$this->template->showPagination = (bool) $this->dataset->itemsPerPage;
-		$this->template->showSearch = (bool) $this->dataset->search;
+		$this->template->showSearch = (bool) $this->dataset->search && !$this->dataset->search->hide;
 		if ($this->dataset->itemsPerPage && $this->shouldRetrieveItems) {
 			$count = $this->getCurrentCount();
 			$term = $this->dataset->search ? $this->getComponent('searchForm')->term : null;
@@ -110,6 +110,7 @@ class DatasetControl extends DataControl implements MainComponent
 				$this->template->suggestedTerm = ($this->dataset->search->suggestCallback)($term);
 			}
 		}
+		$this->template->text = $this->dataset->text;
 		$this->template->render($this->getView()->datasetTemplate);
 	}
 
@@ -126,7 +127,6 @@ class DatasetControl extends DataControl implements MainComponent
 			$this->dataset->itemLink,
 			$this->dataset->alwaysRetrieveItems,
 			$this->dataset->repository,
-			$this->dataset->text,
 		);
 	}
 
@@ -137,6 +137,7 @@ class DatasetControl extends DataControl implements MainComponent
 			$this,
 			(new Paginator)->setItemsPerPage($this->dataset->itemsPerPage),
 			$this->dataset->text,
+			$this->dataset->hidePagination,
 		);
 		$pagination->onPaginate[] = function (PaginationControl $pagination) {
 			$this->getComponent('itemList')->redrawControl();
@@ -157,7 +158,7 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = new SearchFormControl($this, $this->dataset->search->placeholder);
+		$control = new SearchFormControl($this, $this->dataset->search->placeholder, $this->dataset->text);
 		$control->onSearch[] = function (SearchFormControl $search) {
 			$this->redrawControl();
 		};

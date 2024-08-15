@@ -1,12 +1,14 @@
 {templateType Stepapo\Dataset\Control\Dataset\DatasetTemplate}
 
 <div class="override-padding" n:snippet>
-	{if $showSearch}
-		{control searchForm}
-	{/}
-	{control filterList}
-	{control sorting}
-	{control display}
+	<div n:ifcontent class="override-padding mb-3">
+		{if $showSearch}
+			{control searchForm}
+		{/}
+		{control filterList}
+		{control sorting}
+		{control display}
+	</div>
 	<p n:if="isset($term) && $term">{_$text->searchResults} "{$term}"</p>
 	{control itemList}
 	{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}

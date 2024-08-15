@@ -3,19 +3,19 @@
 <tr>
 	<th n:foreach="$columns as $column" n:if="!$column->hide" n:class="'text-' . str_replace('left', 'start', str_replace('right', 'end', $column->align))" n:attr='style: $column->width ? "width: {$column->width}px"'>
 		<span n:if="$column->description" data-tooltip="{$column->description}"><i class="fas fa-fw fa-question-circle"></i></span>
-		{if $column->sort}
+		{if $column->sort && !$column->sort->hide}
 			{php $newDirection = $column->name == $sort ? (
 			$direction == Nextras\Orm\Collection\ICollection::ASC
-			? Nextras\Orm\Collection\ICollection::DESC
-			: Nextras\Orm\Collection\ICollection::ASC
+				? Nextras\Orm\Collection\ICollection::DESC
+				: Nextras\Orm\Collection\ICollection::ASC
 			) : (
 			!$sort && $column->sort && $column->sort->isDefault
-			? (
-			$column->sort->direction == Nextras\Orm\Collection\ICollection::ASC
-			? Nextras\Orm\Collection\ICollection::DESC
-			: Nextras\Orm\Collection\ICollection::ASC
-			)
-			: $column->sort->direction
+				? (
+				$column->sort->direction == Nextras\Orm\Collection\ICollection::ASC
+					? Nextras\Orm\Collection\ICollection::DESC
+					: Nextras\Orm\Collection\ICollection::ASC
+				)
+				: $column->sort->direction
 			)}
 			<a n:href="sort! sort => $column->name, direction => $newDirection" class="ajax" n:attr="data-tooltip: $column->description">
 				{if $column->label}{_$column->label}{/}
