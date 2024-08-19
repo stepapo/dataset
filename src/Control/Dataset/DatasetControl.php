@@ -220,8 +220,12 @@ class DatasetControl extends DataControl implements MainComponent
 		if ($this->dataset->search->prepareCallback and is_callable($this->dataset->search->prepareCallback)) {
 			$term = ($this->dataset->search->prepareCallback)($term);
 		}
-		array_walk($this->dataset->search->searchFunction->args, fn(&$v) => $v = $v == '%term%' ? $term : $v);
-		$c = $c->findBy(array_merge([$this->dataset->search->searchFunction->class], $this->dataset->search->searchFunction->args));
+		if ($this->dataset->search->searchFunction) {
+			array_walk($this->dataset->search->searchFunction->args, fn(&$v) => $v = $v == '%term%' ? $term : $v);
+			$c = $c->findBy(array_merge([$this->dataset->search->searchFunction->class], $this->dataset->search->searchFunction->args));			
+		} elseif ($this->dataset->search->searchCallback) {
+			$c = ($this->dataset->search->searchCallback)($c, $term);
+		}
 		if ($this->dataset->search->sortFunction) {
 			array_walk($this->dataset->search->sortFunction->args, fn(&$v) => $v = $v == '%term%' ? $term : $v);
 		}
