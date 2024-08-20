@@ -3,7 +3,7 @@
 <div class="my-1 table-responsive clearfix" n:snippet>
 	<div class="input-group input-group-sm">
 		<div class="btn btn-sm btn-label">{_$text->display}:</div>
-		<a n:foreach="$views as $view" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name === $main->getView()->name ? btn-primary : btn-secondary">
+		<a n:foreach="$views as $view" n:if="!$view->hide" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name === $main->getView()->name ? btn-primary : btn-secondary">
 			{_$view->label}
 		</a>
 	</div>

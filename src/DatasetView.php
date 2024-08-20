@@ -75,6 +75,7 @@ class DatasetView extends Schematic implements View
 	public string $searchTemplate = self::VIEWS['list']['searchTemplate'];
 	/** @var ?callable */ public $itemFactoryCallback = null;
 	public bool $isDefault = false;
+	public bool $hide = false;
 
 
 	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
