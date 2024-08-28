@@ -1,10 +1,26 @@
 {templateType Stepapo\Dataset\Control\Display\DisplayTemplate}
-
-<div class="my-1 table-responsive clearfix" n:snippet>
-	<div class="input-group input-group-sm">
+<div class="my-1 table-responsive" n:snippet>
+	<div class="btn-toolbar flex-nowrap">
 		<div class="btn btn-sm btn-label">{_$text->display}:</div>
-		<a n:foreach="$views as $view" n:if="!$view->hide" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ajax, $view->name === $main->getView()->name ? btn-primary : btn-secondary">
-			{_$view->label}
-		</a>
+		<div class="d-none d-lg-flex">
+			<a n:foreach="$views as $view" n:if="!$view->hide" n:href="display! viewName => $view->name" n:class="btn, btn-sm, ms-1, ajax, $view->name === $main->getView()->name ? btn-primary : btn-secondary">
+				{_$view->label}
+			</a>
+		</div>
+		<div class="d-flex d-lg-none">
+			<a n:href="display! viewName => $main->getView()->name" class="btn btn-sm btn-primary ms-1 ajax">
+				{_$views[$main->getView()->name]->label}
+			</a>
+			<button class="btn btn-sm btn-secondary ms-1 dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown">
+				<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<div class="dropdown-menu">
+				{foreach $views as $view}
+					<a n:href="display! viewName => $view->name" n:if="!$view->hide" n:class="dropdown-item, ajax">
+						{_$view->label}
+					</a>
+				{/}
+			</div>
+		</div>
 	</div>
 </div>
