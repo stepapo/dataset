@@ -27,8 +27,8 @@ class ItemListControl extends DataControl
 		private string $idColumnName,
 		private ?int $itemsPerPage,
 		private ?string $itemListClass,
-		private $itemClassCallback,
-		private ?Link $itemLink,
+		private ?\Closure $itemClassCallback,
+		private ?\Closure $itemLinkCallback,
 		private bool $alwaysRetrieveItems,
 		private IRepository $repository
 	) {}
@@ -53,7 +53,7 @@ class ItemListControl extends DataControl
 			$entity = $this->template->items[$id] ?? $this->repository->getById($id);
 			$control = $this->main->getView()->itemFactoryCallback
 				? ($this->main->getView()->itemFactoryCallback)($entity)
-				: new ItemControl($this->main, $entity, $this->columns, $this->itemClassCallback, $this->itemLink);
+				: new ItemControl($this->main, $entity, $this->columns, $this->itemClassCallback, $this->itemLinkCallback);
 			if (property_exists($control, 'onChange')) {
 				$control->onChange[] = function (IComponent $control, IEntity $entity) {
 					if (!$this->alwaysRetrieveItems && $this->presenter->isAjax()) {

@@ -15,8 +15,8 @@ class ItemTemplate extends DataTemplate
 	public MainComponent $main;
 	public ItemControl $control;
 	public IEntity $item;
-	/** @var callable|null */ public $itemClassCallback;
-	public ?Link $itemLink;
+	public ?\Closure $itemClassCallback;
+	public ?\Closure $itemLinkCallback;
 	public ?array $linkArgs;
 	public array $columns;
 }

@@ -1,6 +1,6 @@
 {templateType Stepapo\Dataset\Control\Item\ItemTemplate}
 
-<div n:snippet n:inner-foreach="$columns as $column" class="g-col-6 g-col-lg-4 bg-light p-3"{if $itemLink} data-href="{plink $itemLink->destination ...array_values($linkArgs)}"{/}>
+<div n:snippet n:inner-foreach="$columns as $column" class="g-col-6 g-col-lg-4 bg-light p-3" n:attr="data-href: $itemLinkCallback ? $itemLinkCallback($item, $presenter)">
 	{if !$column->hide}
 		{php $value = $control->getValue($column->columnName)}
 		<div n:if="$value" n:class="$column->class">
@@ -10,7 +10,6 @@
 				'entity' => $item,
 				'value' => $value,
 				'column' => $column,
-				'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a), $column->link->args) : null
 			}
 		</div>
 	{/}

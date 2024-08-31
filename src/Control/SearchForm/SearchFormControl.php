@@ -18,7 +18,7 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
  */
 class SearchFormControl extends DataControl
 {
-	/** @var callable[] */ public array $onSearch;
+	/** @var \Closure[] */ public array $onSearch;
 	#[Persistent] public ?string $term = null;
 
 

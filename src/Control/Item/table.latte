@@ -1,5 +1,5 @@
 {templateType Stepapo\Dataset\Control\Item\ItemTemplate}
-<tr n:class="$itemClassCallback ? $itemClassCallback($item)" n:attr="data-href: $itemLink ? $presenter->link($itemLink->destination, $linkArgs)" n:inner-foreach="$columns as $column" n:snippet>
+<tr n:class="$itemClassCallback ? $itemClassCallback($item)" n:attr="data-href: $itemLinkCallback ? $itemLinkCallback($item, $presenter)" n:inner-foreach="$columns as $column" n:snippet>
 	{continueIf $column->hide}
 	{var $value = $control->getValue($column->columnName)}
 	<td n:class="'text-' . str_replace('left', 'start', str_replace('right', 'end', $column->align)), $column->class ? $column->class" n:attr='style: $column->width ? "width: {$column->width}px"'>
@@ -8,7 +8,6 @@
 			'entity' => $item,
 			'value' => $value,
 			'column' => $column,
-			'linkArgs' => $linkArgs,
 		}
 	</td>
 </tr>

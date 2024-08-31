@@ -19,7 +19,7 @@ class SortingControl extends DataControl
 {
 	#[Persistent] public ?string $sort = null;
 	#[Persistent] public ?string $direction = ICollection::ASC;
-	/** @var callable[] */ public array $onSort;
+	/** @var \Closure[] */ public array $onSort;
 
 
 	public function __construct(

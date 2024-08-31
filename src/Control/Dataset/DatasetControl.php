@@ -26,7 +26,7 @@ use Stepapo\Dataset\DatasetView;
  */
 class DatasetControl extends DataControl implements MainComponent
 {
-	/** @var callable[] */ public array $onItemChange;
+	/** @var \Closure[] */ public array $onItemChange;
 	private DatasetView $view;
 	private ICollection $items;
 	private int $currentCount;
@@ -124,7 +124,7 @@ class DatasetControl extends DataControl implements MainComponent
 			$this->dataset->itemsPerPage,
 			$this->dataset->itemListClass,
 			$this->dataset->itemClassCallback,
-			$this->dataset->itemLink,
+			$this->dataset->itemLinkCallback,
 			$this->dataset->alwaysRetrieveItems,
 			$this->dataset->repository,
 		);

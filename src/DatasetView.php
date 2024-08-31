@@ -73,7 +73,7 @@ class DatasetView extends Schematic implements View
 	public string $sortingTemplate = self::VIEWS['list']['sortingTemplate'];
 	public string $displayTemplate = self::VIEWS['list']['displayTemplate'];
 	public string $searchTemplate = self::VIEWS['list']['searchTemplate'];
-	/** @var ?callable */ public $itemFactoryCallback = null;
+	public ?\Closure $itemFactoryCallback = null;
 	public bool $isDefault = false;
 	public bool $hide = false;
 
