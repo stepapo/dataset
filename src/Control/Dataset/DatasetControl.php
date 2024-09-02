@@ -240,9 +240,9 @@ class DatasetControl extends DataControl implements MainComponent
 			$column = $this->dataset->columns[$sort];
 			$direction = $this->getComponent('sorting')->direction;
 			if ($column->sort->function) {
-				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), $direction);
+				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), strtoupper($direction));
 			} else {
-				$c = $c->orderBy($column->getNextrasName(), $direction);
+				$c = $c->orderBy($column->getNextrasName(), strtoupper($direction));
 			}
 		}
 		foreach ($this->dataset->columns as $column) {
@@ -250,9 +250,9 @@ class DatasetControl extends DataControl implements MainComponent
 				continue;
 			}
 			if ($column->sort->function) {
-				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), $column->sort->direction);
+				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), strtoupper($column->sort->direction));
 			} else {
-				$c = $c->orderBy($column->getNextrasName(), $column->sort->direction);
+				$c = $c->orderBy($column->getNextrasName(), strtoupper($column->sort->direction));
 			}
 		}
 

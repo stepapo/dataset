@@ -6,7 +6,6 @@ namespace Stepapo\Dataset\Control\Sorting;
 
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
-use Nextras\Orm\Collection\ICollection;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
@@ -18,7 +17,7 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
 class SortingControl extends DataControl
 {
 	#[Persistent] public ?string $sort = null;
-	#[Persistent] public ?string $direction = ICollection::ASC;
+	#[Persistent] public ?string $direction = 'asc';
 	/** @var \Closure[] */ public array $onSort;
 
 
@@ -50,7 +49,7 @@ class SortingControl extends DataControl
 	}
 
 
-	public function handleSort(?string $sort = null, ?string $direction = ICollection::ASC): void
+	public function handleSort(?string $sort = null, ?string $direction = 'asc'): void
 	{
 		$this->sort = $sort;
 		$this->direction = $direction;

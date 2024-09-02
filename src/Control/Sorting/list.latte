@@ -6,41 +6,33 @@
 		<div class="d-none d-lg-flex">
 			{foreach $columns as $column}
 				{continueIf !$column->sort || $column->sort->hide}
-				{php $newDirection = $column->name == $sort ? (
-					$direction == Nextras\Orm\Collection\ICollection::ASC
-						? Nextras\Orm\Collection\ICollection::DESC
-						: Nextras\Orm\Collection\ICollection::ASC
-				) : (
-					!$sort && $column->sort && $column->sort->isDefault
-						? (
-							$column->sort->direction == Nextras\Orm\Collection\ICollection::ASC
-								? Nextras\Orm\Collection\ICollection::DESC
-								: Nextras\Orm\Collection\ICollection::ASC
-						)
-						: $column->sort->direction
-				)}
+				{php $newDirection = $column->name == $sort
+					? ($direction == 'asc' ? 'desc' : 'asc')
+					: (
+						!$sort && $column->sort && $column->sort->isDefault
+							? ($column->sort->direction == 'asc' ? 'desc' : 'asc')
+							: $column->sort->direction
+					)
+				}
 				<a n:href="sort! sort => $column->name, direction => $newDirection" n:class="btn, btn-sm, ms-1, ajax, $sort == $column->name ? btn-primary : (!$sort && $column->sort->isDefault ? btn-primary : btn-secondary)"{if $column->description} data-tooltip="{$column->description}"{/}>
 					{if $column->label}{_$column->label}{/}
 					{if $sort != $column->name}
 						{if !$sort && $column->sort->isDefault}
-							<i n:class="fa, fa-fw, $column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+							<i n:class="fa, fa-fw, $column->sort->direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
 						{else}
 							<i class="fa fa-fw fa-sort"></i>
 						{/}
 					{else}
-						<i n:class="fa, fa-fw, $direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+						<i n:class="fa, fa-fw, $direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
 					{/}
 				</a>
 			{/foreach}
 		</div>
 		<div class="d-flex d-lg-none">
-			{php $newDirection = $direction == Nextras\Orm\Collection\ICollection::ASC
-				? Nextras\Orm\Collection\ICollection::DESC
-				: Nextras\Orm\Collection\ICollection::ASC
-			}
+			{php $newDirection = $direction == 'asc' ? 'desc' : 'asc'}
 			<a n:href="sort! sort: $sort, direction: $newDirection" class="btn btn-sm btn-primary ms-1 ajax">
 				{if $columns[$sort]->label}{_$columns[$sort]->label}{/}
-				<i n:class="fa, fa-fw, $direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+				<i n:class="fa, fa-fw, $direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
 			</a>
 			<button class="btn btn-sm btn-secondary ms-1 dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown">
 				<span class="sr-only">Toggle Dropdown</span>
@@ -48,29 +40,23 @@
 			<div class="dropdown-menu">
 				{foreach $columns as $column}
 					{continueIf !$column->sort || $column->sort->hide}
-					{php $newDirection = $column->name == $sort ? (
-						$direction == Nextras\Orm\Collection\ICollection::ASC
-							? Nextras\Orm\Collection\ICollection::DESC
-							: Nextras\Orm\Collection\ICollection::ASC
-						) : (
-							!$sort && $column->sort && $column->sort->isDefault
-						? (
-							$column->sort->direction == Nextras\Orm\Collection\ICollection::ASC
-								? Nextras\Orm\Collection\ICollection::DESC
-								: Nextras\Orm\Collection\ICollection::ASC
+					{php $newDirection = $column->name == $sort
+						? ($direction == 'asc' ? 'desc' : 'asc')
+						: (!$sort && $column->sort && $column->sort->isDefault
+							? ($column->sort->direction == 'asc' ? 'desc' : 'asc')
+							: $column->sort->direction
 						)
-						: $column->sort->direction
-					)}
+					}
 					<a n:href="sort! sort: $column->name, direction: $newDirection" n:class="dropdown-item, ajax">
 						{if $column->label}{_$column->label}{/}
 						{if $sort != $column->name}
 							{if !$sort && $column->sort->isDefault}
-								<i n:class="fa, fa-fw, $column->sort->direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+								<i n:class="fa, fa-fw, $column->sort->direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
 							{else}
 								<i class="fa fa-fw fa-sort"></i>
 							{/}
 						{else}
-							<i n:class="fa, fa-fw, $direction == Nextras\Orm\Collection\ICollection::ASC ? fa-caret-up : fa-caret-down"></i>
+							<i n:class="fa, fa-fw, $direction == 'desc' ? fa-caret-up : fa-caret-down"></i>
 						{/}
 					</a>
 				{/}
