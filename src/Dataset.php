@@ -25,6 +25,7 @@ class Dataset extends Schematic
 	public ?\Closure $itemLinkCallback = null;
 	public ?string $itemListClass = null;
 	public string $idColumnName = 'id';
+	public bool $isResponsive = true;
 	public bool $alwaysRetrieveItems = false;
 	#[Type(Text::class), DefaultFromSchematic(Text::class)] public Text|array $text;
 	#[Type(Search::class)] public Search|array|null $search = null;

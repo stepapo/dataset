@@ -8,7 +8,7 @@
 		{control display}
 	</div>
 	<p n:if="$term">{_$text->searchResults} "{$term}":</p>
-	<div class="table-responsive override-padding">
+	<div n:class="$isResponsive ? table-responsive, override-padding">
 		<table class="table table-hover override-padding">
 			{control sorting}
 			{control itemList}

@@ -101,6 +101,7 @@ class DatasetControl extends DataControl implements MainComponent
 	public function render(): void
 	{
 		$this->template->showPagination = (bool) $this->dataset->itemsPerPage;
+		$this->template->isResponsive = $this->dataset->isResponsive;
 		$this->template->showSearch = (bool) $this->dataset->search && !$this->dataset->search->hide;
 		if ($this->dataset->itemsPerPage && $this->shouldRetrieveItems) {
 			$count = $this->getCurrentCount();

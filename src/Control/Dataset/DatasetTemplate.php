@@ -13,6 +13,7 @@ class DatasetTemplate extends DataTemplate
 	public bool $showSearch;
 	public int $count;
 	public bool $showPagination;
+	public bool $isResponsive;
 	public ?string $term;
 	public ?string $suggestedTerm;
 }
