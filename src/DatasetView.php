@@ -78,8 +78,8 @@ class DatasetView extends Schematic implements View
 	public bool $hide = false;
 
 
-	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false): static
+	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
 	{
-		return parent::createFromArray(array_merge(self::VIEWS[$key], (array) $config), $key, $skipDefaults);
+		return parent::createFromArray(array_merge(self::VIEWS[$key], (array) $config), $key, $skipDefaults, $parentKey);
 	}
 }
