@@ -3,7 +3,7 @@
 	{form form class => 'ajax inline-form'}
 		<div class="btn-toolbar flex-nowrap">
 			<div class="btn btn-sm btn-label">{_$text->search}:</div>
-			<input n:name="term"{if $placeholder} placeholder="{_$placeholder}"{/} type="text" class="form-control form-control-sm search-form-field">
+			<input n:name="term"{if $placeholder} placeholder="{_$placeholder}"{/} type="text" class="form-control form-control-sm search-form-field ms-1">
 			<button n:class="btn, btn-sm, $term ? btn-primary : btn-secondary, ajax" n:name="send"><i class="fas fa-fw fa-search"></i></button>
 			<a n:if="$term" href="{link search! term => null}" class="btn btn-sm btn-danger ajax"><i class="fas fa-fw fa-times"></i></a>
 		</div>
