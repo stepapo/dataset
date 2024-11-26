@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Dataset;
 
+use Nette\Application\BadRequestException;
 use Nette\Utils\Paginator;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Data\Control\MainComponent;
+use Stepapo\Data\Helper;
 use Stepapo\Data\Option;
 use Stepapo\Dataset\Control\Display\DisplayControl;
 use Stepapo\Dataset\Control\ItemList\ItemListControl;
@@ -202,12 +204,51 @@ class DatasetControl extends DataControl implements MainComponent
 			if (!$value) {
 				continue;
 			}
-			if ($column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
-				$c = $c->findBy($column->filter->options[$value]->condition);
-			} elseif ($column->filter->function) {
-				$c = $c->findBy([$column->filter->function, $column->getNextrasName(), $value]);
+			if ($column->filter->type === 'single') {
+				if ($column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
+					$c = $c->findBy($column->filter->options[$value]->condition);
+				} elseif ($column->filter->function) {
+					if (is_array($column->filter->columnName)) {
+						$filter = [ICollection::OR];
+						foreach ($column->filter->columnName as $columnName) {
+							$filter[] = [$column->filter->function, Helper::getNextrasName($columnName), $value];
+						}
+						$c = $c->findBy($filter);
+					} else {
+						$c = $c->findBy([$column->filter->function, Helper::getNextrasName($column->columnName), $value]);
+					}
+				} else {
+					if (is_array($column->filter->columnName)) {
+						$filter = [ICollection::OR];
+						foreach ($column->filter->columnName as $columnName) {
+							$filter[] = [Helper::getNextrasName($columnName)];
+						}
+						$c = $c->findBy($filter);
+					} else {
+						$c = $c->findBy([$column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $value]);
+					}
+				}
 			} else {
-				$c = $c->findBy([$column->filter->columnName ? $column->filter->getNextrasName() : $column->name => $value]);
+				$value = explode(',', $value);
+				$filter = [ICollection::OR];
+				foreach ($value as $v) {
+					if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
+						$filter[] = $column->filter->options[$v]->condition;
+					} elseif ($column->filter->function) {
+						$filter[] = [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v];
+					} else {
+						if (is_array($column->filter->columnName)) {
+							$f = [ICollection::OR];
+							foreach ($column->filter->columnName as $columnName) {
+								$f[] = [Helper::getNextrasName($columnName) => $v];
+							}
+							$filter[] = $f;
+						} else {
+							$filter[] = [$column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $v];
+						}
+					}
+				}
+				$c = $c->findBy($filter);
 			}
 		}
 		return $c;
@@ -224,7 +265,7 @@ class DatasetControl extends DataControl implements MainComponent
 		}
 		if ($this->dataset->search->searchFunction) {
 			array_walk($this->dataset->search->searchFunction->args, fn(&$v) => $v = $v == '%term%' ? $term : $v);
-			$c = $c->findBy(array_merge([$this->dataset->search->searchFunction->class], $this->dataset->search->searchFunction->args));			
+			$c = $c->findBy(array_merge([$this->dataset->search->searchFunction->class], $this->dataset->search->searchFunction->args));
 		} elseif ($this->dataset->search->searchCallback) {
 			$c = ($this->dataset->search->searchCallback)($c, $term);
 		}
@@ -244,7 +285,7 @@ class DatasetControl extends DataControl implements MainComponent
 			if ($column->sort->function) {
 				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), strtoupper($direction));
 			} else {
-				$c = $c->orderBy($column->getNextrasName(), strtoupper($direction));
+				$c = $c->orderBy(Helper::getNextrasName($column->columnName), strtoupper($direction));
 			}
 		}
 		foreach ($this->dataset->columns as $column) {
@@ -254,7 +295,7 @@ class DatasetControl extends DataControl implements MainComponent
 			if ($column->sort->function) {
 				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), strtoupper($column->sort->direction));
 			} else {
-				$c = $c->orderBy($column->getNextrasName(), strtoupper($column->sort->direction));
+				$c = $c->orderBy(Helper::getNextrasName($column->columnName), strtoupper($column->sort->direction));
 			}
 		}
 
