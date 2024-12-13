@@ -27,9 +27,10 @@ class Dataset extends Schematic
 	public string $idColumnName = 'id';
 	public bool $isResponsive = true;
 	public bool $alwaysRetrieveItems = false;
-	#[Type(Text::class), DefaultFromSchematic(Text::class)] public Text|array $text;
-	#[Type(Search::class)] public Search|array|null $search = null;
+	#[Type(Text::class), DefaultFromSchematic(Text::class)] public Text $text;
+	#[Type(Search::class)] public ?Search $search = null;
 	/** @var Column[] */ #[ArrayOfType(Column::class)] public array $columns = [];
 	/** @var DatasetView[] */ #[ArrayOfType(DatasetView::class)] public array $views;
 	public bool $hidePagination = false;
+	public string $pagingMode = 'fromPreviousPage';
 }

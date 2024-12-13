@@ -56,6 +56,7 @@ class SearchFormControl extends DataControl
 	public function formSucceeded(Form $form, ArrayHash $values): void
 	{
 		$this->redirect('search!', $values->term);
+//		$this->handleSearch($values->term);
 	}
 
 

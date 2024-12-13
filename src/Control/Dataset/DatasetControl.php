@@ -34,6 +34,7 @@ class DatasetControl extends DataControl implements MainComponent
 	private int $currentCount;
 	private int $totalCount;
 	public bool $shouldRetrieveItems = true;
+	public bool $activeFilter = false;
 
 
 	public function __construct(
@@ -131,6 +132,7 @@ class DatasetControl extends DataControl implements MainComponent
 			$this->dataset->alwaysRetrieveItems,
 			$this->dataset->repository,
 			$this->dataset->text,
+			$this->dataset->pagingMode,
 		);
 	}
 
@@ -142,6 +144,7 @@ class DatasetControl extends DataControl implements MainComponent
 			(new Paginator)->setItemsPerPage($this->dataset->itemsPerPage),
 			$this->dataset->text,
 			$this->dataset->hidePagination,
+			$this->dataset->pagingMode,
 		);
 		$pagination->onPaginate[] = function (PaginationControl $pagination) {
 			$this->getComponent('itemList')->redrawControl();
@@ -204,6 +207,7 @@ class DatasetControl extends DataControl implements MainComponent
 			if (!$value) {
 				continue;
 			}
+			$this->activeFilter = true;
 			if ($column->filter->type === 'single') {
 				if ($column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
 					$c = $c->findBy($column->filter->options[$value]->condition);
@@ -260,6 +264,7 @@ class DatasetControl extends DataControl implements MainComponent
 		if (!$this->dataset->search || !($term = $this->getComponent('searchForm')->term)) {
 			return $c;
 		}
+		$this->activeFilter = true;
 		if ($this->dataset->search->prepareCallback and is_callable($this->dataset->search->prepareCallback)) {
 			$term = ($this->dataset->search->prepareCallback)($term);
 		}
@@ -281,6 +286,9 @@ class DatasetControl extends DataControl implements MainComponent
 		$sort = $this->getComponent('sorting')->sort;
 		if ($sort) {
 			$column = $this->dataset->columns[$sort];
+			if (!$column->sort) {
+				return $c;
+			}
 			$direction = $this->getComponent('sorting')->direction;
 			if ($column->sort->function) {
 				$c = $c->orderBy(array_merge([$column->sort->function->class], (array) $column->sort->function->args), strtoupper($direction));
@@ -316,8 +324,15 @@ class DatasetControl extends DataControl implements MainComponent
 	{
 		if ($this->dataset->itemsPerPage) {
 			$c = $c->limitBy(
-				$this->getComponent('pagination')->getPaginator()->length + 1,
-				$this->getComponent('pagination')->getPaginator()->offset
+				$this->getComponent('pagination')->getPaginator()->length + 1
+					+ (
+						$this->dataset->pagingMode === 'fromStart'
+							? $this->getComponent('pagination')->getPaginator()->offset
+							: 0
+				),
+				$this->dataset->pagingMode === 'fromPreviousPage'
+					? $this->getComponent('pagination')->getPaginator()->offset
+					: 0,
 			);
 		}
 		return $c;

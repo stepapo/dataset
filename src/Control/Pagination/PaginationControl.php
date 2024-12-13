@@ -25,6 +25,7 @@ class PaginationControl extends DataControl
 		private Paginator $paginator,
 		private Text $text,
 		private bool $hidePagination,
+		private string $pagingMode,
 	) {}
 
 
@@ -40,8 +41,10 @@ class PaginationControl extends DataControl
 	public function render(): void
 	{
 		$this->template->paginator = $this->paginator;
+		$this->template->pagingMode = $this->pagingMode;
 		$this->template->text = $this->text;
 		$this->template->shouldRenderNextPage = $this->shouldRenderNextPage();
+		$this->template->shouldRenderPreviousPage = $this->pagingMode === 'fromPreviousPage' && !$this->paginator->isFirst();
 		$this->template->hide = $this->hidePagination;
 		$this->template->render($this->main->getView()->paginationTemplate);
 	}
@@ -66,6 +69,13 @@ class PaginationControl extends DataControl
 
 	private function shouldRenderNextPage(): bool
 	{
-		return $this->main->getCurrentCount() > $this->paginator->getItemsPerPage();
+		if ($this->pagingMode === 'fromPreviousPage') {
+			return $this->main->getCurrentCount() > $this->paginator->getItemsPerPage();
+		}
+		return $this->main->getCurrentCount() > (
+			$this->pagingMode === 'fromPreviousPage'
+				? $this->paginator->getItemsPerPage()
+				: $this->paginator->getPage() * $this->paginator->getItemsPerPage()
+			);
 	}
 }
