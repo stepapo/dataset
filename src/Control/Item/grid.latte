@@ -10,6 +10,7 @@
 				'entity' => $item,
 				'value' => $value,
 				'column' => $column,
+				'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args) : null
 			}
 		</div>
 	{/}
