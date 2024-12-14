@@ -42,6 +42,12 @@ class DatasetControl extends DataControl implements MainComponent
 	) {}
 
 
+	public function getCollection(): ICollection
+	{
+		return $this->dataset->collection;
+	}
+
+
 	public function getCollectionItems(): ICollection
 	{
 		if (!isset($this->items)) {
@@ -165,7 +171,7 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = new SearchFormControl($this, $this->dataset->search->placeholder, $this->dataset->text);
+		$control = new SearchFormControl($this, $this->dataset->text, $this->dataset->search->placeholder);
 		$control->onSearch[] = function (SearchFormControl $search) {
 			$this->redrawControl();
 		};
@@ -313,7 +319,7 @@ class DatasetControl extends DataControl implements MainComponent
 			&& $this->getComponent('searchForm')->term
 			&& ($this->getComponent('searchForm-form')->isSubmitted() || !$sort)
 		) {
-			$c = $c->orderBy(array_merge([$this->dataset->search->sortFunction->class], (array) $this->dataset->search->sortFunction->args), $this->dataset->search->sortDirection);
+			$c = $c->orderBy(array_merge([$this->dataset->search->sortFunction->class], (array) $this->dataset->search->sortFunction->args), strtoupper($this->dataset->search->sortDirection));
 		}
 		$primaryKey = $this->dataset->repository->getEntityMetadata()->getPrimaryKey();
 		return count($primaryKey) === 1 ? $c->orderBy($primaryKey[0]) : $c;
@@ -325,10 +331,10 @@ class DatasetControl extends DataControl implements MainComponent
 		if ($this->dataset->itemsPerPage) {
 			$c = $c->limitBy(
 				$this->getComponent('pagination')->getPaginator()->length + 1
-					+ (
-						$this->dataset->pagingMode === 'fromStart'
-							? $this->getComponent('pagination')->getPaginator()->offset
-							: 0
+				+ (
+				$this->dataset->pagingMode === 'fromStart'
+					? $this->getComponent('pagination')->getPaginator()->offset
+					: 0
 				),
 				$this->dataset->pagingMode === 'fromPreviousPage'
 					? $this->getComponent('pagination')->getPaginator()->offset

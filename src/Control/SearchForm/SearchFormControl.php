@@ -24,8 +24,8 @@ class SearchFormControl extends DataControl
 
 	public function __construct(
 		private DatasetControl $main,
-		private ?string $placeholder = null,
 		private Text $text,
+		private ?string $placeholder = null,
 	) {}
 
 
