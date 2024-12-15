@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Dataset;
 
 use Nette\Application\BadRequestException;
+use Nette\InvalidArgumentException;
+use Nette\NotSupportedException;
 use Nette\Utils\Paginator;
+use Nette\Utils\Random;
+use Nextras\Orm\Collection\Aggregations\AnyAggregator;
+use Nextras\Orm\Collection\Aggregations\NoneAggregator;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\Control\DataControl;
@@ -240,25 +245,52 @@ class DatasetControl extends DataControl implements MainComponent
 				}
 			} else {
 				$value = explode(',', $value);
-				$filter = [ICollection::OR];
-				foreach ($value as $v) {
-					if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
-						$filter[] = $column->filter->options[$v]->condition;
-					} elseif ($column->filter->function) {
-						$filter[] = [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v];
-					} else {
-						if (is_array($column->filter->columnName)) {
-							$f = [ICollection::OR];
-							foreach ($column->filter->columnName as $columnName) {
-								$f[] = [Helper::getNextrasName($columnName) => $v];
-							}
-							$filter[] = $f;
+				if ($column->filter->multiMode === 'any') {
+					$filter = [ICollection::OR];
+					foreach ($value as $v) {
+						if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
+							$filter[] = $column->filter->options[$v]->condition;
+						} elseif ($column->filter->function) {
+							$filter[] = [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v];
 						} else {
-							$filter[] = [$column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $v];
+							if (is_array($column->filter->columnName)) {
+								$f = [ICollection::OR];
+								foreach ($column->filter->columnName as $columnName) {
+									$f[] = [Helper::getNextrasName($columnName) => $v];
+								}
+								$filter[] = $f;
+							} else {
+								$filter[] = [$column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $v];
+							}
 						}
 					}
+					$c = $c->findBy($filter);
+				} elseif ($column->filter->multiMode === 'all') {
+					$filter = [ICollection::AND];
+					foreach ($value as $v) {
+						$aggregator = new AnyAggregator(Random::generate());
+						if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
+							$filter[] = [ICollection::AND, $aggregator, $column->filter->options[$v]->condition];
+						} elseif ($column->filter->function) {
+							$filter[] = [ICollection::AND, $aggregator, [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v]];
+						} else {
+							if (is_array($column->filter->columnName)) {
+								$f = [ICollection::OR];
+								foreach ($column->filter->columnName as $columnName) {
+									$f[] = [Helper::getNextrasName($columnName) => $v];
+								}
+								$filter[] = [ICollection::AND, $aggregator, $f];
+							} else {
+								$filter[] = [ICollection::AND, $aggregator, $column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $v];
+							}
+						}
+					}
+					$c = $c->findBy($filter);
+				} elseif ($column->filter->multiMode === 'none') {
+					throw new NotSupportedException;
+				} else {
+					throw new InvalidArgumentException;
 				}
-				$c = $c->findBy($filter);
 			}
 		}
 		return $c;
