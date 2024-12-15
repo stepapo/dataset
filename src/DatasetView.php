@@ -6,10 +6,10 @@ namespace Stepapo\Dataset;
 
 use Stepapo\Data\View;
 use Stepapo\Utils\Attribute\KeyProperty;
-use Stepapo\Utils\Schematic;
+use Stepapo\Utils\Config;
 
 
-class DatasetView extends Schematic implements View
+class DatasetView extends Config implements View
 {
 	public const array DEFAULT_VIEW = self::VIEWS['table'];
 	public const array VIEWS = [

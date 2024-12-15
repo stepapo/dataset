@@ -11,12 +11,12 @@ use Stepapo\Data\Link;
 use Stepapo\Data\Search;
 use Stepapo\Data\Text;
 use Stepapo\Utils\Attribute\ArrayOfType;
-use Stepapo\Utils\Attribute\DefaultFromSchematic;
+use Stepapo\Utils\Attribute\DefaultFromConfig;
 use Stepapo\Utils\Attribute\Type;
-use Stepapo\Utils\Schematic;
+use Stepapo\Utils\Config;
 
 
-class Dataset extends Schematic
+class Dataset extends Config
 {
 	public ICollection $collection;
 	public IRepository $repository;
@@ -27,7 +27,7 @@ class Dataset extends Schematic
 	public string $idColumnName = 'id';
 	public bool $isResponsive = true;
 	public bool $alwaysRetrieveItems = false;
-	#[Type(Text::class), DefaultFromSchematic(Text::class)] public Text $text;
+	#[Type(Text::class), DefaultFromConfig(Text::class)] public Text $text;
 	#[Type(Search::class)] public ?Search $search = null;
 	/** @var Column[] */ #[ArrayOfType(Column::class)] public array $columns = [];
 	/** @var DatasetView[] */ #[ArrayOfType(DatasetView::class)] public array $views;
