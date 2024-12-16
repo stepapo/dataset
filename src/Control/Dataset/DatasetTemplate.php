@@ -11,6 +11,7 @@ class DatasetTemplate extends DataTemplate
 {
 	public DatasetControl $control;
 	public bool $showSearch;
+	public bool $showFilter;
 	public int $count;
 	public bool $showPagination;
 	public bool $isResponsive;

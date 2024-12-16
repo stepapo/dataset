@@ -117,6 +117,14 @@ class DatasetControl extends DataControl implements MainComponent
 		$this->template->showPagination = (bool) $this->dataset->itemsPerPage;
 		$this->template->isResponsive = $this->dataset->isResponsive;
 		$this->template->showSearch = (bool) $this->dataset->search && !$this->dataset->search->hide;
+		$showFilter = false;
+		foreach ($this->dataset->columns as $column) {
+			if ($column->filter && !$column->filter->hide) {
+				$showFilter = true;
+				break;
+			}
+		}
+		$this->template->showFilter = $showFilter;
 		if ($this->dataset->itemsPerPage && $this->shouldRetrieveItems) {
 			$count = $this->getCurrentCount();
 			$term = $this->dataset->search ? $this->getComponent('searchForm')->term : null;
@@ -220,6 +228,9 @@ class DatasetControl extends DataControl implements MainComponent
 			}
 			$this->activeFilter = true;
 			if ($column->filter->type === 'single') {
+				if (!isset($column->filter->options[$value])) {
+					continue;
+				}
 				if ($column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
 					$c = $c->findBy($column->filter->options[$value]->condition);
 				} elseif ($column->filter->function) {
@@ -248,6 +259,9 @@ class DatasetControl extends DataControl implements MainComponent
 				if ($column->filter->multiMode === 'any') {
 					$filter = [ICollection::OR];
 					foreach ($value as $v) {
+						if (!isset($column->filter->options[$v])) {
+							continue;
+						}
 						if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
 							$filter[] = $column->filter->options[$v]->condition;
 						} elseif ($column->filter->function) {
@@ -268,6 +282,9 @@ class DatasetControl extends DataControl implements MainComponent
 				} elseif ($column->filter->multiMode === 'all') {
 					$filter = [ICollection::AND];
 					foreach ($value as $v) {
+						if (!isset($column->filter->options[$v])) {
+							continue;
+						}
 						$aggregator = new AnyAggregator(Random::generate());
 						if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
 							$filter[] = [ICollection::AND, $aggregator, $column->filter->options[$v]->condition];
