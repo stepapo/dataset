@@ -5,13 +5,15 @@
 		{php $value = $control->getValue($column->columnName)}
 		<li n:if="$value" n:class="$column->class">
 			{if $column->label}{_$column->label}:{/}
-			{include
-				$column->valueTemplateFile ?: $main->getView()->valueTemplate,
-				'entity' => $item,
-				'value' => $value,
-				'column' => $column,
-				'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args) : null
-			}
+			<a n:tag-if="$column->linkCallback" href="{($column->linkCallback)($item, $presenter)}">
+				{include
+					$column->valueTemplateFile ?: $main->getView()->valueTemplate,
+					'entity' => $item,
+					'value' => $value,
+					'column' => $column,
+					'linkArgs' => $column->link && $column->link->args ? array_map(fn($a) => $control->getValue($a) ?: $a, $column->link->args) : null
+				}
+			</a>
 		</li>
 	{/}
 </ul>

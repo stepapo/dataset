@@ -1,5 +1,5 @@
 {templateType Stepapo\Dataset\Control\Dataset\DatasetTemplate}
-<div class="override-padding" n:snippet>
+<div class="dataset override-padding" n:snippet>
 	<div n:ifcontent class="override-padding mb-3">
 		{if $showSearch}
 			{control searchForm}
@@ -9,7 +9,7 @@
 	</div>
 	<p n:if="$term">{_$text->searchResults} "{$term}":</p>
 	<div n:class="$isResponsive ? table-responsive, override-padding">
-		<table class="table table-hover override-padding">
+		<table n:class="table, table-hover, override-padding, $datasetClass">
 			{control sorting}
 			{control itemList}
 		</table>

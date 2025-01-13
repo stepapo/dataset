@@ -55,7 +55,7 @@ class ItemControl extends DataControl
 				if (!$value?->getMetadata()->hasProperty($columnName)) {
 					return self::UNDEFINED_VALUE;
 				}
-				$value = $value->{$columnName};
+				$value = $value->{$columnName} ?? null;
 			}
 		}
 		return $value;

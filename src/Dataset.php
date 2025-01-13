@@ -23,6 +23,7 @@ class Dataset extends Config
 	public ?int $itemsPerPage = null;
 	public ?\Closure $itemClassCallback = null;
 	public ?\Closure $itemLinkCallback = null;
+	public ?string $datasetClass = null;
 	public ?string $itemListClass = null;
 	public string $idColumnName = 'id';
 	public bool $isResponsive = true;

@@ -117,6 +117,7 @@ class DatasetControl extends DataControl implements MainComponent
 		$this->template->showPagination = (bool) $this->dataset->itemsPerPage;
 		$this->template->isResponsive = $this->dataset->isResponsive;
 		$this->template->showSearch = (bool) $this->dataset->search && !$this->dataset->search->hide;
+		$this->template->datasetClass = $this->dataset->datasetClass;
 		$showFilter = false;
 		foreach ($this->dataset->columns as $column) {
 			if ($column->filter && !$column->filter->hide) {

@@ -3,32 +3,7 @@
 	<div class="btn-toolbar flex-nowrap">
 		<div class="btn btn-sm btn-label">{_$text->sort}:</div>
 		{if !$sort}{foreach $columns as $column}{continueIf !$column->sort || !$column->sort->isDefault}{php $sort = $column->name}{php break}{/}{/}
-		<div class="d-none d-lg-flex">
-			{foreach $columns as $column}
-				{continueIf !$column->sort || $column->sort->hide}
-				{php $newDirection = $column->name == $sort
-					? ($direction == 'asc' ? 'desc' : 'asc')
-					: (
-						!$sort && $column->sort && $column->sort->isDefault
-							? ($column->sort->direction == 'asc' ? 'desc' : 'asc')
-							: $column->sort->direction
-					)
-				}
-				<a n:href="sort! sort => $column->name, direction => $newDirection" n:class="btn, btn-sm, ms-1, ajax, $sort == $column->name ? btn-primary : (!$sort && $column->sort->isDefault ? btn-primary : btn-secondary)"{if $column->description} data-tooltip="{$column->description}"{/}>
-					{if $column->label}{_$column->label}{/}
-					{if $sort != $column->name}
-						{if !$sort && $column->sort->isDefault}
-							<i n:class="fa, fa-fw, $column->sort->direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
-						{else}
-							<i class="fa fa-fw fa-sort"></i>
-						{/}
-					{else}
-						<i n:class="fa, fa-fw, $direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
-					{/}
-				</a>
-			{/foreach}
-		</div>
-		<div class="d-flex d-lg-none">
+		<div class="d-flex">
 			{php $newDirection = $direction == 'asc' ? 'desc' : 'asc'}
 			<a n:href="sort! sort: $sort, direction: $newDirection" class="btn btn-sm btn-primary ms-1 ajax">
 				{if $columns[$sort]->label}{_$columns[$sort]->label}{/}
@@ -49,15 +24,6 @@
 					}
 					<a n:href="sort! sort: $column->name, direction: $newDirection" n:class="dropdown-item, ajax">
 						{if $column->label}{_$column->label}{/}
-						{if $sort != $column->name}
-							{if !$sort && $column->sort->isDefault}
-								<i n:class="fa, fa-fw, $column->sort->direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
-							{else}
-								<i class="fa fa-fw fa-sort"></i>
-							{/}
-						{else}
-							<i n:class="fa, fa-fw, $direction == 'desc' ? fa-caret-up : fa-caret-down"></i>
-						{/}
 					</a>
 				{/}
 			</div>

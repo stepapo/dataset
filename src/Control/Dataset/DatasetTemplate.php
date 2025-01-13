@@ -17,4 +17,5 @@ class DatasetTemplate extends DataTemplate
 	public bool $isResponsive;
 	public ?string $term;
 	public ?string $suggestedTerm;
+	public ?string $datasetClass;
 }
