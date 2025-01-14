@@ -229,10 +229,7 @@ class DatasetControl extends DataControl implements MainComponent
 			}
 			$this->activeFilter = true;
 			if ($column->filter->type === 'single') {
-				if (!isset($column->filter->options[$value])) {
-					continue;
-				}
-				if ($column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
+				if (isset($column->filter->options[$value]) && $column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
 					$c = $c->findBy($column->filter->options[$value]->condition);
 				} elseif ($column->filter->function) {
 					if (is_array($column->filter->columnName)) {
@@ -260,10 +257,7 @@ class DatasetControl extends DataControl implements MainComponent
 				if ($column->filter->multiMode === 'any') {
 					$filter = [ICollection::OR];
 					foreach ($value as $v) {
-						if (!isset($column->filter->options[$v])) {
-							continue;
-						}
-						if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
+						if (isset($column->filter->options[$v]) && $column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
 							$filter[] = $column->filter->options[$v]->condition;
 						} elseif ($column->filter->function) {
 							$filter[] = [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v];
