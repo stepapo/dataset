@@ -13,6 +13,7 @@ use Nextras\Orm\Collection\Aggregations\AnyAggregator;
 use Nextras\Orm\Collection\Aggregations\NoneAggregator;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
+use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Data\Control\MainComponent;
@@ -50,6 +51,18 @@ class DatasetControl extends DataControl implements MainComponent
 	public function getCollection(): ICollection
 	{
 		return $this->dataset->collection;
+	}
+
+
+	public function getRepository(): IRepository
+	{
+		return $this->dataset->repository;
+	}
+
+
+	public function getItemsPerPage(): ?int
+	{
+		return $this->dataset->itemsPerPage;
 	}
 
 
