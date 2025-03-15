@@ -9,8 +9,10 @@ use Nette\InvalidArgumentException;
 use Nette\NotSupportedException;
 use Nette\Utils\Paginator;
 use Nette\Utils\Random;
+use Nextras\Dbal\Drivers\Exception\QueryException;
 use Nextras\Orm\Collection\Aggregations\AnyAggregator;
 use Nextras\Orm\Collection\Aggregations\NoneAggregator;
+use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
@@ -68,16 +70,20 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function getCollectionItems(): ICollection
 	{
-		if (!isset($this->items)) {
-			$c = $this->dataset->collection;
-			$c = $this->filter($c);
-			$c = $this->search($c);
-			$c = $this->sort($c);
-			$c = $this->paginate($c);
-			$this->currentCount = $c->count();
-			$this->items = $c;
+		try {
+			if (!isset($this->items)) {
+				$c = $this->dataset->collection;
+				$c = $this->filter($c);
+				$c = $this->search($c);
+				$c = $this->sort($c);
+				$c = $this->paginate($c);
+				$this->currentCount = $c->count();
+				$this->items = $c;
+			}
+			return $this->items;
+		} catch (QueryException $e) {
+			return new ArrayCollection([], $this->dataset->repository);
 		}
-		return $this->items;
 	}
 
 
