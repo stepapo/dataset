@@ -11,8 +11,8 @@
 			<a n:href="display! viewName => $main->getView()->name" class="btn btn-sm btn-primary ms-1 ajax">
 				{_$views[$main->getView()->name]->label}
 			</a>
-			<button class="btn btn-sm btn-secondary ms-1 dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown">
-				<span class="sr-only">Toggle Dropdown</span>
+			<button class="btn btn-sm btn-secondary dropdown-toggle-split ms-1" type="button" data-bs-toggle="dropdown">
+				<i class="fas fa-fw fa-ellipsis"></i>
 			</button>
 			<div class="dropdown-menu">
 				{foreach $views as $view}

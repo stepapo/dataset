@@ -7,10 +7,10 @@
 			{php $newDirection = $direction == 'asc' ? 'desc' : 'asc'}
 			<a n:href="sort! sort: $sort, direction: $newDirection" class="btn btn-sm btn-primary ms-1 ajax">
 				{if $columns[$sort]->label}{_$columns[$sort]->label}{/}
-				<i n:class="fa, fa-fw, $direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
+				<i n:class="fa, fa-fw, $direction == 'asc' ? fa-chevron-up : fa-chevron-down"></i>
 			</a>
-			<button class="btn btn-sm btn-secondary ms-1 dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown">
-				<span class="sr-only">Toggle Dropdown</span>
+			<button class="btn btn-sm btn-secondary dropdown-toggle-split ms-1" type="button" data-bs-toggle="dropdown">
+				<i class="fas fa-fw fa-ellipsis"></i>
 			</button>
 			<div class="dropdown-menu">
 				{foreach $columns as $column}

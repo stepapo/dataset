@@ -15,12 +15,12 @@
 				{if $column->label}{_$column->label|noescape}{/}
 				{if $sort != $column->name}
 					{if !$sort && $column->sort->isDefault}
-						<i n:class="fa, fa-fw, $column->sort->direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
+						<i n:class="fa, fa-fw, $column->sort->direction == 'asc' ? fa-chevron-up : fa-chevron-down"></i>
 					{else}
 						<i class="fa fa-fw fa-sort"></i>
 					{/}
 				{else}
-					<i n:class="fa, fa-fw, $direction == 'asc' ? fa-caret-up : fa-caret-down"></i>
+					<i n:class="fa, fa-fw, $direction == 'asc' ? fa-chevron-up : fa-chevron-down"></i>
 				{/}
 			</a>
 		{else}
