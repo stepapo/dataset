@@ -2,5 +2,12 @@
 
 <div n:if="!$hide && ($shouldRenderPreviousPage || $shouldRenderNextPage)" n:class="clearfix, mt-3, $pagingMode === 'fromStart' ? text-center" n:snippet>
 	<a class="float-start btn btn-sm btn-secondary ajax" n:if="$shouldRenderPreviousPage" n:href="paginate! page => $paginator->getPage() - 1" rel="prev"><i class="fas fa-arrow-left fa-fw"></i> {_$text->previous}</a>
-	<a n:class="d-inline, $pagingMode === 'fromPreviousPage' ? float-end, btn, btn-sm, btn-secondary, ajax" n:if="$shouldRenderNextPage" n:href="paginate! page => $paginator->getPage() + 1" rel="next">{_$text->next} <i class="fas fa-arrow-right fa-fw"></i></a>
+	<a n:class="d-inline, $pagingMode === 'fromPreviousPage' ? 'float-end btn btn-sm btn-secondary' : 'scroll link-secondary lh-1 fs-1', ajax" n:if="$shouldRenderNextPage" n:href="paginate! page => $paginator->getPage() + 1" rel="next">
+		{if $pagingMode === 'fromPreviousPage'}
+			{_$text->next}
+			<i class="fas fa-arrow-right fa-fw"></i>
+		{else}
+			<i class="fas fa-chevron-down fa-fw"></i>
+		{/}
+	</a>
 </div>
