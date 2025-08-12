@@ -8,7 +8,6 @@ use Nette\InvalidArgumentException;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
 use Stepapo\Data\Control\DataControl;
-use Stepapo\Data\Link;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 

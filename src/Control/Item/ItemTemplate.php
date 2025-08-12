@@ -7,7 +7,6 @@ namespace Stepapo\Dataset\Control\Item;
 use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\Control\DataTemplate;
 use Stepapo\Data\Control\MainComponent;
-use Stepapo\Data\Link;
 
 
 class ItemTemplate extends DataTemplate
