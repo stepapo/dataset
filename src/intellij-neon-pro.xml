@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<neon vendor="stepapo/dataset"
+      version="1"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation=".idea/intellij-neon-pro/xmlSources/Neon.xsd">
+    <project>
+        <useExtension name="dataset" type="Stepapo\Dataset\Dataset" />
+        <useExtension name="column" type="Stepapo\Data\Column" />
+    </project>
+    <extensions>
+        <extension type="Stepapo\Dataset\Dataset">
+            <schema>
+                <structure>
+                    <field name="collection"><string /></field>
+                    <field name="repository"><string /></field>
+                    <field name="itemsPerPage"><int /></field>
+                    <field name="itemClassCallback"><string /></field>
+                    <field name="itemLinkCallback"><string /></field>
+                    <field name="datasetClass"><string /></field>
+                    <field name="itemListClass"><string /></field>
+                    <field name="idColumnName"><string /></field>
+                    <field name="isResponsive"><bool /></field>
+                    <field name="alwaysRetrieveItems"><string /></field>
+                    <field name="text">
+                        <structure>
+                            <field name="search"><string /></field>
+                            <field name="sort"><string /></field>
+                            <field name="previous"><string /></field>
+                            <field name="next"><string /></field>
+                        </structure>
+                    </field>
+                    <field name="search"><useReusable ref="search"/></field>
+                    <field name="columns">
+                        <listOf>
+                            <value>
+                                <structure>
+                                    <field name="name"><string /></field>
+                                    <field name="columnName"><string /></field>
+                                    <field name="label"><string /></field>
+                                </structure>
+                            </value>
+                        </listOf>
+                    </field>
+                    <field name="views">
+                        <arrayOf>
+                            <key><string /></key>
+                            <value><useReusable ref="view" /></value>
+                        </arrayOf>
+                    </field>
+                    <field name="hidePagination"><bool /></field>
+                    <field name="pagingMode"><string /></field>
+                </structure>
+            </schema>
+        </extension>
+    </extensions>
+    <reusables>
+        <reusable id="text">
+            <structure>
+                <field name="search"><string /></field>
+                <field name="sort"><string /></field>
+                <field name="previous"><string /></field>
+                <field name="next"><string /></field>
+            </structure>
+        </reusable>
+        <reusable id="search">
+            <structure>
+                <field name="placeholder"><string /></field>
+                <field name="function"><string /></field>
+            </structure>
+        </reusable>
+        <reusable id="column">
+            <structure>
+                <field name="name"><string /></field>
+                <field name="label"><string /></field>
+            </structure>
+        </reusable>
+        <reusable id="view">
+            <structure>
+                <field name="name"><string /></field>
+                <field name="label"><string /></field>
+                <field name="datasetTemplate"><string /></field>
+            </structure>
+        </reusable>
+    </reusables>
+</neon>

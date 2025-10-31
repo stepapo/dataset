@@ -7,6 +7,7 @@ namespace Stepapo\Dataset;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Column;
+use Stepapo\Data\Link;
 use Stepapo\Data\Search;
 use Stepapo\Data\Text;
 use Stepapo\Utils\Attribute\ArrayOfType;
@@ -33,4 +34,10 @@ class Dataset extends Config
 	/** @var DatasetView[] */ #[ArrayOfType(DatasetView::class)] public array $views;
 	public bool $hidePagination = false;
 	public string $pagingMode = 'fromPreviousPage';
+
+
+	protected static function getExtensionName(): string
+	{
+		return 'dataset';
+	}
 }

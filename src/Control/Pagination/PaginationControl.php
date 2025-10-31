@@ -37,6 +37,7 @@ class PaginationControl extends DataControl
 	}
 
 
+
 	public function render(): void
 	{
 		$this->template->paginator = $this->paginator;
