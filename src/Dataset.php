@@ -20,6 +20,8 @@ class Dataset extends Config
 {
 	public ICollection $collection;
 	public IRepository $repository;
+	public ?\Closure $descriptionCallback = null;
+	public ?int $labelWidth = null;
 	public ?int $itemsPerPage = null;
 	public ?\Closure $itemClassCallback = null;
 	public ?\Closure $itemLinkCallback = null;

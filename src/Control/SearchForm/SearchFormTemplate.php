@@ -10,8 +10,7 @@ use Stepapo\Data\Control\DataTemplate;
 class SearchFormTemplate extends DataTemplate
 {
 	public SearchFormControl $control;
-
 	public ?string $term;
-
 	public string $placeholder;
+	public ?int $labelWidth;
 }

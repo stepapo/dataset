@@ -33,10 +33,12 @@ use Stepapo\Dataset\DatasetView;
 /**
  * @property-read DatasetTemplate $template
  * @method onItemChange(DatasetControl $control, ?IEntity $entity = null)
+ * @method onRedraw(DatasetControl $control)
  */
 class DatasetControl extends DataControl implements MainComponent
 {
 	/** @var \Closure[] */ public array $onItemChange;
+	/** @var \Closure[] */ public array $onRedraw;
 	private DatasetView $view;
 	private ICollection $items;
 	private int $currentCount;
@@ -137,6 +139,7 @@ class DatasetControl extends DataControl implements MainComponent
 		$this->template->isResponsive = $this->dataset->isResponsive;
 		$this->template->showSearch = (bool) $this->dataset->search && !$this->dataset->search->hide;
 		$this->template->datasetClass = $this->dataset->datasetClass;
+		$this->template->descriptions = $this->dataset->descriptionCallback ? ($this->dataset->descriptionCallback)($this) : null;
 		$showFilter = false;
 		foreach ($this->dataset->columns as $column) {
 			if ($column->filter && !$column->filter->hide) {
@@ -194,8 +197,9 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentFilterList(): FilterListControl
 	{
-		$control = new FilterListControl($this, $this->dataset->columns);
+		$control = new FilterListControl($this, $this->dataset->columns, labelWidth: $this->dataset->labelWidth);
 		$control->onFilter[] = function (FilterListControl $filterList) {
+			$this->onRedraw($this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -204,8 +208,9 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentSearchForm(): SearchFormControl
 	{
-		$control = new SearchFormControl($this, $this->dataset->text, $this->dataset->search->placeholder);
+		$control = new SearchFormControl($this, $this->dataset->text, $this->dataset->search->placeholder, $this->dataset->labelWidth);
 		$control->onSearch[] = function (SearchFormControl $search) {
+			$this->onRedraw($this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -214,8 +219,9 @@ class DatasetControl extends DataControl implements MainComponent
 
 	public function createComponentSorting(): SortingControl
 	{
-		$control = new SortingControl($this, $this->dataset->columns, $this->dataset->text);
+		$control = new SortingControl($this, $this->dataset->columns, $this->dataset->text, $this->dataset->labelWidth);
 		$control->onSort[] = function (SortingControl $sorting) {
+			$this->onRedraw($this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -228,8 +234,10 @@ class DatasetControl extends DataControl implements MainComponent
 			$this,
 			$this->dataset->views,
 			$this->dataset->text,
+			$this->dataset->labelWidth,
 		);
 		$control->onDisplay[] = function (DisplayControl $display) {
+			$this->onRedraw($this);
 			$this->redrawControl();
 		};
 		return $control;

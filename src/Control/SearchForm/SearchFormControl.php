@@ -26,6 +26,7 @@ class SearchFormControl extends DataControl
 		private DatasetControl $main,
 		private Text $text,
 		private ?string $placeholder = null,
+		private ?int $labelWidth = null,
 	) {}
 
 
@@ -34,6 +35,7 @@ class SearchFormControl extends DataControl
 		$this->template->term = $this->term;
 		$this->template->placeholder = $this->placeholder;
 		$this->template->text = $this->text;
+		$this->template->labelWidth = $this->labelWidth;
 		$this->template->render($this->main->getView()->searchTemplate);
 	}
 

@@ -7,6 +7,7 @@
 		{control filterList}
 		{control display}
 	</div>
+	<p n:if="$descriptions" n:inner-foreach="$descriptions as $description">{_$description}{sep}<br>{/}</p>
 	<p n:if="$term">{_$text->searchResults} "{$term}":</p>
 	<div n:class="$isResponsive ? table-responsive, override-padding">
 		<table n:class="table, table-hover, override-padding, $datasetClass">

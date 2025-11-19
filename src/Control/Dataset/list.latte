@@ -9,6 +9,7 @@
 		{control sorting}
 		{control display}
 	</div>
+	<p n:if="$descriptions" n:inner-foreach="$descriptions as $description">{_$description}{sep}<br>{/}</p>
 	<p n:if="isset($term) && $term">{_$text->searchResults} "{$term}"</p>
 	{control itemList}
 	{if isset($count) && $count == 0 && isset($term, $suggestedTerm)}

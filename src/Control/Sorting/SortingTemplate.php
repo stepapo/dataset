@@ -16,4 +16,5 @@ class SortingTemplate extends DataTemplate
 	public ?string $direction;
 	public Text $text;
 	public array $columns;
+	public ?int $labelWidth;
 }

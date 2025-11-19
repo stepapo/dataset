@@ -25,6 +25,7 @@ class SortingControl extends DataControl
 		private DatasetControl $main,
 		private array $columns,
 		private Text $text,
+		private ?int $labelWidth,
 	) {}
 
 
@@ -45,6 +46,7 @@ class SortingControl extends DataControl
 		$this->template->sort = $this->sort;
 		$this->template->direction = $this->direction;
 		$this->template->text = $this->text;
+		$this->template->labelWidth = $this->labelWidth;
 		$this->template->render($this->main->getView()->sortingTemplate);
 	}
 

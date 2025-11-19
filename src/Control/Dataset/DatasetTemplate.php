@@ -18,4 +18,5 @@ class DatasetTemplate extends DataTemplate
 	public ?string $term;
 	public ?string $suggestedTerm;
 	public ?string $datasetClass;
+	public ?array $descriptions;
 }

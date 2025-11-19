@@ -16,4 +16,5 @@ class DisplayTemplate extends DataTemplate
 	public ?string $viewName;
 	public array $views;
 	public Text $text;
+	public ?int $labelWidth;
 }

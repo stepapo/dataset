@@ -27,6 +27,7 @@ class DisplayControl extends DataControl
 		private DatasetControl $main,
 		public array $views,
 		private Text $text,
+		private ?int $labelWidth,
 	) {}
 
 
@@ -39,6 +40,7 @@ class DisplayControl extends DataControl
 		$this->template->views = $this->views;
 		$this->template->main = $this->main;
 		$this->template->text = $this->text;
+		$this->template->labelWidth = $this->labelWidth;
 		$this->template->render($this->main->getView()->displayTemplate);
 	}
 
