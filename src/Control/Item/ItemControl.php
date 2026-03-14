@@ -8,7 +8,6 @@ use Nette\InvalidArgumentException;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
 use Stepapo\Data\Control\DataControl;
-use Stepapo\Data\Link;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 
@@ -40,6 +39,7 @@ class ItemControl extends DataControl
 		$this->template->item = $this->entity;
 		$this->template->main = $this->main;
 		$this->template->columns = $this->columns;
+		$this->template->invokeFilter = $this->template->getLatte()->invokeFilter(...);
 		$this->template->render($this->main->getView()->itemTemplate);
 	}
 

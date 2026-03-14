@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Dataset;
 
-use Nette\Application\BadRequestException;
 use Nette\InvalidArgumentException;
 use Nette\NotSupportedException;
 use Nette\Utils\Paginator;
 use Nette\Utils\Random;
 use Nextras\Dbal\Drivers\Exception\QueryException;
 use Nextras\Orm\Collection\Aggregations\AnyAggregator;
-use Nextras\Orm\Collection\Aggregations\NoneAggregator;
 use Nextras\Orm\Collection\ArrayCollection;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;

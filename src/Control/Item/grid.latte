@@ -8,6 +8,7 @@
 			<a n:tag-if="$column->linkCallback" href="{($column->linkCallback)($item, $presenter)}">
 				{include
 					$column->valueTemplateFile ?: $main->getView()->valueTemplate,
+                    'invokeFilter', $invokeFilter,
 					'entity' => $item,
 					'value' => $value,
 					'column' => $column,
