@@ -55,7 +55,7 @@ class SortingControl extends DataControl
 	{
 		$this->sort = $sort;
 		$this->direction = $direction;
-		if (!isset($this->columns[$sort]) || $this->columns[$sort]->sort->hide) {
+		if ($sort && (!isset($this->columns[$sort]) || $this->columns[$sort]->sort->hide)) {
 			throw new BadRequestException;
 		}
 		if ($this->presenter->isAjax()) {
