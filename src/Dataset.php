@@ -6,6 +6,7 @@ namespace Stepapo\Dataset;
 
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\IRepository;
+use Stepapo\Data\Button;
 use Stepapo\Data\Column;
 use Stepapo\Data\Search;
 use Stepapo\Data\Text;
@@ -32,6 +33,7 @@ class Dataset extends Config
 	#[Type(Text::class), DefaultFromConfig(Text::class)] public Text $text;
 	#[Type(Search::class)] public ?Search $search = null;
 	/** @var Column[] */ #[ArrayOfType(Column::class)] public array $columns = [];
+	/** @var Button[] */ #[ArrayOfType(Button::class)] public array $buttons = [];
 	/** @var DatasetView[] */ #[ArrayOfType(DatasetView::class)] public array $views;
 	public bool $hidePagination = false;
 	public string $pagingMode = 'fromPreviousPage';

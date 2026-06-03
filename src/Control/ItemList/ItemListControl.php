@@ -100,13 +100,7 @@ class ItemListControl extends DataControl
 	private function getItems()
 	{
 		$items = $this->main->getCollectionItems()->fetchPairs($this->idColumnName);
-		if (
-			$this->itemsPerPage && $this->main->getCurrentCount() > (
-				$this->pagingMode === 'fromPreviousPage'
-					? $this->itemsPerPage
-					: $this->main->getComponent('pagination')->page * $this->itemsPerPage
-			)
-		) {
+		if ($this->itemsPerPage && $this->main->getCurrentCount() > $this->itemsPerPage) {
 			array_pop($items);
 		}
 		return $items;

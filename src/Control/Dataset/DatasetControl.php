@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Dataset;
 
+use Nette\Application\UI\Form;
 use Nette\InvalidArgumentException;
 use Nette\NotSupportedException;
 use Nette\Utils\Paginator;
@@ -155,7 +156,22 @@ class DatasetControl extends DataControl implements MainComponent
 			}
 		}
 		$this->template->text = $this->dataset->text;
+		$this->template->buttons = $this->dataset->buttons;
+		$this->template->view = $this->getView();
 		$this->template->render($this->getView()->datasetTemplate);
+	}
+
+
+	protected function createComponentButtonForm(): Form
+	{
+		$form = new Form;
+		foreach ($this->dataset->buttons as $button) {
+			$form->addSubmit($button->name, $button->label);
+			if ($button->callback) {
+				$form[$button->name]->onClick[] = $button->callback;
+			}
+		}
+		return $form;
 	}
 
 
@@ -399,15 +415,8 @@ class DatasetControl extends DataControl implements MainComponent
 	{
 		if ($this->dataset->itemsPerPage) {
 			$c = $c->limitBy(
-				$this->getComponent('pagination')->getPaginator()->length + 1
-				+ (
-				$this->dataset->pagingMode === 'fromStart'
-					? $this->getComponent('pagination')->getPaginator()->offset
-					: 0
-				),
-				$this->dataset->pagingMode === 'fromPreviousPage'
-					? $this->getComponent('pagination')->getPaginator()->offset
-					: 0,
+				$this->getComponent('pagination')->getPaginator()->length + 1,
+				$this->getComponent('pagination')->getPaginator()->offset,
 			);
 		}
 		return $c;

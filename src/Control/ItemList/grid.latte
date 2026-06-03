@@ -1,6 +1,6 @@
 {templateType Stepapo\Dataset\Control\ItemList\ItemListTemplate}
 
-{snippet}
+<div n:snippet data-naja-snippet-append>
 	<div n:class="grid, text-center, $itemListClass, mt-3" n:foreach="($items|batch:4) as $row" n:inner-foreach="$row as $item">
 		{control 'item-' . $item->getValue($idColumnName)}
 	</div>
@@ -9,4 +9,4 @@
 			{_$text->noResults}
 		</p>
 	{/}
-{/}
+</div>

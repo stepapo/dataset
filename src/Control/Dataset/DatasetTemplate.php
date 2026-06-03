@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Dataset;
 
+use Stepapo\Data\Button;
 use Stepapo\Data\Control\DataTemplate;
+use Stepapo\Dataset\DatasetView;
 
 
 class DatasetTemplate extends DataTemplate
@@ -19,4 +21,6 @@ class DatasetTemplate extends DataTemplate
 	public ?string $suggestedTerm;
 	public ?string $datasetClass;
 	public ?array $descriptions;
+	/** @var Button[] */ public array $buttons;
+	public DatasetView $view;
 }

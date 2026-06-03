@@ -1,0 +1,8 @@
+{templateType Stepapo\Dataset\Control\SearchForm\SearchFormTemplate}
+<div n:class="search, $term ? active-search, mt-lg-0, mt-2" n:snippet>
+	{form form class => 'ajax inline-form d-flex', style => "border: 1px solid var(--cms-primary-bg); border-radius: 19px; padding: 0 0.5rem;"}
+		<input n:name="term"{if $placeholder} placeholder="{_$placeholder}"{/} type="text" class="search-form-field text-lg-end flex-grow-1" style="border: 0; padding: 0; margin: 0 1rem; background: transparent; line-height: 36px;">
+		<button class="ajax" n:name="send" style="padding: 0; background: transparent; border: 0;"><i class="fal fa-fw fa-search"></i></button>
+		<a n:if="$term" href="{link search! term => null}" class="ms-1 btn-danger ajax" style="line-height: 36px;"><i class="fal fa-fw fa-xmark"></i></a>
+	{/}
+</div>

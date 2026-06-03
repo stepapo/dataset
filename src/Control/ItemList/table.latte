@@ -1,6 +1,6 @@
 {templateType Stepapo\Dataset\Control\ItemList\ItemListTemplate}
 
-<tbody n:class="$itemListClass" n:snippet>
+<tbody n:class="$itemListClass" n:snippet data-naja-snippet-append>
 	{if $main->getCurrentCount() > 0}
 		{foreach $items as $item}
 			{control 'item-' . $item->getValue($idColumnName)}

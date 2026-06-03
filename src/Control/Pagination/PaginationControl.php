@@ -69,13 +69,6 @@ class PaginationControl extends DataControl
 
 	private function shouldRenderNextPage(): bool
 	{
-		if ($this->pagingMode === 'fromPreviousPage') {
-			return $this->main->getCurrentCount() > $this->paginator->getItemsPerPage();
-		}
-		return $this->main->getCurrentCount() > (
-			$this->pagingMode === 'fromPreviousPage'
-				? $this->paginator->getItemsPerPage()
-				: $this->paginator->getPage() * $this->paginator->getItemsPerPage()
-			);
+		return $this->main->getCurrentCount() > $this->paginator->getItemsPerPage();
 	}
 }

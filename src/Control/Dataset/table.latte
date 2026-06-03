@@ -1,20 +1,55 @@
 {templateType Stepapo\Dataset\Control\Dataset\DatasetTemplate}
 <div class="dataset override-padding" n:snippet>
-	<div n:ifcontent class="filters override-padding mb-3">
-		{if $showSearch}
-			{control searchForm}
-		{/}
-		{control filterList}
-		{control display}
-	</div>
+	{if $view->inlineFilters}
+		<div n:if="($showFilter || $showSearch)" class="mb-3">
+			<button class="btn btn-sm btn-outline-primary menu-item d-lg-none w-100 d-flex" type="button" data-bs-toggle="collapse" data-bs-target="#filters">
+				<span class="text-start flex-grow-1">Filtr</span>
+				<i class="fal fa-fw fa-bars-filter lh-base"></i>
+			</button>
+			<div n:class="collapse, d-lg-block, $control->activeFilter ? show" id="filters">
+				<div n:ifcontent class="clearfix d-lg-flex column-gap-1 row-gap-1 flex-wrap">
+					{if $showSearch}
+						{control searchForm}
+					{/}
+					{control filterList}
+					{control display}
+				</div>
+			</div>
+		</div>
+	{else}
+		<div n:ifcontent class="filters override-padding mb-3">
+			{if $showSearch}
+				{control searchForm}
+			{/}
+			{control filterList}
+			{control display}
+		</div>
+	{/}
 	<p n:if="$descriptions" n:inner-foreach="$descriptions as $description">{_$description}{sep}<br>{/}</p>
 	<p n:if="$term">{_$text->searchResults} "{$term}":</p>
-	<div n:class="$isResponsive ? table-responsive, override-padding">
-		<table n:class="table, table-hover, override-padding, $datasetClass">
-			{control sorting}
-			{control itemList}
-		</table>
-	</div>
+	{if $buttons}
+		{form buttonForm class: 'override-padding'}
+			<div class="multi-actions mb-3">
+				{foreach $buttons as $button}
+					{input $button->name class => 'btn btn-' . $button->style, disabled => 'true'}
+				{/}
+			</div>
+			<div n:class="$isResponsive ? table-responsive, override-padding">
+				<table n:class="table, table-hover, override-padding, $datasetClass">
+					{control sorting}
+					{control itemList}
+				</table>
+			</div>
+		{/}
+	{else}
+		<div n:class="$isResponsive ? table-responsive, override-padding">
+			<table n:class="table, table-hover, override-padding, $datasetClass">
+				{control sorting}
+				{control itemList}
+			</table>
+		</div>
+	{/}
+
 	<p n:if="isset($term, $suggestedTerm)" class="mt-4">
 		{_$text->didYouMean} <b><a n:href="searchForm-search! searchForm-term => $suggestedTerm">{$suggestedTerm}</a></b>?
 	</p>

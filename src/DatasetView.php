@@ -76,10 +76,21 @@ class DatasetView extends Config implements View
 	public ?\Closure $itemFactoryCallback = null;
 	public bool $isDefault = false;
 	public bool $hide = false;
+	public bool $inlineFilters = false;
 
 
 	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
 	{
-		return parent::createFromArray(array_merge(self::VIEWS[$key], (array) $config), $key, $skipDefaults, $parentKey);
+		$defaults = self::VIEWS[$key];
+		if ($config && array_key_exists('inlineFilters', $config) && $config['inlineFilters']) {
+			$defaults['filterListTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
+			$defaults['filterTemplate'] = __DIR__ . '/../../data/src/Control/Filter/inline.latte';
+//			$defaults['searchTemplate'] = __DIR__ . '/Control/Display/inline.latte';
+//			$defaults['displayTemplate'] = __DIR__ . '/Control/SearchForm/inline.latte';
+			if ($key === 'list') {
+				$defaults['sortTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
+			}
+		}
+		return parent::createFromArray(array_merge($defaults, (array) $config), $key, $skipDefaults, $parentKey);
 	}
 }
