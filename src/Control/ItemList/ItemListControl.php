@@ -46,6 +46,7 @@ class ItemListControl extends DataControl
 		$this->template->idColumnName = $this->idColumnName;
 		$this->template->itemListClass = $this->itemListClass;
 		$this->template->text = $this->text;
+		$this->template->pagingMode = $this->pagingMode;
 		$this->template->render($this->main->getView()->itemListTemplate);
 	}
 

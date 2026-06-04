@@ -414,10 +414,17 @@ class DatasetControl extends DataControl implements MainComponent
 	private function paginate(ICollection $c): ICollection
 	{
 		if ($this->dataset->itemsPerPage) {
-			$c = $c->limitBy(
-				$this->getComponent('pagination')->getPaginator()->length + 1,
-				$this->getComponent('pagination')->getPaginator()->offset,
-			);
+			if ($this->presenter->isAjax() || $this->dataset->pagingMode === 'fromPreviousPage') {
+				$c = $c->limitBy(
+					$this->getComponent('pagination')->getPaginator()->length + 1,
+					$this->getComponent('pagination')->getPaginator()->offset,
+				);
+			} else {
+				$c = $c->limitBy(
+					$this->getComponent('pagination')->getPaginator()->length + 1 + $this->getComponent('pagination')->getPaginator()->offset,
+					0
+				);
+			}
 		}
 		return $c;
 	}
