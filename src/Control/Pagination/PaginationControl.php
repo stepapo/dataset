@@ -54,7 +54,7 @@ class PaginationControl extends DataControl
 	{
 		$this->paginator->setPage($page);
 		$this->page = $page;
-		if ($this->presenter->isAjax()) {
+		if ($this->getPresenter()->isAjax()) {
 			$this->onPaginate($this);
 			$this->redrawControl();
 		}

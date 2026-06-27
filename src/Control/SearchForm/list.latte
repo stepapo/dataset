@@ -1,6 +1,6 @@
 {templateType Stepapo\Dataset\Control\SearchForm\SearchFormTemplate}
 <div class="my-1" n:snippet>
-	{form form class => 'ajax inline-form'}
+	{form form, class => 'ajax inline-form'}
 		<div class="btn-toolbar flex-nowrap">
 			<div class="btn btn-sm btn-label"{if $labelWidth} style="width: {$labelWidth}px"{/}>{_$text->search}:</div>
 			<input n:name="term"{if $placeholder} placeholder="{_$placeholder}"{/} type="text" class="form-control form-control-sm search-form-field ms-1">

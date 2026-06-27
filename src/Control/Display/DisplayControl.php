@@ -51,7 +51,7 @@ class DisplayControl extends DataControl
 		if (!isset($this->views[$viewName]) || $this->views[$viewName]->hide) {
 			throw new BadRequestException;
 		}
-		if ($this->presenter->isAjax()) {
+		if ($this->getPresenter()->isAjax()) {
 			$this->onDisplay($this);
 			$this->redrawControl();
 		}

@@ -58,7 +58,7 @@ class SortingControl extends DataControl
 		if ($sort && (!isset($this->columns[$sort]) || $this->columns[$sort]->sort->hide)) {
 			throw new BadRequestException;
 		}
-		if ($this->presenter->isAjax()) {
+		if ($this->getPresenter()->isAjax()) {
 			$this->onSort($this);
 			$this->redrawControl();
 		}

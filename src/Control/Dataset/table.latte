@@ -28,7 +28,7 @@
 	<p n:if="$descriptions" n:inner-foreach="$descriptions as $description">{_$description}{sep}<br>{/}</p>
 	<p n:if="$term">{_$text->searchResults} "{$term}":</p>
 	{if $buttons}
-		{form buttonForm class: 'override-padding'}
+		{form buttonForm, class: 'override-padding'}
 			<div class="multi-actions mb-3">
 				{foreach $buttons as $button}
 					{input $button->name class => 'btn btn-' . $button->style, disabled => 'true'}

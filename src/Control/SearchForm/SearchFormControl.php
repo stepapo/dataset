@@ -65,7 +65,7 @@ class SearchFormControl extends DataControl
 	public function handleSearch(?string $term = null): void
 	{
 		$this->term = $term;
-		if ($this->presenter->isAjax()) {
+		if ($this->getPresenter()->isAjax()) {
 			$this->onSearch($this);
 			$this->redrawControl();
 		}

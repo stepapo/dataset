@@ -60,7 +60,7 @@ class ItemListControl extends DataControl
 				: new ItemControl($this->main, $entity, $this->columns, $this->itemClassCallback, $this->itemLinkCallback);
 			if (property_exists($control, 'onChange')) {
 				$control->onChange[] = function (IComponent $control, IEntity $entity) {
-					if (!$this->alwaysRetrieveItems && $this->presenter->isAjax()) {
+					if (!$this->alwaysRetrieveItems && $this->getPresenter()->isAjax()) {
 						$this->main->shouldRetrieveItems = false;
 					}
 					$this->main->onItemChange($this->main, $entity);
