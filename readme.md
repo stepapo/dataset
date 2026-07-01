@@ -26,7 +26,7 @@ columns:
         columnName: genderLabel
         filter:
             options: %genderFilterOptions%
-            prompt: Both        
+            prompt: Both
     birthday:
         label: Birthday
         align: right
@@ -127,7 +127,7 @@ placeholder:
 prepareCallback:
 suggestCallback:
 searchFunction: # include OrmFunction configuration
-sortFunction: # include OrmFunction configuration 
+sortFunction: # include OrmFunction configuration
 ```
 
 ### Text

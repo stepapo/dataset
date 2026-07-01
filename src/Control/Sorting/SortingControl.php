@@ -6,6 +6,7 @@ namespace Stepapo\Dataset\Control\Sorting;
 
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
+use Nette\Utils\Arrays;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
@@ -36,7 +37,7 @@ class SortingControl extends DataControl
 		foreach ($this->columns as $column) {
 			if ($column->sort && !$column->sort->hide) {
 				$sortCount++;
- 				if ($sortCount > 1) {
+				if ($sortCount > 1) {
 					$this->template->show = true;
 					break;
 				}
@@ -59,7 +60,7 @@ class SortingControl extends DataControl
 			throw new BadRequestException;
 		}
 		if ($this->getPresenter()->isAjax()) {
-			$this->onSort($this);
+			Arrays::invoke($this->onSort, $this);
 			$this->redrawControl();
 		}
 	}

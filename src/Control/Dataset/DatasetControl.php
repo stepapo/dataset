@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Stepapo\Dataset\Control\Dataset;
 
 use Nette\Application\UI\Form;
+use Nette\Forms\Controls\SubmitButton;
 use Nette\InvalidArgumentException;
 use Nette\NotSupportedException;
 use Nette\Utils\Paginator;
@@ -16,10 +17,10 @@ use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Control\DataControl;
+use Stepapo\Data\Control\Filter\FilterControl;
 use Stepapo\Data\Control\FilterList\FilterListControl;
 use Stepapo\Data\Control\MainComponent;
 use Stepapo\Data\Helper;
-use Stepapo\Data\Option;
 use Stepapo\Dataset\Control\Display\DisplayControl;
 use Stepapo\Dataset\Control\ItemList\ItemListControl;
 use Stepapo\Dataset\Control\Pagination\PaginationControl;
@@ -168,7 +169,9 @@ class DatasetControl extends DataControl implements MainComponent
 		foreach ($this->dataset->buttons as $button) {
 			$form->addSubmit($button->name, $button->label);
 			if ($button->callback) {
-				$form[$button->name]->onClick[] = $button->callback;
+				/** @var SubmitButton $submitButton */
+				$submitButton = $form[$button->name];
+				$submitButton->onClick[] = $button->callback;
 			}
 		}
 		return $form;
@@ -264,13 +267,15 @@ class DatasetControl extends DataControl implements MainComponent
 			if (!$column->filter) {
 				continue;
 			}
-			$value = $this->getComponent('filterList')->getComponent('filter')->getComponent($column->name)->value;
+			/** @var FilterControl $component */
+			$component = $this->getComponent('filterList')->getComponent('filter')->getComponent($column->name);
+			$value = $component->value;
 			if (!$value) {
 				continue;
 			}
 			$this->activeFilter = true;
 			if ($column->filter->type === 'single') {
-				if (isset($column->filter->options[$value]) && $column->filter->options[$value] instanceof Option && $column->filter->options[$value]->condition) {
+				if (isset($column->filter->options[$value]) && $column->filter->options[$value]->condition) {
 					$c = $c->findBy($column->filter->options[$value]->condition);
 				} elseif ($column->filter->function) {
 					if (is_array($column->filter->columnName)) {
@@ -280,7 +285,7 @@ class DatasetControl extends DataControl implements MainComponent
 						}
 						$c = $c->findBy($filter);
 					} else {
-						$c = $c->findBy([$column->filter->function, Helper::getNextrasName($column->columnName), $value]);
+						$c = $c->findBy([$column->filter->function, Helper::getNextrasName($column->filter->columnName ?: $column->name), $value]);
 					}
 				} else {
 					if (is_array($column->filter->columnName)) {
@@ -290,7 +295,7 @@ class DatasetControl extends DataControl implements MainComponent
 						}
 						$c = $c->findBy($filter);
 					} else {
-						$c = $c->findBy([$column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $value]);
+						$c = $c->findBy([Helper::getNextrasName($column->filter->columnName ?: $column->name) => $value]);
 					}
 				}
 			} else {
@@ -298,10 +303,18 @@ class DatasetControl extends DataControl implements MainComponent
 				if ($column->filter->multiMode === 'any') {
 					$filter = [ICollection::OR];
 					foreach ($value as $v) {
-						if (isset($column->filter->options[$v]) && $column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
+						if (isset($column->filter->options[$v]) && $column->filter->options[$v]->condition) {
 							$filter[] = $column->filter->options[$v]->condition;
 						} elseif ($column->filter->function) {
-							$filter[] = [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v];
+							if (is_array($column->filter->columnName)) {
+								$f = [ICollection::OR];
+								foreach ($column->filter->columnName as $columnName) {
+									$f[] = [$column->filter->function, Helper::getNextrasName($columnName), $v];
+								}
+								$filter[] = $f;
+							} else {
+								$filter[] = [$column->filter->function, Helper::getNextrasName($column->filter->columnName ?: $column->name), $v];
+							}
 						} else {
 							if (is_array($column->filter->columnName)) {
 								$f = [ICollection::OR];
@@ -310,7 +323,7 @@ class DatasetControl extends DataControl implements MainComponent
 								}
 								$filter[] = $f;
 							} else {
-								$filter[] = [$column->filter->columnName ? Helper::getNextrasName($column->filter->columnName) : $column->name => $v];
+								$filter[] = [Helper::getNextrasName($column->filter->columnName ?: $column->name) => $v];
 							}
 						}
 					}
@@ -321,11 +334,19 @@ class DatasetControl extends DataControl implements MainComponent
 						if (!isset($column->filter->options[$v])) {
 							continue;
 						}
-						$aggregator = new AnyAggregator(Random::generate());
-						if ($column->filter->options[$v] instanceof Option && $column->filter->options[$v]->condition) {
+						$aggregator = new AnyAggregator(Random::generate()); // @phpstan-ignore argument.type
+						if ($column->filter->options[$v]->condition) {
 							$filter[] = [ICollection::AND, $aggregator, $column->filter->options[$v]->condition];
 						} elseif ($column->filter->function) {
-							$filter[] = [ICollection::AND, $aggregator, [$column->filter->function, Helper::getNextrasName($column->filter->columnName), $v]];
+							if (is_array($column->filter->columnName)) {
+								$f = [ICollection::OR];
+								foreach ($column->filter->columnName as $columnName) {
+									$f[] = [ICollection::AND, $aggregator, [$column->filter->function, Helper::getNextrasName($columnName), $v]];
+								}
+								$filter[] = $f;
+							} else {
+								$filter[] = [ICollection::AND, $aggregator, [$column->filter->function, Helper::getNextrasName($column->filter->columnName ?: $column->name), $v]];
+							}
 						} else {
 							if (is_array($column->filter->columnName)) {
 								$f = [ICollection::OR];
@@ -356,7 +377,7 @@ class DatasetControl extends DataControl implements MainComponent
 			return $c;
 		}
 		$this->activeFilter = true;
-		if ($this->dataset->search->prepareCallback and is_callable($this->dataset->search->prepareCallback)) {
+		if ($this->dataset->search->prepareCallback) {
 			$term = ($this->dataset->search->prepareCallback)($term);
 		}
 		if ($this->dataset->search->searchFunction) {

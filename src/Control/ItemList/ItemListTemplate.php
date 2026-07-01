@@ -17,4 +17,5 @@ class ItemListTemplate extends DataTemplate
 	public ?string $itemListClass;
 	public MainComponent $main;
 	public ?array $columns;
+	public string $pagingMode;
 }

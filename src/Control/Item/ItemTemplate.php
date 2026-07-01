@@ -18,4 +18,5 @@ class ItemTemplate extends DataTemplate
 	public ?\Closure $itemLinkCallback;
 	public ?array $linkArgs;
 	public array $columns;
+	public \Closure $invokeFilter;
 }

@@ -44,7 +44,7 @@ class ItemControl extends DataControl
 	}
 
 
-	public function getValue($columnName)
+	public function getValue(string $columnName): mixed
 	{
 		$columnNames = explode('.', $columnName);
 		$value = $this->entity;
@@ -59,19 +59,5 @@ class ItemControl extends DataControl
 			}
 		}
 		return $value;
-	}
-
-
-	private function getLinkArgs(array $args): array
-	{
-		$linkArgs = [];
-		foreach ($args as $key => $value) {
-			if (is_array($value)) {
-				$linkArgs[$key] = $this->getLinkArgs($value);
-			} else {
-				$linkArgs[$key] = $this->getValue($value) === self::UNDEFINED_VALUE ? $value : $this->getValue($value);
-			}
-		}
-		return $linkArgs;
 	}
 }

@@ -80,7 +80,7 @@ class ItemListControl extends DataControl
 	}
 
 
-	public function getValue(IEntity $entity, $columnName)
+	public function getValue(IEntity $entity, string $columnName): mixed
 	{
 		$columnNames = explode('.', $columnName);
 		$value = $entity;
@@ -98,7 +98,7 @@ class ItemListControl extends DataControl
 	}
 
 
-	private function getItems()
+	private function getItems(): array
 	{
 		$items = $this->main->getCollectionItems()->fetchPairs($this->idColumnName);
 		if ($this->itemsPerPage && $this->main->getCurrentCount() > $this->itemsPerPage) {

@@ -2,7 +2,7 @@
 <div class="my-1" n:if="$show" n:snippet>
 	<div class="btn-toolbar flex-nowrap">
 		<div class="btn btn-sm btn-label"{if $labelWidth} style="width: {$labelWidth}px"{/}>{_$text->sort}:</div>
-		{if !$sort}{foreach $columns as $column}{continueIf !$column->sort || !$column->sort->isDefault}{php $sort = $column->name}{php break}{/}{/}
+		{if !$sort}{foreach $columns as $column}{continueIf !$column->sort || !$column->sort->isDefault}{php $sort = $column->name}{breakIf true}{/}{/}
 		<div class="d-flex">
 			{php $newDirection = $direction == 'asc' ? 'desc' : 'asc'}
 			<a n:href="sort! sort: $sort, direction: $newDirection" class="btn btn-sm btn-primary ms-1 ajax">
