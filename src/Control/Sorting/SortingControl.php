@@ -27,7 +27,8 @@ class SortingControl extends DataControl
 		private array $columns,
 		private Text $text,
 		private ?int $labelWidth,
-	) {}
+	) {
+	}
 
 
 	public function render(): void

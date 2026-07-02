@@ -10,6 +10,7 @@ use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Dataset\DatasetView;
+use function count;
 
 
 /**
@@ -28,7 +29,8 @@ class DisplayControl extends DataControl
 		public array $views,
 		private Text $text,
 		private ?int $labelWidth,
-	) {}
+	) {
+	}
 
 
 	public function render(): void

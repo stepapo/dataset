@@ -27,7 +27,8 @@ class SearchFormControl extends DataControl
 		private Text $text,
 		private ?string $placeholder = null,
 		private ?int $labelWidth = null,
-	) {}
+	) {
+	}
 
 
 	public function render(): void
@@ -42,7 +43,7 @@ class SearchFormControl extends DataControl
 
 	public function createComponentForm(): Form
 	{
-		$form = new Form();
+		$form = new Form;
 
 		$form->addText('term');
 		$form->addSubmit('send');
@@ -58,7 +59,7 @@ class SearchFormControl extends DataControl
 	public function formSucceeded(Form $form, ArrayHash $values): void
 	{
 		$this->redirect('search!', $values->term);
-//		$this->handleSearch($values->term);
+		//		$this->handleSearch($values->term);
 	}
 
 

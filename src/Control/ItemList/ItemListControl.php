@@ -33,7 +33,8 @@ class ItemListControl extends DataControl
 		private IRepository $repository,
 		private Text $text,
 		private string $pagingMode,
-	) {}
+	) {
+	}
 
 
 	public function render(): void
@@ -85,7 +86,7 @@ class ItemListControl extends DataControl
 		$columnNames = explode('.', $columnName);
 		$value = $entity;
 		if ($value instanceof HasMany) {
-			throw new InvalidArgumentException("Value is a collection.");
+			throw new InvalidArgumentException('Value is a collection.');
 		} else {
 			foreach ($columnNames as $columnName) {
 				if (!$value?->getMetadata()->hasProperty($columnName)) {

@@ -28,6 +28,7 @@ use Stepapo\Dataset\Control\SearchForm\SearchFormControl;
 use Stepapo\Dataset\Control\Sorting\SortingControl;
 use Stepapo\Dataset\Dataset;
 use Stepapo\Dataset\DatasetView;
+use function count, is_array;
 
 
 /**
@@ -39,17 +40,18 @@ class DatasetControl extends DataControl implements MainComponent
 {
 	/** @var \Closure[] */ public array $onItemChange;
 	/** @var \Closure[] */ public array $onRedraw;
+	public bool $shouldRetrieveItems = true;
+	public bool $activeFilter = false;
 	private DatasetView $view;
 	private ICollection $items;
 	private int $currentCount;
 	private int $totalCount;
-	public bool $shouldRetrieveItems = true;
-	public bool $activeFilter = false;
 
 
 	public function __construct(
 		private Dataset $dataset,
-	) {}
+	) {
+	}
 
 
 	public function getCollection(): ICollection
@@ -169,8 +171,8 @@ class DatasetControl extends DataControl implements MainComponent
 		foreach ($this->dataset->buttons as $button) {
 			$form->addSubmit($button->name, $button->label);
 			if ($button->callback) {
-				/** @var SubmitButton $submitButton */
 				$submitButton = $form[$button->name];
+				\assert($submitButton instanceof SubmitButton);
 				$submitButton->onClick[] = $button->callback;
 			}
 		}
@@ -267,8 +269,8 @@ class DatasetControl extends DataControl implements MainComponent
 			if (!$column->filter) {
 				continue;
 			}
-			/** @var FilterControl $component */
 			$component = $this->getComponent('filterList')->getComponent('filter')->getComponent($column->name);
+			\assert($component instanceof FilterControl);
 			$value = $component->value;
 			if (!$value) {
 				continue;
@@ -443,7 +445,7 @@ class DatasetControl extends DataControl implements MainComponent
 			} else {
 				$c = $c->limitBy(
 					$this->getComponent('pagination')->getPaginator()->length + 1 + $this->getComponent('pagination')->getPaginator()->offset,
-					0
+					0,
 				);
 			}
 		}

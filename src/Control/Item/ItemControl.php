@@ -29,7 +29,8 @@ class ItemControl extends DataControl
 		private array $columns,
 		private ?\Closure $itemClassCallback,
 		private ?\Closure $itemLinkCallback,
-	) {}
+	) {
+	}
 
 
 	public function render(): void
@@ -49,7 +50,7 @@ class ItemControl extends DataControl
 		$columnNames = explode('.', $columnName);
 		$value = $this->entity;
 		if ($value instanceof HasMany) {
-			throw new InvalidArgumentException("Value is a collection.");
+			throw new InvalidArgumentException('Value is a collection.');
 		} else {
 			foreach ($columnNames as $columnName) {
 				if (!$value?->getMetadata()->hasProperty($columnName)) {

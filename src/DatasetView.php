@@ -7,6 +7,7 @@ namespace Stepapo\Dataset;
 use Stepapo\Data\View;
 use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Config;
+use function array_key_exists;
 
 
 class DatasetView extends Config implements View
@@ -79,17 +80,22 @@ class DatasetView extends Config implements View
 	public bool $inlineFilters = false;
 
 
-	public static function createFromArray(mixed $config = [], mixed $key = null, bool $skipDefaults = false, mixed $parentKey = null): static
+	public static function createFromArray(
+		mixed $config = [],
+		mixed $key = null,
+		bool $skipDefaults = false,
+		mixed $parentKey = null,
+	): static
 	{
 		$defaults = self::VIEWS[$key];
 		if ($config && array_key_exists('inlineFilters', $config) && $config['inlineFilters']) {
 			$defaults['filterListTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
 			$defaults['filterTemplate'] = __DIR__ . '/../../data/src/Control/Filter/inline.latte';
-//			$defaults['searchTemplate'] = __DIR__ . '/Control/Display/inline.latte';
-//			$defaults['displayTemplate'] = __DIR__ . '/Control/SearchForm/inline.latte';
-			if ($key === 'list') {
-				$defaults['sortTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
-			}
+			//			$defaults['searchTemplate'] = __DIR__ . '/Control/Display/inline.latte';
+			//			$defaults['displayTemplate'] = __DIR__ . '/Control/SearchForm/inline.latte';
+						if ($key === 'list') {
+							$defaults['sortTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
+						}
 		}
 		return parent::createFromArray(array_merge($defaults, (array) $config), $key, $skipDefaults, $parentKey);
 	}

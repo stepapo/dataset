@@ -26,7 +26,8 @@ class PaginationControl extends DataControl
 		private Text $text,
 		private bool $hidePagination,
 		private string $pagingMode,
-	) {}
+	) {
+	}
 
 
 	public function loadState(array $params): void
@@ -35,7 +36,6 @@ class PaginationControl extends DataControl
 		$this->page = isset($params['page']) ? (int) $params['page'] : 1;
 		$this->paginator->setPage($this->page);
 	}
-
 
 
 	public function render(): void
