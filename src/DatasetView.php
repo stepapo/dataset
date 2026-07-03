@@ -91,11 +91,9 @@ class DatasetView extends Config implements View
 		if ($config && array_key_exists('inlineFilters', $config) && $config['inlineFilters']) {
 			$defaults['filterListTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
 			$defaults['filterTemplate'] = __DIR__ . '/../../data/src/Control/Filter/inline.latte';
-			//			$defaults['searchTemplate'] = __DIR__ . '/Control/Display/inline.latte';
-			//			$defaults['displayTemplate'] = __DIR__ . '/Control/SearchForm/inline.latte';
-						if ($key === 'list') {
-							$defaults['sortTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
-						}
+			if ($key === 'list') {
+				$defaults['sortTemplate'] = __DIR__ . '/../../data/src/Control/FilterList/inline.latte';
+			}
 		}
 		return parent::createFromArray(array_merge($defaults, (array) $config), $key, $skipDefaults, $parentKey);
 	}
