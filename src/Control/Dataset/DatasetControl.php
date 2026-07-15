@@ -8,6 +8,7 @@ use Nette\Application\UI\Form;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\InvalidArgumentException;
 use Nette\NotSupportedException;
+use Nette\Utils\Arrays;
 use Nette\Utils\Paginator;
 use Nette\Utils\Random;
 use Nextras\Dbal\Drivers\Exception\QueryException;
@@ -33,13 +34,11 @@ use function count, is_array;
 
 /**
  * @property-read DatasetTemplate $template
- * @method onItemChange(DatasetControl $control, ?IEntity $entity = null)
- * @method onRedraw(DatasetControl $control)
  */
 class DatasetControl extends DataControl implements MainComponent
 {
-	/** @var \Closure[] */ public array $onItemChange;
-	/** @var \Closure[] */ public array $onRedraw;
+	/** @var array<callable(static, ?IEntity): void> */ public array $onItemChange;
+	/** @var array<callable(static): void> */ public array $onRedraw;
 	public bool $shouldRetrieveItems = true;
 	public bool $activeFilter = false;
 	private DatasetView $view;
@@ -172,7 +171,7 @@ class DatasetControl extends DataControl implements MainComponent
 			$form->addSubmit($button->name, $button->label);
 			if ($button->callback) {
 				$submitButton = $form[$button->name];
-				\assert($submitButton instanceof SubmitButton);
+				assert($submitButton instanceof SubmitButton);
 				$submitButton->onClick[] = $button->callback;
 			}
 		}
@@ -218,7 +217,7 @@ class DatasetControl extends DataControl implements MainComponent
 	{
 		$control = new FilterListControl($this, $this->dataset->columns, labelWidth: $this->dataset->labelWidth);
 		$control->onFilter[] = function (FilterListControl $filterList) {
-			$this->onRedraw($this);
+			Arrays::invoke($this->onRedraw, $this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -229,7 +228,7 @@ class DatasetControl extends DataControl implements MainComponent
 	{
 		$control = new SearchFormControl($this, $this->dataset->text, $this->dataset->search->placeholder, $this->dataset->labelWidth);
 		$control->onSearch[] = function (SearchFormControl $search) {
-			$this->onRedraw($this);
+			Arrays::invoke($this->onRedraw, $this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -240,7 +239,7 @@ class DatasetControl extends DataControl implements MainComponent
 	{
 		$control = new SortingControl($this, $this->dataset->columns, $this->dataset->text, $this->dataset->labelWidth);
 		$control->onSort[] = function (SortingControl $sorting) {
-			$this->onRedraw($this);
+			Arrays::invoke($this->onRedraw, $this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -256,7 +255,7 @@ class DatasetControl extends DataControl implements MainComponent
 			$this->dataset->labelWidth,
 		);
 		$control->onDisplay[] = function (DisplayControl $display) {
-			$this->onRedraw($this);
+			Arrays::invoke($this->onRedraw, $this);
 			$this->redrawControl();
 		};
 		return $control;
@@ -270,7 +269,7 @@ class DatasetControl extends DataControl implements MainComponent
 				continue;
 			}
 			$component = $this->getComponent('filterList')->getComponent('filter')->getComponent($column->name);
-			\assert($component instanceof FilterControl);
+			assert($component instanceof FilterControl);
 			$value = $component->value;
 			if (!$value) {
 				continue;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Pagination;
 
+use Nette\Utils\Arrays;
 use Nette\Utils\Paginator;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Text;
@@ -12,11 +13,10 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 /**
  * @property-read PaginationTemplate $template
- * @method onPaginate(PaginationControl $control)
  */
 class PaginationControl extends DataControl
 {
-	public array $onPaginate;
+	/** @var array<callable(static): void> */ public array $onPaginate;
 	public int $page = 1;
 
 
@@ -55,7 +55,7 @@ class PaginationControl extends DataControl
 		$this->paginator->setPage($page);
 		$this->page = $page;
 		if ($this->getPresenter()->isAjax()) {
-			$this->onPaginate($this);
+			Arrays::invoke($this->onPaginate, $this);
 			$this->redrawControl();
 		}
 	}

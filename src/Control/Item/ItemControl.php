@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\Item;
 
+use Nette\Application\IPresenter;
 use Nette\InvalidArgumentException;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
@@ -13,16 +14,18 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 /**
  * @property-read ItemTemplate $template
- * @method onChange(ItemControl $control, IEntity $entity)
- * @method onRemove(ItemControl $control)
  */
 class ItemControl extends DataControl
 {
 	public const string UNDEFINED_VALUE = 'undefined_value';
-	/** @var \Closure[] */ public array $onChange;
-	/** @var \Closure[] */ public array $onRemove;
+	/** @var array<callable(static, IEntity): void> */ public array $onChange;
+	/** @var array<callable(static): void> */ public array $onRemove;
 
 
+	/**
+	 * @param \Closure(IEntity): string|null $itemClassCallback
+	 * @param \Closure(IEntity, IPresenter): string|null $itemLinkCallback
+	 */
 	public function __construct(
 		private DatasetControl $main,
 		private IEntity $entity,

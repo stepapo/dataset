@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
+use Nette\ComponentModel\IComponent;
+use Nextras\Orm\Entity\IEntity;
 use Stepapo\Data\View;
 use Stepapo\Utils\Attribute\KeyProperty;
 use Stepapo\Utils\Config;
@@ -74,7 +76,7 @@ class DatasetView extends Config implements View
 	public string $sortingTemplate = self::VIEWS['list']['sortingTemplate'];
 	public string $displayTemplate = self::VIEWS['list']['displayTemplate'];
 	public string $searchTemplate = self::VIEWS['list']['searchTemplate'];
-	public ?\Closure $itemFactoryCallback = null;
+	/** @var \Closure(IEntity): IComponent|null */ public ?\Closure $itemFactoryCallback = null;
 	public bool $isDefault = false;
 	public bool $hide = false;
 	public bool $inlineFilters = false;

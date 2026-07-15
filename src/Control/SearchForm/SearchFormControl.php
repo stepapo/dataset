@@ -7,6 +7,7 @@ namespace Stepapo\Dataset\Control\SearchForm;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\Arrays;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
@@ -14,11 +15,10 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
 
 /**
  * @property SearchFormTemplate $template
- * @method onSearch(SearchFormControl $control)
  */
 class SearchFormControl extends DataControl
 {
-	/** @var \Closure[] */ public array $onSearch;
+	/** @var array<callable(static): void> */ public array $onSearch;
 	#[Persistent] public ?string $term = null;
 
 
@@ -59,7 +59,7 @@ class SearchFormControl extends DataControl
 	public function formSucceeded(Form $form, ArrayHash $values): void
 	{
 		$this->redirect('search!', $values->term);
-		//		$this->handleSearch($values->term);
+		//$this->handleSearch($values->term);
 	}
 
 
@@ -67,7 +67,7 @@ class SearchFormControl extends DataControl
 	{
 		$this->term = $term;
 		if ($this->getPresenter()->isAjax()) {
-			$this->onSearch($this);
+			Arrays::invoke($this->onSearch, $this);
 			$this->redrawControl();
 		}
 	}

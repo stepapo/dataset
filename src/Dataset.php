@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset;
 
+use Nette\Application\IPresenter;
 use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Repository\IRepository;
 use Stepapo\Data\Button;
 use Stepapo\Data\Column;
 use Stepapo\Data\Search;
 use Stepapo\Data\Text;
+use Stepapo\Dataset\Control\Dataset\DatasetControl;
 use Stepapo\Utils\Attribute\ArrayOfType;
 use Stepapo\Utils\Attribute\DefaultFromConfig;
 use Stepapo\Utils\Attribute\Type;
@@ -20,11 +23,11 @@ class Dataset extends Config
 {
 	public ICollection $collection;
 	public IRepository $repository;
-	public ?\Closure $descriptionCallback = null;
+	/** @var \Closure(DatasetControl): array|null */ public ?\Closure $descriptionCallback = null;
 	public ?int $labelWidth = null;
 	public ?int $itemsPerPage = null;
-	public ?\Closure $itemClassCallback = null;
-	public ?\Closure $itemLinkCallback = null;
+	/** @var \Closure(IEntity): string|null */ public ?\Closure $itemClassCallback = null;
+	/** @var \Closure(IEntity, IPresenter): string|null */ public ?\Closure $itemLinkCallback = null;
 	public ?string $datasetClass = null;
 	public ?string $itemListClass = null;
 	public string $idColumnName = 'id';

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Stepapo\Dataset\Control\ItemList;
 
+use Nette\Application\IPresenter;
 use Nette\Application\UI\Multiplier;
 use Nette\ComponentModel\IComponent;
 use Nette\InvalidArgumentException;
+use Nette\Utils\Arrays;
 use Nextras\Orm\Entity\IEntity;
 use Nextras\Orm\Relationships\HasMany;
 use Nextras\Orm\Repository\IRepository;
@@ -21,6 +23,10 @@ use Stepapo\Dataset\Control\Item\ItemControl;
  */
 class ItemListControl extends DataControl
 {
+	/**
+	 * @param \Closure(IEntity): string|null $itemClassCallback
+	 * @param \Closure(IEntity, IPresenter): string|null $itemLinkCallback
+	 */
 	public function __construct(
 		private DatasetControl $main,
 		private ?array $columns,
@@ -64,7 +70,7 @@ class ItemListControl extends DataControl
 					if (!$this->alwaysRetrieveItems && $this->getPresenter()->isAjax()) {
 						$this->main->shouldRetrieveItems = false;
 					}
-					$this->main->onItemChange($this->main, $entity);
+					Arrays::invoke($this->main->onItemChange, $this->main, $entity);
 				};
 			}
 			if (property_exists($control, 'onRemove')) {
@@ -73,7 +79,7 @@ class ItemListControl extends DataControl
 					if ($this->itemsPerPage) {
 						$this->main->getComponent('pagination')->redrawControl();
 					}
-					$this->main->onItemChange($this->main);
+					Arrays::invoke($this->main->onItemChange, $this->main);
 				};
 			}
 			return $control;

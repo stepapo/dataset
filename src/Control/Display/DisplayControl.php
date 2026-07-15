@@ -6,6 +6,7 @@ namespace Stepapo\Dataset\Control\Display;
 
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\BadRequestException;
+use Nette\Utils\Arrays;
 use Stepapo\Data\Control\DataControl;
 use Stepapo\Data\Text;
 use Stepapo\Dataset\Control\Dataset\DatasetControl;
@@ -15,12 +16,11 @@ use function count;
 
 /**
  * @property-read DisplayTemplate $template
- * @method onDisplay(DisplayControl $control)
  */
 class DisplayControl extends DataControl
 {
 	#[Persistent] public ?string $viewName = null;
-	public array $onDisplay;
+	/** @var array<callable(static): void> */ public array $onDisplay;
 
 
 	/** @param DatasetView[] $views */
@@ -54,7 +54,7 @@ class DisplayControl extends DataControl
 			throw new BadRequestException;
 		}
 		if ($this->getPresenter()->isAjax()) {
-			$this->onDisplay($this);
+			Arrays::invoke($this->onDisplay, $this);
 			$this->redrawControl();
 		}
 	}

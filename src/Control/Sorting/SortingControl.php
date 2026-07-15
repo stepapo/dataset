@@ -19,7 +19,7 @@ class SortingControl extends DataControl
 {
 	#[Persistent] public ?string $sort = null;
 	#[Persistent] public ?string $direction = 'asc';
-	/** @var \Closure[] */ public array $onSort;
+	/** @var array<callable(static): void> */ public array $onSort;
 
 
 	public function __construct(
