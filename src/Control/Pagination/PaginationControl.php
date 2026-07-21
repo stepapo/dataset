@@ -16,7 +16,7 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
  */
 class PaginationControl extends DataControl
 {
-	/** @var array<callable(static): void> */ public array $onPaginate;
+	/** @var array<callable(static): void> */ public array $onPaginate = [];
 	public int $page = 1;
 
 

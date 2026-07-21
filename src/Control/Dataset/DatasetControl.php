@@ -37,8 +37,8 @@ use function count, is_array;
  */
 class DatasetControl extends DataControl implements MainComponent
 {
-	/** @var array<callable(static, ?IEntity): void> */ public array $onItemChange;
-	/** @var array<callable(static): void> */ public array $onRedraw;
+	/** @var array<callable(static, ?IEntity): void> */ public array $onItemChange = [];
+	/** @var array<callable(static): void> */ public array $onRedraw = [];
 	public bool $shouldRetrieveItems = true;
 	public bool $activeFilter = false;
 	private DatasetView $view;

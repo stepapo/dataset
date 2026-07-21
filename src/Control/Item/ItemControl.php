@@ -18,8 +18,8 @@ use Stepapo\Dataset\Control\Dataset\DatasetControl;
 class ItemControl extends DataControl
 {
 	public const string UNDEFINED_VALUE = 'undefined_value';
-	/** @var array<callable(static, IEntity): void> */ public array $onChange;
-	/** @var array<callable(static): void> */ public array $onRemove;
+	/** @var array<callable(static, IEntity): void> */ public array $onChange = [];
+	/** @var array<callable(static): void> */ public array $onRemove = [];
 
 
 	/**

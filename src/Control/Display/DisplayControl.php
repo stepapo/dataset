@@ -20,7 +20,7 @@ use function count;
 class DisplayControl extends DataControl
 {
 	#[Persistent] public ?string $viewName = null;
-	/** @var array<callable(static): void> */ public array $onDisplay;
+	/** @var array<callable(static): void> */ public array $onDisplay = [];
 
 
 	/** @param DatasetView[] $views */
