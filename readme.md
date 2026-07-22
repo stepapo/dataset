@@ -8,7 +8,7 @@ Let's create a list of all persons in database sorted alphabeticaly by name. The
 
 ### Definition
 
-```neon
+```yml
 collection: %collection%
 repository: %repository%
 itemsPerPage: 10
@@ -44,7 +44,7 @@ views:
 ```php
 public function createComponentPersonDataset()
 {
-    return Stepapo\Dataset\Control\Dataset::createFromNeon(__DIR__ . '/personDataset.neon', [
+    return Stepapo\Dataset\Control\Dataset::createFromNeon(__DIR__ . '/personDataset.yml', [
         'collection' => $this->orm->personRepository->findAll()
         'repository' => $this->orm->personRepository
         'genderFilterOptions' => ['m' => 'Male', 'f' => 'Female']
@@ -62,7 +62,7 @@ public function createComponentPersonDataset()
 
 ### Dataset
 
-```neon
+```yml
 collection:
 repository:
 parentEntity:
@@ -75,7 +75,7 @@ idColumnName:
 alwaysRetrieveItems:
 columns:
     example column: # include Column configuration
-     another example column: # include Column configuration
+    another example column: # include Column configuration
 views:
     table: # include View configuration
     list: # include View configuration
@@ -85,7 +85,7 @@ search: # include Search configuration
 
 ### Column
 
-```neon
+```yml
 label:
 description:
 width:
@@ -104,7 +104,7 @@ link: # include Link configuration
 
 ### View
 
-```neon
+```yml
 label:
 datasetTemplate:
 itemListTemplate:
@@ -122,7 +122,7 @@ isDefault:
 
 ### Search
 
-```neon
+```yml
 placeholder:
 prepareCallback:
 suggestCallback:
@@ -132,7 +132,7 @@ sortFunction: # include OrmFunction configuration
 
 ### Text
 
-```neon
+```yml
 search:
 sort:
 display:
@@ -145,7 +145,7 @@ didYouMean:
 
 ### Filter
 
-```neon
+```yml
 prompt:
 collapse:
 columnName:
@@ -158,7 +158,7 @@ options:
 
 ### Sort
 
-```neon
+```yml
 idDefault:
 direction:
 function: # include OrmFunction configuration
@@ -166,21 +166,21 @@ function: # include OrmFunction configuration
 
 ### Link
 
-```neon
+```yml
 destination:
 args:
 ```
 
 ### LatteFilter
 
-```neon
+```yml
 name:
 args:
 ```
 
 ### Option
 
-```neon
+```yml
 name:
 label:
 condition:
@@ -188,7 +188,7 @@ condition:
 
 ### OrmFunction
 
-```neon
+```yml
 class:
 args:
 ```
